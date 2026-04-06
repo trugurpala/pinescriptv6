@@ -1,0 +1,31 @@
+//@version=6
+// MACD with Colored Histogram — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("MACD Histogram [trugurpala]", overlay=false)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int fastLen   = input.int(12, "Fast",   minval=1)
+int slowLen   = input.int(26, "Slow",   minval=1)
+int signalLen = input.int(9,  "Signal", minval=1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+[macdLine, signalLine, histLine] = ta.macd(close, fastLen, slowLen, signalLen)
+bool bullCross = ta.crossover(macdLine,  signalLine)
+bool bearCross = ta.crossunder(macdLine, signalLine)
+
+// ── Histogram Color (rising vs falling) ──────────────────────────────────────
+color histColor = histLine >= 0
+    ? (histLine >= histLine[1] ? color.new(color.green, 20) : color.new(color.green, 60))
+    : (histLine <= histLine[1] ? color.new(color.red,   20) : color.new(color.red,   60))
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(histLine,   "Histogram", histColor,                  style=plot.style_histogram, linewidth=4)
+plot(macdLine,   "MACD",      color.new(color.blue,   20), linewidth=2)
+plot(signalLine, "Signal",    color.new(color.orange, 20), linewidth=2)
+hline(0, "Zero", color.new(color.gray, 50))
+plotshape(bullCross, "Bull", shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(bearCross, "Bear", shape.triangledown, location.abovebar, color.red,   size=size.small)
+
+// ── Alerts ───────────────────────────────────────────────────────────────────
+alertcondition(bullCross, "MACD Bull", "MACD Bull Cross — {{ticker}} @ {{close}}")
+alertcondition(bearCross, "MACD Bear", "MACD Bear Cross — {{ticker}} @ {{close}}")
