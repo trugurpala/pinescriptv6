@@ -4,30 +4,18 @@
 
 ## TR | Türkçe
 
-### Desteklenen Sürümler
+Bu bir dokümantasyon reposudur; çalıştırılabilir kod içermez.
 
-Bu bir dokümantasyon deposudur; çalıştırılabilir kod içermez.
+Bir token, gizli anahtar veya kişisel veri sızıntısı fark ederseniz lütfen kamuya açık issue açmadan özel olarak bildirin:
 
-### Güvenlik Açığı Bildirimi
-
-Bir gizli anahtar, token veya kişisel veri sızıntısı fark ederseniz lütfen
-kamuya açık bir issue açmadan özel olarak bildirin:
-
-**E-posta:** mail@ugurpala.com
-**GitHub:** [@trugurpala](https://github.com/trugurpala)
+**E-posta:** mail@ugurpala.com · **GitHub:** [@trugurpala](https://github.com/trugurpala)
 
 ---
 
 ## EN | English
 
-### Supported Versions
+This is a documentation repository; it contains no executable code.
 
-This is a documentation repository. There is no executable code.
+If you discover a leaked token, secret, or personal data, please report it privately rather than opening a public issue:
 
-### Reporting a Vulnerability
-
-If you discover a committed secret, token, or any sensitive data leak,
-please report it privately rather than opening a public issue:
-
-**Email:** mail@ugurpala.com
-**GitHub:** [@trugurpala](https://github.com/trugurpala)
+**Email:** mail@ugurpala.com · **GitHub:** [@trugurpala](https://github.com/trugurpala)
