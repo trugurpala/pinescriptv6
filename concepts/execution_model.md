@@ -1,40 +1,96 @@
-# Execution Model — Pine Script v6
-Maintainer: Ugur Pala — mail@ugurpala.com
+# Execution Model
+> Maintainer: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
 
-## Temel Calisma Mantigi
-Pine Script bar-by-bar soldan saga calisir. Her cubukta kod bastan sona execute edilir.
+---
 
-## Historical vs Realtime
-- Historical bar: Kapanmis. Script bir kere calisir.
-- Realtime bar: Acik. Her tick'te yeniden calisir, kapaninca commit edilir.
-- Rollback: Kapanmadan once her execution rollback'lenir (varip haric).
+## TR | Türkçe
 
-## var ve varip
+Pine Script her cubukta soldan sağa, baştan sona çalışır.
 
-| Keyword | Davranis |
-|---------|----------|
-| yok | Her barda sifirlanir |
-| var | Hic sifirlanmaz (kalici) |
-| varip | Hic sifirlanmaz, rollback'e de direncli |
+### Historical vs Realtime
+
+| Bar türü | Nasıl çalışır? |
+|----------|----------------|
+| **Historical** | Kapanmış bar. Script bir kere çalışır, sonuç commitlenir. |
+| **Realtime** | Açık bar. Her tick'te yeniden çalışır. Kapanınca commit edilir. |
+| **Rollback** | Realtime barda kapanış öncesi her execution rollback'lenir (`varip` hariç). |
+
+```pine
+//@version=6
+indicator("Execution demo")
+plot(barstate.ishistory  ? 1 : 0, "isHistory")
+plot(barstate.isrealtime ? 1 : 0, "isRealtime")
+plot(barstate.isconfirmed ? 1 : 0, "isClosed")
+```
+
+### var ve varip
+
+| Keyword | Sıfırlanır mı? | Rollback? | Kullanım |
+|---------|---------------|-----------|----------|
+| *(yok)* | Her barda | Evet | Normal değişken |
+| `var` | Hayır | Evet | Kümülatif sayaç, persistent state |
+| `varip` | Hayır | **Hayır** | Realtime tick sayacı |
 
 ```pine
 //@version=6
 indicator("var demo")
+
+// Normal — her barda 1
+normalVar = 0
+normalVar += 1
+plot(normalVar)  // hep 1
+
+// var — kümülatif
 var int counter = 0
 counter += 1
-plot(counter)  // 1, 2, 3... artar
+plot(counter)  // 1, 2, 3 ...
 ```
 
-## barstate Degiskenleri
-- barstate.ishistory — gecmis cubuk
-- barstate.isrealtime — canli cubuk
-- barstate.isconfirmed — kapanmis
-- barstate.islast — son cubuk
-- barstate.isfirst — ilk cubuk
+### Time Series — Geçmiş Değer
 
-## Time Series — Gecmis Deger
 ```pine
-close[0]  // bu cubuk
-close[1]  // onceki cubuk
-close[5]  // 5 cubuk oncesi
+close[0]  // bu bar
+close[1]  // bir önceki bar
+close[5]  // 5 bar önce
+```
+
+### barstate Değişkenleri
+
+```pine
+barstate.ishistory   // geçmiş bar
+barstate.isrealtime  // canlı bar
+barstate.isconfirmed // kapanmış bar
+barstate.islast      // son bar
+barstate.isfirst     // ilk bar
+barstate.isnew       // bar yeni mi açıldı?
+```
+
+---
+
+## EN | English
+
+Pine Script runs left to right, bar by bar, from top to bottom on every bar.
+
+### Historical vs Realtime
+
+| Bar type | How it works |
+|----------|-------------|
+| **Historical** | Closed bar. Script runs once, result committed. |
+| **Realtime** | Open bar. Reruns on every tick. Committed on close. |
+| **Rollback** | Before close, each execution is rolled back (`varip` exempt). |
+
+### var and varip
+
+| Keyword | Resets? | Rollback? | Use case |
+|---------|---------|-----------|----------|
+| *(none)* | Every bar | Yes | Normal variable |
+| `var` | Never | Yes | Cumulative counter, persistent state |
+| `varip` | Never | **No** | Realtime tick counter |
+
+### Time Series — Historical Values
+
+```pine
+close[0]  // current bar
+close[1]  // previous bar
+close[5]  // 5 bars ago
 ```
