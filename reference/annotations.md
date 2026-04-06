@@ -1,43 +1,50 @@
-# Annotations — Pine Script v6
-Maintainer: Ugur Pala — mail@ugurpala.com
+# Annotations
+> Maintainer: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
+> TR: Kod belgelemeleri ve metadata için kullanılan annotation'lar. EN: Annotations for documentation and metadata.
+
+---
 
 ## @version
 ```pine
 //@version=6
 ```
 
-## @description
+## @description — Library açıklaması
 ```pine
-// @description Bu indikatör RSI ve EMA'yi birlestirir.
+// @description RSI + EMA kombinasyonu için yardımcı fonksiyonlar.
+// @description Helper functions for RSI + EMA combinations.
 library("MyLibrary")
 ```
 
 ## @function
 ```pine
 // @function Verilen uzunlukta EMA hesaplar.
-// @param src (series float) Kaynak seri
-// @param len (simple int) Period uzunlugu
-// @returns (series float) EMA degeri
-export myEma(float src, int len) =>
+// @function Calculates EMA for the given length.
+// @param src  (series float) Kaynak seri / Source series
+// @param len  (simple int)  Periyod / Period
+// @returns    (series float) EMA değeri / EMA value
+export myEma(series float src, simple int len) =>
     ta.ema(src, len)
 ```
 
 ## @param
 ```pine
-// @param length (simple int) Indicator period. Min: 1
+// @param length (simple int) RSI periyodu. Min: 1, Max: 500
 ```
 
 ## @returns
 ```pine
-// @returns (series bool) Kesisim oldugunda true
+// @returns (series bool) Kesişim olduğunda true döner.
+// @returns (series bool) Returns true when crossover occurs.
 ```
 
 ## @type ve @field
 ```pine
-// @type Grafik uzerinde bir noktayi temsil eder.
-// @field index (int) Bar indexi (x koordinati)
-// @field price (float) Fiyat (y koordinati)
-type ChartPoint
+// @type Grafik üzerindeki bir pivot noktasını temsil eder.
+// @type Represents a pivot point on the chart.
+// @field index (int)   Bar indexi / Bar index
+// @field price (float) Fiyat seviyesi / Price level
+type PivotPoint
     int   index
     float price
 ```
