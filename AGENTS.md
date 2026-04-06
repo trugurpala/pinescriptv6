@@ -1,62 +1,71 @@
-# Pine Script v6 — Agent Instructions
+# Pine Script v6 Reference — Agent Instructions
 > Author: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
-
-TR: Bu dosya Devin, OpenAI Codex ve diğer otonom AI agent sistemleri tarafından okunur.
-EN: This file is read by Devin, OpenAI Codex, and other autonomous AI agent systems.
-
----
-
-## Task Protocol / Görev Protokolü
-
-**Step 1 — Read before acting / Yazmadan önce oku:**
-```
-LESSONS_LEARNED.md   → known errors / bilinen hatalar
-LLM_MANIFEST.md      → routing map / yönlendirme haritası
-```
-
-**Step 2 — Find the right reference / Doğru referansı bul:**
-Use `LLM_MANIFEST.md` to identify which file to read for the task.
-`LLM_MANIFEST.md` kullanarak göreve uygun dosyayı belirle.
-
-**Step 3 — Write / Yaz:**
-Every Pine Script v6 script starts with `//@version=6`.
-
-**Step 4 — On error / Hata olunca:**
-1. Solve the error
-2. Append to `LESSONS_LEARNED.md` using the format in that file
+> TradingView: https://tr.tradingview.com/u/trugurpala/
+> X (Twitter): https://x.com/trugurpala
 
 ---
 
-## What This Repo Contains / Bu Repoda Ne Var
+## Bu Repo Neden Var? / Why This Repo Exists?
 
-```
-LESSONS_LEARNED.md        Error memory / Hata hafızası
-LLM_MANIFEST.md           Query routing / Sorgu yönlendirme
-reference/                v6 API reference (ta, strategy, drawing, request...)
-concepts/                 Core concepts (execution model, timeframes, errors)
-writing_scripts/          Style, debug, optimization, limits
-examples/indicators/      17 ready-to-use indicators
-examples/strategies/      12 ready-to-use strategies
-webhook-templates/        Telegram, Discord, JSON webhook templates
-v5-to-v6-migration/       v5 → v6 migration guide (10 files)
-```
+TR: TradingView Pine Script v6 çıktığında tüm AI editörler v5 kodu yazmaya devam etti.
+    Claude v5 hatalarını tekrarlıyordu. Cursor `study()` yazıyordu.
+    Bu repo AI agent'lara doğru v6 referansı ve kalıcı hata hafızası verir.
+
+EN: When Pine Script v6 launched, all AI editors kept writing v5 code.
+    Claude repeated v5 errors. Cursor wrote `study()`.
+    This repo gives AI agents correct v6 reference and permanent error memory.
 
 ---
 
-## Non-Negotiable Rules / Kesinlikle Uyulacak Kurallar
+## Kullandığını Nasıl Anlarsın? / How to Verify?
 
-1. Every script: `//@version=6` — first line, no exceptions
-2. Never use: `study()`, `security()`, bare `input()` — these are v5
-3. Never invent function names not in the reference docs
-4. After solving any error: update `LESSONS_LEARNED.md`
-5. Use `ta.*` functions — never reimplement them manually
+✅ Agent LESSONS_LEARNED.md okuduğunu belirtmeli / should mention reading it
+✅ //@version=6 ile başlamalı / must start with //@version=6
+✅ ta.* kullanmalı / must use ta.*
+✅ Hata olunca LESSONS_LEARNED.md'ye eklemeli / must append on error
+❌ v5 syntax görüyorsan repo bağlı değil / if v5 syntax, repo not connected
 
 ---
 
-## Source Note / Kaynak Notu
+## Görev Protokolü / Task Protocol
+
+1. `LESSONS_LEARNED.md` oku — bilinen hatalar
+2. `LLM_MANIFEST.md` ile doğru referans dosyasını bul
+3. O dosyayı oku
+4. `//@version=6` ile başlayan kod yaz
+5. Hata olunca: çöz + `LESSONS_LEARNED.md`'ye ekle
+
+---
+
+## Kesin Kurallar / Non-Negotiable Rules
+
+1. `//@version=6` — her scriptin ilk satırı, istisna yok
+2. `ta.*` — asla manuel hesaplama
+3. `input.int()`, `input.float()` — asla bare `input()`
+4. `request.security()` — asla `security()`
+5. `indicator()` — asla `study()`
+6. Hata çözümünü `LESSONS_LEARNED.md`'ye ekle
+
+---
+
+## Repo İçeriği / What's In This Repo
+
+```
+LESSONS_LEARNED.md        — Hata hafızası / Error memory (AI auto-updates)
+LLM_MANIFEST.md           — Sorgu yönlendirme / Query routing
+reference/                — v6 API referansı / API reference
+concepts/                 — Temel kavramlar / Core concepts
+examples/indicators/      — 17 indikatör / indicators
+examples/strategies/      — 12 strateji / strategies
+global-markets/           — ES, NQ, GC, CL, EURUSD, BTC... (12 enstrüman)
+webhook-templates/        — Telegram, Discord, JSON
+v5-to-v6-migration/       — v5 → v6 geçiş rehberi / migration guide
+```
+
+---
 
 > TR: TradingView resmi Pine Script v6 dokümantasyonu temel referans materyalidir.
-> TradingView bu projeyle hiçbir bağlantısı bulunmamaktadır.
+> TradingView bu projeyle hiçbir resmi bağlantısı bulunmamaktadır.
 >
 > EN: TradingView official Pine Script v6 documentation is the primary reference.
 > TradingView is not affiliated with this project.
