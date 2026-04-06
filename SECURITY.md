@@ -1,21 +1,26 @@
-# Güvenlik Politikası / Security Policy
+# Security Policy
+
+> TR: Dokümantasyon reposu — çalıştırılabilir kod yok. Yine de bir sorun görürsen bildir.
+> EN: Documentation repo — no executable code. Still, if you spot something, let us know.
 
 ---
 
 ## TR | Türkçe
 
-Bu bir dokümantasyon reposudur; çalıştırılabilir kod içermez.
+### Kapsam
+Bu repo yalnızca Markdown dosyaları içerir. Güvenlik açığı riski düşüktür.
 
-Bir token, gizli anahtar veya kişisel veri sızıntısı fark ederseniz lütfen kamuya açık issue açmadan özel olarak bildirin:
-
-**E-posta:** mail@ugurpala.com · **GitHub:** [@trugurpala](https://github.com/trugurpala)
+### Bildir
+Yanlışlıkla commit edilmiş token, API key veya kişisel veri görürsen:
+**public issue açma** — doğrudan yaz: **mail@ugurpala.com**
 
 ---
 
 ## EN | English
 
-This is a documentation repository; it contains no executable code.
+### Scope
+This repo contains only Markdown files. Security vulnerability risk is low.
 
-If you discover a leaked token, secret, or personal data, please report it privately rather than opening a public issue:
-
-**Email:** mail@ugurpala.com · **GitHub:** [@trugurpala](https://github.com/trugurpala)
+### Report
+If you spot an accidentally committed token, API key, or personal data:
+**do not open a public issue** — contact directly: **mail@ugurpala.com**
