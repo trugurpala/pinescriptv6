@@ -1,0 +1,76 @@
+//@version=6
+// Crude Oil (CL) — ATR Momentum + Session Filter
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: Yüksek ATR momentum ile yön kırılması üzerine işlem yapar.
+//     Çarşamba EIA stok verisi saatlerinden kaçınır (10:30 ET).
+//     Seans sonu tüm pozisyonlar kapatılır.
+// EN: Trades directional breakout on high ATR momentum.
+//     Avoids Wednesday EIA inventory release (10:30 ET).
+//     All positions closed at session end.
+//
+// Sembol / Symbol: NYMEX:CL1!
+// Önerilen TF / Recommended TF: 5M, 15M
+strategy("CL Crude Oil Momentum [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.fixed,
+    default_qty_value = 1,
+    commission_type   = strategy.commission.cash_per_contract,
+    commission_value  = 5.0,
+    slippage          = 2)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen   = input.int(9,    "Fast EMA",   minval=1)
+int   slowLen   = input.int(21,   "Slow EMA",   minval=1)
+int   atrLen    = input.int(14,   "ATR",        minval=1)
+float momMult   = input.float(1.2, "ATR Momentum Mult", step=0.1)
+float slMult    = input.float(2.0, "SL Mult",   step=0.1)
+float tpMult    = input.float(2.5, "TP Mult",   step=0.1)
+bool  avoidEIA  = input.bool(true, "Avoid EIA Window (Wed 10:00-11:00 ET)")
+
+// ── En Aktif Seans: 09:00–14:30 ET ──────────────────────────────────────────
+bool inSession  = not na(time(timeframe.period, "0900-1430", "America/New_York"))
+bool sesEnd     = inSession[1] and not inSession
+if sesEnd
+    strategy.close_all(comment="Session End")
+
+// EIA penceresi — Çarşamba 10:00-11:00 ET
+bool eiaWindow  = avoidEIA
+                    and dayofweek == dayofweek.wednesday
+                    and not na(time(timeframe.period, "1000-1100", "America/New_York"))
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float fastEma   = ta.ema(close, fastLen)
+float slowEma   = ta.ema(close, slowLen)
+float atrVal    = ta.atr(atrLen)
+float atrAvg    = ta.sma(atrVal, 20)
+bool  highMom   = atrVal > atrAvg * momMult
+
+bool bullCross  = ta.crossover(fastEma,  slowEma) and highMom and inSession and not eiaWindow
+bool bearCross  = ta.crossunder(fastEma, slowEma) and highMom and inSession and not eiaWindow
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if bearCross
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(fastEma, "Fast", fastEma > slowEma ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
+bgcolor(eiaWindow     ? color.new(color.red,  88) : na, title="EIA Window")
+bgcolor(not inSession ? color.new(color.gray, 96) : na, title="Off Hours")
+plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
+
+alertcondition(bullCross, "CL Long",  "CL Crude Oil Long — {{close}}")
+alertcondition(bearCross, "CL Short", "CL Crude Oil Short — {{close}}")
