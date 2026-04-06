@@ -1,32 +1,45 @@
 ---
-name: Add to LESSONS_LEARNED
-about: Share a Pine Script v6 error you solved
-title: '[LESSON] '
+name: "💡 Çözülen Hata / Solved Error"
+about: "TR: Çözdüğünüz bir Pine Script v6 hatasını paylaşın / EN: Share a Pine Script v6 error you solved"
+title: "[LESSON] "
 labels: enhancement
 assignees: trugurpala
 ---
 
-## Error Message
+## TR | Türkçe
 
+**Hata mesajı:**
 ```
-Paste the exact error from TradingView here
+TradingView'dan tam hata metni buraya
 ```
 
-## Cause
+**Sebep:**
 
-<!-- Why does this error happen? -->
+**Çözüm:**
 
-## Fix
+```pine
+//@version=6
+// ❌ Yanlış
 
-<!-- How did you solve it? -->
+// ✅ Doğru
+```
 
-## Code Example
+---
+
+## EN | English
+
+**Error message:**
+```
+Paste exact error from TradingView here
+```
+
+**Cause:**
+
+**Fix:**
 
 ```pine
 //@version=6
 // ❌ Wrong
-...
 
 // ✅ Correct
-...
 ```
