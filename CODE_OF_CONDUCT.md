@@ -4,52 +4,26 @@
 
 ## TR | Türkçe
 
-### Taahhüdümüz
+Bu toplulukta herkes saygılı ve kapsayıcı bir ortamı hak eder.
 
-Bu projede katılımcı herkese saygılı ve kapsayıcı bir ortam sağlamayı taahhüt ediyoruz.
+**Kabul Edilebilir:** Saygılı dil · Farklı görüşlere hoşgörü · Yapıcı eleştiri
 
-### Kabul Edilebilir Davranış
+**Kabul Edilemez:** Taciz · Aşağılama · Kişisel saldırı · İzinsiz kişisel bilgi paylaşımı
 
-- Kapsayıcı ve saygılı bir dil kullanmak
-- Farklı görüşlere saygı göstermek
-- Yapıcı eleştiriyi kabul etmek
-- Topluluğun yararına odaklanmak
-
-### Kabul Edilemez Davranış
-
-- Taciz, alay veya aşağılayıcı yorumlar
-- Kişisel bilgilerin izinsiz paylaşılması
-- Toplulukta uygunsuz sayılabilecek her türlü davranış
-
-### Uygulama
-
-İhlaller **mail@ugurpala.com** adresine bildirilebilir. Tüm şikayetler incelenecektir.
+İhlaller için: **mail@ugurpala.com**
 
 ---
 
 ## EN | English
 
-### Our Pledge
+Everyone in this community deserves a respectful and inclusive environment.
 
-We are committed to making participation in this project a harassment-free experience for everyone.
+**Acceptable:** Respectful language · Tolerance for different views · Constructive criticism
 
-### Standards
+**Unacceptable:** Harassment · Insults · Personal attacks · Sharing private information without consent
 
-Positive behaviour includes:
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-
-Unacceptable behaviour includes:
-- Harassment, trolling, or insulting comments
-- Publishing others' private information without permission
-- Any other conduct reasonably considered inappropriate
-
-### Enforcement
-
-Violations may be reported to **mail@ugurpala.com**. All complaints will be reviewed promptly.
+Report violations to: **mail@ugurpala.com**
 
 ---
 
-*Adapted from the [Contributor Covenant](https://www.contributor-covenant.org), v2.1.*
+*[Contributor Covenant](https://www.contributor-covenant.org) v2.1 uyarlanmıştır / adapted from.*
