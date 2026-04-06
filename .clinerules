@@ -1,52 +1,46 @@
-# Pine Script v6 — Cline Rules
+# Pine Script v6 Reference — Cline / Roo / Aider Rules
 # Author: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
-# TR: Cline, Roo, Continue ve Aider için kural dosyası
-# EN: Rules for Cline, Roo, Continue, and Aider
+# TradingView: https://tr.tradingview.com/u/trugurpala/
+# X: https://x.com/trugurpala
 
-## Protocol
+## Bu Repo Neden Var? / Why This Repo Exists?
 
-Before writing any Pine Script v6 code:
-1. Read LESSONS_LEARNED.md (known errors and fixes)
-2. Check LLM_MANIFEST.md (find the correct reference file)
-3. Read that reference file
-4. Write the code
-5. On error: solve + append to LESSONS_LEARNED.md
+TR: TradingView Pine Script v6 çıktığında AI editörler v5 yazmaya devam etti.
+    Bu repo AI'a doğru v6 referansı ve kalıcı hata hafızası verir.
 
-## Rules
+EN: When Pine Script v6 launched, AI editors kept writing v5 code.
+    This repo gives AI correct v6 reference and permanent error memory.
 
-- //@version=6 on every script — no exceptions
-- Use ta.* functions — never reimplement manually
-- Use input.int(), input.float() etc — NOT bare input()
-- Use request.security() — NOT security()
-- Use indicator() — NOT study()
-- var / varip per execution model
-- No invented function names
+## Kullandığını Nasıl Anlarsın? / How to Verify?
 
-## Reference Map
+✅ AI "LESSONS_LEARNED.md okudum / read" demeli
+✅ //@version=6 ile başlamalı
+✅ ta.* kullanmalı, v5 syntax yazmamalı
+❌ v5 syntax görüyorsan kurallar aktif değil
 
-| Task | File |
+## Protokol / Protocol
+
+1. LESSONS_LEARNED.md oku / read
+2. LLM_MANIFEST.md ile doğru dosyayı bul / find correct file
+3. O dosyayı oku / read it
+4. //@version=6 ile yaz / write starting with //@version=6
+5. Hata olunca: çöz + LESSONS_LEARNED.md'ye ekle
+
+## v5 → v6
+
+| ❌ v5 | ✅ v6 |
+|-------|-------|
+| study() | indicator() |
+| security() | request.security() |
+| input(14, type=input.integer) | input.int(14) |
+| array.new_float() | array.new<float>() |
+
+## Referans / Reference
+
+| Need | File |
 |------|------|
 | RSI, EMA, MACD, ATR | reference/functions/ta.md |
 | strategy.entry, exit | reference/functions/strategy.md |
 | plot, line, label | reference/functions/drawing.md |
-| request.security, MTF | reference/functions/request.md |
-| array, map | reference/functions/collections.md |
-| math, str, input, alert | reference/functions/general.md |
 | Errors | concepts/common_errors.md |
-| Execution model | concepts/execution_model.md |
 | **Always first** | LESSONS_LEARNED.md |
-
-## On Error
-
-```
-### [Error title]
-- **Error message:** exact text from TradingView
-- **Cause:** why it happens
-- **Fix:** how to resolve
-
-//@version=6
-// ❌ Wrong
-// ✅ Correct
-```
-
-Append this format to LESSONS_LEARNED.md after every error fix.
