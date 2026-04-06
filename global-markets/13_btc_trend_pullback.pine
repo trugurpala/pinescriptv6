@@ -1,0 +1,68 @@
+//@version=6
+// BTC/USDT — EMA Trend + RSI Pullback Entry Strategy
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: EMA trend yönünde RSI pullback ile giriş yapar.
+//     BTC için optimize edilmiş — 24/7 piyasa, long only varsayılan.
+// EN: Enters on RSI pullback in direction of EMA trend.
+//     Optimised for BTC — 24/7 market, long only default.
+//
+// Önerilen TF / Recommended TF: 4H, 1D
+// Sembol / Symbol: BINANCE:BTCUSDT
+strategy("BTC Trend Pullback [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 5,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.1,
+    slippage          = 3)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   trendLen  = input.int(200, "Trend EMA",   minval=50)
+int   fastLen   = input.int(21,  "Fast EMA",    minval=1)
+int   rsiLen    = input.int(14,  "RSI",         minval=1)
+float rsiEntry  = input.float(40, "RSI Pullback Level", minval=20, maxval=55)
+int   atrLen    = input.int(14,  "ATR",         minval=1)
+float slMult    = input.float(2.0, "SL Mult",   step=0.1)
+float tpMult    = input.float(4.0, "TP Mult",   step=0.1)
+bool  longOnly  = input.bool(true, "Long Only (BTC bull bias)")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float trendEma  = ta.ema(close, trendLen)
+float fastEma   = ta.ema(close, fastLen)
+float rsi       = ta.rsi(close, rsiLen)
+float atrVal    = ta.atr(atrLen)
+
+// Trend: fiyat trend EMA üzerinde
+bool  upTrend   = close > trendEma and fastEma > trendEma
+bool  downTrend = close < trendEma and fastEma < trendEma
+
+// Giriş: RSI pullback sonrası toparlanma
+bool  longEntry  = upTrend and ta.crossover(rsi, rsiEntry)
+bool  shortEntry = downTrend and ta.crossunder(rsi, 100 - rsiEntry) and not longOnly
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if longEntry
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if shortEntry
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(trendEma, "Trend EMA", color.new(color.gray,  30), linewidth=2)
+plot(fastEma,  "Fast EMA",  color.new(color.orange, 20), linewidth=1)
+bgcolor(upTrend   ? color.new(color.green, 96) : na)
+bgcolor(downTrend ? color.new(color.red,   96) : na)
+plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
+
+alertcondition(longEntry,  "BTC Long",  "BTC Long Entry — {{close}}")
+alertcondition(shortEntry, "BTC Short", "BTC Short Entry — {{close}}")
