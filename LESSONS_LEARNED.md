@@ -108,3 +108,39 @@ strategy("ES Demo",
 
 > TR: Yeni bir hata çözünce buraya ekle. Format: başlık + hata mesajı + sebep + çözüm + kod.
 > EN: When you solve a new error, add it here. Format: title + error + cause + fix + code.
+
+---
+
+### Hacim Olmadan EMA Cross = Muhtemelen Fakeout
+- **Durum / Situation:** EMA crossover sinyali geldi ama fiyat hemen geri döndü
+- **Sebep / Cause:** Düşük hacimli gürültü, EMA'yı kısaca kesti
+- **Çözüm / Fix:** Hacim filtresi + HTF trend filtresi ekle
+
+```pine
+//@version=6
+// Sinyal sadece yeterli hacim + HTF trend uyumunda geçerli
+float volAvg = ta.sma(volume, 20)
+float htfEma = request.security(syminfo.tickerid, "60",
+    ta.ema(close, 50)[1], lookahead=barmerge.lookahead_on)
+bool signal  = ta.crossover(ta.ema(close,9), ta.ema(close,21))
+              and volume > volAvg * 1.5   // hacim onayı / volume confirm
+              and close > htfEma          // HTF trend yönü / HTF direction
+```
+
+- **Referans / Reference:** `concepts/signal_quality.md`
+
+---
+
+### request.security() lookahead_on + [1] = Repainting Yok
+- **Not / Note:** MTF filtresi kullanırken repainting önlemek için her zaman `[1]` ekle
+- **Çözüm / Fix:**
+
+```pine
+//@version=6
+// ❌ Repainting yapar / Causes repainting
+float htf = request.security(syminfo.tickerid, "60", ta.ema(close,50))
+
+// ✅ Repainting yok / No repainting
+float htf = request.security(syminfo.tickerid, "60",
+    ta.ema(close, 50)[1], lookahead=barmerge.lookahead_on)
+```
