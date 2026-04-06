@@ -1,110 +1,74 @@
 # LLM Manifest — Pine Script v6
+# Repo: github.com/trugurpala/pinescriptv6
 # Maintainer: Ugur Pala · mail@ugurpala.com
 
----
-
-## TR | Türkçe
-
-Bu dosya, yapay zekanın hangi soruda hangi referans dosyasını okuması
-gerektiğini belirleyen yönlendirme haritasıdır.
-
-### Protokol
-1. Kullanıcının isteğini belirle
-2. Aşağıdaki tablodan ilgili dosyayı bul
-3. **Her zaman önce `LESSONS_LEARNED.md`'yi kontrol et**
-4. Yalnızca ilgili dosyayı oku (context penceresi verimliliği için)
-
-### Kavramlar ve Temel Dil
-
-| Anahtar Kelime | Dosya |
-|----------------|-------|
-| barstate, var, varip, history, realtime | `concepts/execution_model.md` |
-| repainting, request.security, HTF, MTF | `concepts/timeframes.md` |
-| color.new, from_gradient, bgcolor | `concepts/colors_and_display.md` |
-| max_bars_back, series string, hata | `concepts/common_errors.md` |
-| method, user-defined method | `concepts/methods.md` |
-| type, UDT, object, field | `concepts/objects.md` |
-
-### API Referansı
-
-| Anahtar Kelime | Dosya |
-|----------------|-------|
-| open, close, high, low, volume, bar_index, syminfo | `reference/variables.md` |
-| color.red, shape.*, plot.style_*, size.* | `reference/constants.md` |
-| int, float, bool, string, series, simple | `reference/types.md` |
-| if, for, while, switch, var, varip, export | `reference/keywords.md` |
-| @version, @param, @returns, @type | `reference/annotations.md` |
-
-### Fonksiyonlar
-
-| İhtiyaç | Dosya |
-|---------|-------|
-| RSI, EMA, SMA, MACD, ATR, BB, crossover, pivot | `reference/functions/ta.md` |
-| strategy.entry, exit, close, position_size | `reference/functions/strategy.md` |
-| plot, line.new, box.new, label.new, table | `reference/functions/drawing.md` |
-| request.security, financial, currency_rate | `reference/functions/request.md` |
-| array, map, matrix | `reference/functions/collections.md` |
-| math, str, input, alert, timestamp | `reference/functions/general.md` |
-
-### Kod Yazma
-
-| İhtiyaç | Dosya |
-|---------|-------|
-| İsimlendirme, sıralama, yorum | `writing_scripts/style_guide.md` |
-| Pine Logs, debug paneli | `writing_scripts/debugging.md` |
-| Profiler, optimizasyon | `writing_scripts/profiling_and_optimization.md` |
-| Script limitleri, drawing limitleri | `writing_scripts/limitations.md` |
+TR: Bu dosya AI'ın hangi soruda hangi referans dosyasını okuyacağını belirler.
+EN: This file tells the AI which reference file to read for each type of query.
 
 ---
 
-## EN | English
+## Protokol / Protocol
 
-This file is the routing map that tells the AI which reference file
-to read for which query.
+1. TR: LESSONS_LEARNED.md'yi kontrol et — bilinen hataları tekrarlama
+   EN: Check LESSONS_LEARNED.md — never repeat a known error
 
-### Protocol
-1. Identify the user's intent
-2. Find the relevant file in the tables below
-3. **Always check `LESSONS_LEARNED.md` first**
-4. Read only the relevant file (for context window efficiency)
+2. TR: Aşağıdaki tablodan ilgili dosyayı bul ve ONU oku
+   EN: Find the relevant file below and read ONLY that file
 
-### Concepts & Core Language
+3. TR: Kodu yaz, hata olursa LESSONS_LEARNED.md'yi güncelle
+   EN: Write code; on error update LESSONS_LEARNED.md
 
-| Keyword | File |
-|---------|------|
+---
+
+## 1. Kavramlar / Concepts
+
+| Anahtar Kelimeler / Keywords | Dosya / File |
+|---|---|
 | barstate, var, varip, history, realtime | `concepts/execution_model.md` |
-| repainting, request.security, HTF, MTF | `concepts/timeframes.md` |
+| max_bars_back, series string, undeclared | `concepts/common_errors.md` |
+| request.security, repainting, HTF, MTF | `concepts/timeframes.md` |
 | color.new, from_gradient, bgcolor | `concepts/colors_and_display.md` |
-| max_bars_back, series string, error | `concepts/common_errors.md` |
 | method, user-defined method | `concepts/methods.md` |
 | type, UDT, object, field | `concepts/objects.md` |
 
-### API Reference
+## 2. Referans / Reference
 
-| Keyword | File |
-|---------|------|
-| open, close, high, low, volume, bar_index, syminfo | `reference/variables.md` |
-| color.red, shape.*, plot.style_*, size.* | `reference/constants.md` |
-| int, float, bool, string, series, simple | `reference/types.md` |
-| if, for, while, switch, var, varip, export | `reference/keywords.md` |
+| Anahtar Kelimeler / Keywords | Dosya / File |
+|---|---|
+| open, close, high, low, bar_index, syminfo | `reference/variables.md` |
+| color.red, shape.triangle, plot.style_line | `reference/constants.md` |
+| int, float, bool, series, simple | `reference/types.md` |
+| if, for, while, var, varip, switch | `reference/keywords.md` |
 | @version, @param, @returns, @type | `reference/annotations.md` |
 
-### Functions
+## 3. Fonksiyonlar / Functions
 
-| Need | File |
-|------|------|
-| RSI, EMA, SMA, MACD, ATR, BB, crossover, pivot | `reference/functions/ta.md` |
-| strategy.entry, exit, close, position_size | `reference/functions/strategy.md` |
+| İhtiyaç / Need | Dosya / File |
+|---|---|
+| ta.rsi, ta.ema, ta.macd, ta.atr, ta.crossover, ta.pivot | `reference/functions/ta.md` |
+| strategy.entry, strategy.exit, strategy.close | `reference/functions/strategy.md` |
 | plot, line.new, box.new, label.new, table | `reference/functions/drawing.md` |
-| request.security, financial, currency_rate | `reference/functions/request.md` |
+| request.security, request.financial | `reference/functions/request.md` |
 | array, map, matrix | `reference/functions/collections.md` |
 | math, str, input, alert, timestamp | `reference/functions/general.md` |
 
-### Writing Scripts
+## 4. Kod Yazma / Writing
 
-| Need | File |
-|------|------|
-| Naming, ordering, comments | `writing_scripts/style_guide.md` |
-| Pine Logs, debug panel | `writing_scripts/debugging.md` |
-| Profiler, optimization | `writing_scripts/profiling_and_optimization.md` |
-| Script limits, drawing limits | `writing_scripts/limitations.md` |
+| İhtiyaç / Need | Dosya / File |
+|---|---|
+| İsimlendirme, sıralama / Naming, ordering | `writing_scripts/style_guide.md` |
+| Pine Logs, debug | `writing_scripts/debugging.md` |
+| Performans / Performance | `writing_scripts/profiling_and_optimization.md` |
+| Limitler / Limits | `writing_scripts/limitations.md` |
+
+---
+
+## Örnekler / Examples
+
+| Görev / Task | Oku / Read |
+|---|---|
+| RSI indikatörü yaz | `reference/functions/ta.md` + `reference/functions/drawing.md` |
+| EMA strateji yaz | `reference/functions/ta.md` + `reference/functions/strategy.md` |
+| Çoklu TF (MTF) | `reference/functions/request.md` + `concepts/timeframes.md` |
+| Hata alıyorum | `concepts/common_errors.md` + `LESSONS_LEARNED.md` |
+| Değişkenim neden sıfırlanıyor | `concepts/execution_model.md` |
