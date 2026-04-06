@@ -5,13 +5,13 @@
 ![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-1E88E5?style=for-the-badge&logo=tradingview&logoColor=white)
 ![TradingView](https://img.shields.io/badge/TradingView-Compatible-131722?style=for-the-badge&logo=tradingview)
 ![License](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)
-![Maintained](https://img.shields.io/badge/Maintained%20by-Uğur%20Pala-F59E0B?style=for-the-badge)
+![Author](https://img.shields.io/badge/Author-Uğur%20Pala-F59E0B?style=for-the-badge)
 ![Contributions](https://img.shields.io/badge/Contributions-Welcome-8B5CF6?style=for-the-badge)
 
-**A complete Pine Script v6 reference, restructured for AI-assisted development.**  
-Built by [Uğur Pala](https://github.com/trugurpala) · Includes an auto-updating error memory system via `LESSONS_LEARNED.md`
+**A complete Pine Script v6 reference, hand-built for AI-assisted development.**
+Created by [Uğur Pala](https://github.com/trugurpala) · mail@ugurpala.com
 
-[Quick Start](#quick-start) · [File Structure](#file-structure) · [Use with Cursor / Windsurf](#use-with-cursor--windsurf--copilot) · [Use with Claude](#use-with-claude-projects) · [Contributing](#contributing) · [License](#license)
+[Quick Start](#quick-start) · [Use with Cursor / Windsurf](#use-with-cursor--windsurf--copilot) · [Use with Claude](#use-with-claude-projects) · [File Structure](#file-structure) · [Contributing](#contributing)
 
 </div>
 
@@ -19,17 +19,17 @@ Built by [Uğur Pala](https://github.com/trugurpala) · Includes an auto-updatin
 
 ## What is this?
 
-This repository contains the TradingView Pine Script v6 documentation,
-restructured for use as an AI knowledge base (RAG — Retrieval Augmented Generation).
+Every file in this repository was written from scratch by **Uğur Pala**, purpose-built for AI-assisted Pine Script v6 development.
 
-**Created and maintained by [Uğur Pala](https://github.com/trugurpala) · mail@ugurpala.com**
+The primary source is the official TradingView Pine Script v6 documentation — hand-translated, restructured, and optimised as an AI knowledge base (RAG).
 
-Key features:
-- **Complete v6 reference** — ta.*, strategy.*, drawing, request, collections, math/string/input
-- **LESSONS_LEARNED.md** — auto-updated by Claude when it solves errors, preventing repetition
-- **LLM_MANIFEST.md** — routing map so the AI fetches only the relevant file per query
-- **SKILL.md** — the AI's writing protocol for this codebase
-- Open to the community — use it with Claude, Cursor, Windsurf, GitHub Copilot, or any AI editor
+On top of the reference material, this repo adds a unique system:
+
+- **LESSONS_LEARNED.md** — the AI writes here every time it solves an error. Next session it reads this first and never repeats the same mistake.
+- **LLM_MANIFEST.md** — a routing map so the AI fetches only the relevant file per query, not the whole repo.
+- **SKILL.md** — the AI's writing protocol: check errors first, find the right reference, write clean v6 code.
+- **Claude Project integration** — works out of the box with Claude.ai Projects.
+- **Cursor / Windsurf / Copilot** — `.cursorrules` and `.github/copilot-instructions.md` included.
 
 ---
 
@@ -55,31 +55,25 @@ git clone https://github.com/trugurpala/pinescriptv6.git
 
 ## Use with Cursor / Windsurf / Copilot
 
-Clone the repo and reference files directly in your AI chat:
+Clone the repo — `.cursorrules` and `.github/copilot-instructions.md` are picked up automatically.
 
-| Task | Reference file |
-|------|---------------|
-| Building an indicator | `@reference/functions/ta.md` + `@reference/functions/drawing.md` |
-| Building a strategy | `@reference/functions/strategy.md` |
+Or reference files directly:
+
+| Task | File to reference |
+|------|------------------|
+| Writing an indicator | `@reference/functions/ta.md` + `@reference/functions/drawing.md` |
+| Writing a strategy | `@reference/functions/strategy.md` |
 | Multi-timeframe data | `@reference/functions/request.md` |
-| Getting an error | `@concepts/common_errors.md` |
-| Before writing any code | `@LESSONS_LEARNED.md` (always first) |
-
-Or add the whole repo as context in your `.cursorrules` / `copilot-instructions.md`:
-
-```
-Always check LESSONS_LEARNED.md before writing Pine Script v6 code.
-Use LLM_MANIFEST.md to find the correct reference file for the task.
-All scripts must start with //@version=6.
-```
+| Fixing an error | `@concepts/common_errors.md` |
+| **Before anything** | `@LESSONS_LEARNED.md` — always read this first |
 
 ---
 
-## Use with Custom GPTs / Other LLMs
+## Use with Custom GPTs or Other LLMs
 
 1. Download this repo as a ZIP
-2. Upload the relevant files to your Custom GPT Knowledge or any RAG system
-3. Recommended minimum upload: `LLM_MANIFEST.md` + `LESSONS_LEARNED.md` + the `reference/functions/` folder
+2. Upload to your Custom GPT Knowledge or RAG pipeline
+3. Recommended minimum: `LLM_MANIFEST.md` + `LESSONS_LEARNED.md` + `reference/functions/`
 
 ---
 
@@ -88,7 +82,7 @@ All scripts must start with //@version=6.
 ```
 pinescriptv6/
 │
-├── LESSONS_LEARNED.md          ← Auto-updated error log (AI writes here on every fix)
+├── LESSONS_LEARNED.md          ← Auto-updated error log (AI appends here on every fix)
 ├── SKILL.md                    ← AI writing protocol for this repo
 ├── LLM_MANIFEST.md             ← Query routing map — which file to read for which task
 │
@@ -115,44 +109,30 @@ pinescriptv6/
 │       └── general.md          ← math, str, input, alert, timestamp
 │
 └── writing_scripts/
-    ├── style_guide.md          ← Naming, ordering, comment conventions
-    ├── debugging.md            ← Pine Logs, plot debug, table panels
+    ├── style_guide.md
+    ├── debugging.md
     ├── profiling_and_optimization.md
-    └── limitations.md          ← Drawing limits, request limits, buffer limits
+    └── limitations.md
 ```
 
 ---
 
 ## How LESSONS_LEARNED Works
 
-When an AI using this repo solves a Pine Script v6 error:
+This is the core feature of this repo.
 
-1. The error and its fix are documented
-2. **`LESSONS_LEARNED.md` is updated automatically**
-3. Next session: the AI reads it first
-4. The same mistake is never repeated
+Every time an AI using this repo encounters and fixes a Pine Script v6 error:
 
-This is the core feature of this repo — a living, growing error log that makes the AI smarter over time.
+1. The error, cause, and fix are documented
+2. **`LESSONS_LEARNED.md` is updated in this repo automatically**
+3. Next session: the AI reads it before writing any code
+4. The same mistake is never made twice
 
----
-
-## Credits
-
-| Contribution | Author |
-|---|---|
-| Original Pine Script v6 documentation | [TradingView](https://www.tradingview.com/pine-script-docs/) |
-| v6 RAG restructuring & chunking | [codenamdevan](https://github.com/codenamedevan/pinescriptv6) |
-| Ownership, Turkish adaptation, LESSONS_LEARNED system, SKILL protocol, community release | [Uğur Pala](https://github.com/trugurpala) · mail@ugurpala.com |
-
----
-
-## Contributing
-
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Over time, this file becomes a personal, growing knowledge base of real-world Pine Script v6 errors and solutions.
 
 ---
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.  
-Copyright © 2025 [Uğur Pala](https://github.com/trugurpala)
+MIT — see [LICENSE](LICENSE) for details.
+Copyright © 2025 [Uğur Pala](https://github.com/trugurpala) · mail@ugurpala.com
