@@ -1,66 +1,136 @@
-# Profiling ve Optimizasyon - Pine Script v6
-Maintainer: Ugur Pala - mail@ugurpala.com
+# Profiling & Optimization
+> Maintainer: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
 
-## Pine Profiler Nasil Acilir
-Pine Editor > sag ust kosedeki ... menusunden "Profile script" sec.
-Her satirin millisaniye bazinda maliyet raporu gosterilir.
+---
 
-## Optimizasyon Kurallari
+## TR | Türkçe
 
-### 1. request.security Cagrilerini Minimize Et
+### Pine Profiler
+
+Pine Editor → `...` menüsü → **Profile script**
+Her satırın ms bazında maliyeti gösterilir.
+
+### Optimizasyon Kuralları
+
+**1. request.security — Çağrıları Birleştir**
+
 ```pine
-// YANLIS - 3 ayri cagri
+// ❌ 3 ayrı çağrı
 dHigh  = request.security(syminfo.tickerid, "D", high)
 dLow   = request.security(syminfo.tickerid, "D", low)
 dClose = request.security(syminfo.tickerid, "D", close)
 
-// DOGRU - tek cagri, tuple
-[dHigh, dLow, dClose] = request.security(syminfo.tickerid, "D",
-                                          [high, low, close])
+// ✅ Tek çağrı, tuple
+[dHigh, dLow, dClose] = request.security(syminfo.tickerid, "D", [high, low, close])
 ```
 
-### 2. Hesaplamayi if Disina Al
-```pine
-// YANLIS - gereksiz kosullu hesaplama
-if condition
-    val = ta.ema(close, 200)  // Her barda degil ama yine de pahali
+**2. Hesaplamayı if Dışına Al**
 
-// DOGRU - once hesapla, sonra kullan
+```pine
+// ❌ if içinde pahalı hesaplama
+if condition
+    val = ta.ema(close, 200)
+
+// ✅ Her barda hesapla, sadece kullanımı koşulla
 val = ta.ema(close, 200)
 if condition
     doSomething(val)
 ```
 
-### 3. Drawing Nesnelerini Limitli Tut
-```pine
-// YANLIS - sinırsız label birikimi
-if condition
-    label.new(bar_index, high, "Al")
+**3. Sliding Window — Sabit Boyut**
 
-// DOGRU - max 50 label tut
+```pine
+// ✅ Push + shift ile boyut sabit kalır
+var arr = array.new<float>(20, na)
+arr.push(close)
+arr.shift()
+```
+
+**4. Drawing — Biriken Nesneleri Temizle**
+
+```pine
+// ❌ Sonsuz label birikir
 if condition
-    label.new(bar_index, high, "Al")
+    label.new(bar_index, high, "sinyal")
+
+// ✅ Max 50 tut
+if condition
+    label.new(bar_index, high, "sinyal")
     if label.all.size() > 50
         label.delete(label.all.first())
 ```
 
-### 4. Sliding Window Icin var + push/shift
+**5. Son Bar İşlemleri**
+
 ```pine
-// DOGRU - sabit boyutlu sliding window
+// Pahalı hesaplamalar sadece son barda
+if barstate.islast
+    // tablo güncelleme, kompleks label vs.
+```
+
+---
+
+## EN | English
+
+### Pine Profiler
+
+Pine Editor → `...` menu → **Profile script**
+Shows per-line cost in milliseconds.
+
+### Optimization Rules
+
+**1. request.security — Combine Calls**
+
+```pine
+// ❌ 3 separate calls
+dHigh  = request.security(syminfo.tickerid, "D", high)
+dLow   = request.security(syminfo.tickerid, "D", low)
+dClose = request.security(syminfo.tickerid, "D", close)
+
+// ✅ Single call, tuple
+[dHigh, dLow, dClose] = request.security(syminfo.tickerid, "D", [high, low, close])
+```
+
+**2. Move Calculations Outside if**
+
+```pine
+// ❌ Expensive calc inside if
+if condition
+    val = ta.ema(close, 200)
+
+// ✅ Calculate every bar, conditionally use
+val = ta.ema(close, 200)
+if condition
+    doSomething(val)
+```
+
+**3. Sliding Window — Fixed Size**
+
+```pine
+// ✅ Push + shift keeps size constant
 var arr = array.new<float>(20, na)
 arr.push(close)
-arr.shift()  // Boyut 20'de sabit kalir
+arr.shift()
 ```
 
-### 5. barstate.islast ile Son Barda Yapilacak Islemler
+**4. Drawing — Clean Up Accumulating Objects**
+
 ```pine
-// Pahalı hesaplamalar sadece son barda yap
+// ❌ Labels accumulate forever
+if condition
+    label.new(bar_index, high, "signal")
+
+// ✅ Keep max 50
+if condition
+    label.new(bar_index, high, "signal")
+    if label.all.size() > 50
+        label.delete(label.all.first())
+```
+
+**5. Last-Bar-Only Operations**
+
+```pine
+// Expensive work only on the last bar
 if barstate.islast
-    // table guncelleme, kompleks etiketler vs.
-```
-
-### 6. max_bars_back Gereksiz Artirma
-```pine
-// Sadece ihtiyac kadar ayarla
-max_bars_back(close, 200)  // Tum script icin 5000 YERINE spesifik degisken
+    // table updates, complex labels, etc.
 ```
