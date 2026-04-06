@@ -1,18 +1,35 @@
-## Description
+## TR | Türkçe
 
-<!-- What does this PR add or fix? -->
+### Bu PR Ne Yapıyor?
+<!-- Kısa açıklama -->
 
-## Type of change
+### Değişiklik Türü
+- [ ] Hata düzeltme (yanlış dokümantasyon)
+- [ ] Yeni içerik (eksik fonksiyon, örnek)
+- [ ] LESSONS_LEARNED girişi
+- [ ] Diğer
 
+### Kontrol Listesi
+- [ ] Kod örnekleri `//@version=6` ile başlıyor
+- [ ] TradingView'da test edildi
+- [ ] v5 syntax yok
+- [ ] Commit formatı: `docs: ...` / `fix: ...` / `lesson: ...`
+
+---
+
+## EN | English
+
+### What does this PR do?
+<!-- Short description -->
+
+### Type of Change
 - [ ] Bug fix (incorrect documentation)
-- [ ] New content (missing function, example, etc.)
-- [ ] LESSONS_LEARNED entry (new error + fix)
+- [ ] New content (missing function, example)
+- [ ] LESSONS_LEARNED entry
 - [ ] Other
 
-## Checklist
-
-- [ ] My changes follow the file conventions in CONTRIBUTING.md
+### Checklist
 - [ ] Code examples start with `//@version=6`
-- [ ] Code examples are tested in TradingView
-- [ ] No v5 syntax is introduced
-- [ ] Commit message follows the convention: `docs: ...` / `fix: ...`
+- [ ] Tested in TradingView
+- [ ] No v5 syntax
+- [ ] Commit format: `docs: ...` / `fix: ...` / `lesson: ...`
