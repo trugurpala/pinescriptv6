@@ -1,10 +1,17 @@
 //@version=6
-// Stochastic Cross + EMA Filter — github.com/trugurpala/pinescriptv6
-// Author: Ugur Pala · mail@ugurpala.com
+// Stochastic Cross + EMA Filter — Pine Script v6
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+//
+// NOT: ta.stoch() v6'da sadece K değerini döndürür (float).
+// D için K'nın SMA'sını al.
+// NOTE: ta.stoch() returns only K (float) in v6. D = SMA of K.
 strategy("Stoch Strategy [trugurpala]",
-    overlay=true, initial_capital=10000,
-    default_qty_type=strategy.percent_of_equity, default_qty_value=10,
-    commission_type=strategy.commission.percent, commission_value=0.1)
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 10,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.1)
 
 // ── Inputs ───────────────────────────────────────────────────────────────────
 int   stochLen = input.int(14, "Stoch Length", minval=1)
@@ -18,22 +25,28 @@ float slMult   = input.float(1.5, "SL Mult",   step=0.1)
 float tpMult   = input.float(2.5, "TP Mult",   step=0.1)
 
 // ── Calculations ─────────────────────────────────────────────────────────────
-[kRaw, _]  = ta.stoch(high, low, close, stochLen), ta.stoch(high, low, close, stochLen)
-[kLine, dLine] = ta.stoch(high, low, close, stochLen), ta.stoch(high, low, close, stochLen)
-float k      = ta.sma(ta.stoch(high, low, close, stochLen), kSmooth)
-float d      = ta.sma(k, dSmooth)
+// v6: ta.stoch() sadece K döndürür / returns only K
+float rawK   = ta.stoch(high, low, close, stochLen)
+float k      = ta.sma(rawK, kSmooth)   // K düzleştirme / K smoothing
+float d      = ta.sma(k, dSmooth)      // D = K'nın SMA'sı / D = SMA of K
 float emaVal = ta.ema(close, emaLen)
 float atrVal = ta.atr(atrLen)
+
 bool  longEntry  = ta.crossover(k, d)  and k < osLevel and close > emaVal
 bool  shortEntry = ta.crossunder(k, d) and k > obLevel and close < emaVal
 
 // ── Entries ──────────────────────────────────────────────────────────────────
 if longEntry
     strategy.entry("Long", strategy.long)
-    strategy.exit("Long Exit", "Long", stop=close - slMult * atrVal, limit=close + tpMult * atrVal)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
 if shortEntry
     strategy.entry("Short", strategy.short)
-    strategy.exit("Short Exit", "Short", stop=close + slMult * atrVal, limit=close - tpMult * atrVal)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
 
 // ── Visuals ──────────────────────────────────────────────────────────────────
 plot(emaVal, "EMA Filter", color.new(color.orange, 20), linewidth=2)
