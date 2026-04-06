@@ -1,14 +1,33 @@
-# Security Policy
+# Güvenlik Politikası / Security Policy
 
-## Supported Versions
+---
+
+## TR | Türkçe
+
+### Desteklenen Sürümler
+
+Bu bir dokümantasyon deposudur; çalıştırılabilir kod içermez.
+
+### Güvenlik Açığı Bildirimi
+
+Bir gizli anahtar, token veya kişisel veri sızıntısı fark ederseniz lütfen
+kamuya açık bir issue açmadan özel olarak bildirin:
+
+**E-posta:** mail@ugurpala.com
+**GitHub:** [@trugurpala](https://github.com/trugurpala)
+
+---
+
+## EN | English
+
+### Supported Versions
 
 This is a documentation repository. There is no executable code.
 
-## Reporting a Vulnerability
+### Reporting a Vulnerability
 
-If you discover a security concern (e.g. a committed secret or token), please report it privately:
+If you discover a committed secret, token, or any sensitive data leak,
+please report it privately rather than opening a public issue:
 
-**Email:** mail@ugurpala.com  
+**Email:** mail@ugurpala.com
 **GitHub:** [@trugurpala](https://github.com/trugurpala)
-
-Please do not open a public issue for security matters.
