@@ -1,58 +1,65 @@
-# Contributing to pinescriptv6
+# Katkı Sağla
 
-This project was created by **Uğur Pala** ([@trugurpala](https://github.com/trugurpala)) · mail@ugurpala.com
-
-Contributions from the community are welcome.
+Bu proje **Uğur Pala** ([@trugurpala](https://github.com/trugurpala)) tarafından
+tasarlanmış ve geliştirilmiştir. Topluluk katkılarına açıktır.
 
 ---
 
-## Ways to Contribute
+## Nasıl Katkı Sağlanır?
 
-### 1. Add a Solved Error to LESSONS_LEARNED.md
+### 1. LESSONS_LEARNED.md'ye Hata Ekle
 
-The most valuable contribution. Format:
+En değerli katkı türü. Bir Pine Script v6 hatasıyla karşılaşıp çözdüyseniz ekleyin:
 
-```markdown
-### [Short Error Title]
-- **Error message:** Exact text from TradingView
-- **Cause:** Why it happens
-- **Fix:** How to resolve it
-- **Example:**
-```pine
+Format:
+
+### [Kısa Hata Başlığı]
+- Hata mesajı: TradingView'dan kopyaladığınız tam hata metni
+- Sebep: Neden oluşuyor?
+- Çözüm: Nasıl düzeltilir?
+- Örnek:
+
 //@version=6
-// ❌ Wrong
+// Yanlış
 ...
-// ✅ Correct
+// Doğru
 ...
-```
----
-```
-
-### 2. Improve a Reference File
-
-If you find a missing function, incorrect signature, or better example:
-
-1. Fork the repo
-2. Edit the relevant `.md` file
-3. Open a pull request
-
-### 3. Add Examples
-
-All code examples must:
-- Start with `//@version=6`
-- Be tested and working in TradingView
-- Not contain v5 syntax
 
 ---
 
-## File Conventions
+### 2. Referans Dosyasını Geliştir
 
-- Markdown (`.md`) only
-- Code blocks use ```pine
-- No invented or untested function signatures
+Eksik fonksiyon, yanlış imza veya daha iyi bir örnek buldunuz mu?
+
+1. Repoyu fork'layın
+2. İlgili .md dosyasını düzenleyin
+3. Pull request açın
+
+### 3. Örnek Ekle
+
+Tüm kod örnekleri:
+- //@version=6 ile başlamalı
+- TradingView'da test edilmiş ve çalışır olmalı
+- v5 syntax içermemeli
 
 ---
 
-## Questions
+## Dosya Kuralları
 
-Open an issue or email: **mail@ugurpala.com**
+- Sadece Markdown (.md)
+- Kod blokları pine ile açılmalı
+- Test edilmemiş veya var olmayan fonksiyon imzası eklenmemeli
+
+---
+
+## PR Başlık Formatı
+
+docs: ta.pivothigh ornegi eklendi
+fix: strategy.exit imzasi duzeltildi
+lesson: max_bars_back realtime hatasi eklendi
+
+---
+
+## İletişim
+
+Soru için issue açın veya: mail@ugurpala.com
