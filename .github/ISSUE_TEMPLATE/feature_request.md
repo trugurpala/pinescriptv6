@@ -1,19 +1,27 @@
 ---
-name: Feature / Content request
-about: Request new content or a missing reference section
-title: '[REQUEST] '
+name: "✨ İçerik İsteği / Content Request"
+about: "TR: Eksik fonksiyon veya bölüm isteyin / EN: Request missing content or a new section"
+title: "[REQUEST] "
 labels: enhancement
 assignees: trugurpala
 ---
 
-## What is missing?
+## TR | Türkçe
 
-<!-- e.g. "request.seed() is not documented" -->
+**Ne eksik?**
+<!-- Örnek: request.seed() fonksiyonu dokümante edilmemiş -->
 
-## Why is it needed?
+**Neden gerekli?**
 
-<!-- Describe the use case -->
+**Referans linki (varsa):**
 
-## Any references?
+---
 
-<!-- Link to TradingView docs or community post if available -->
+## EN | English
+
+**What is missing?**
+<!-- e.g. request.seed() is not documented -->
+
+**Why is it needed?**
+
+**Reference link (if any):**
