@@ -1,0 +1,48 @@
+//@version=6
+// Squeeze Momentum (LazyBear inspired) — Pine Script v6
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+indicator("Squeeze Momentum [trugurpala]", overlay=false)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   bbLen    = input.int(20,   "BB Length",   minval=1)
+float bbMult   = input.float(2.0, "BB Mult",    step=0.1)
+int   kcLen    = input.int(20,   "KC Length",   minval=1)
+float kcMult   = input.float(1.5, "KC Mult",    step=0.1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+// Bollinger Bands
+[bbUpper, bbBasis, bbLower] = ta.bb(close, bbLen, bbMult)
+
+// Keltner Channels
+float kcMa    = ta.ema(close, kcLen)
+float kcRange = ta.atr(kcLen) * kcMult
+float kcUpper = kcMa + kcRange
+float kcLower = kcMa - kcRange
+
+// Squeeze: BB içinde mi KC?
+bool sqzOn  = bbLower > kcLower and bbUpper < kcUpper
+bool sqzOff = bbLower < kcLower and bbUpper > kcUpper
+bool noSqz  = not sqzOn and not sqzOff
+
+// Momentum
+float highLow   = math.avg(ta.highest(kcLen), ta.lowest(kcLen))
+float highClose = math.avg(ta.highest(kcLen), close)
+float mom       = ta.linreg(close - math.avg(highLow, highClose), kcLen, 0)
+
+// ── Colors ───────────────────────────────────────────────────────────────────
+color momColor = mom > 0
+    ? (mom > mom[1] ? color.new(color.green,  0) : color.new(color.green, 50))
+    : (mom < mom[1] ? color.new(color.red,    0) : color.new(color.red,   50))
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(mom, "Momentum", momColor, style=plot.style_histogram, linewidth=4)
+hline(0, "Zero", color.new(color.gray, 50))
+
+plotshape(sqzOn,  "Squeeze On",  shape.circle, location.bottom,
+    color.new(color.red,   20), size=size.tiny, title="Sqz On")
+plotshape(sqzOff, "Squeeze Off", shape.circle, location.bottom,
+    color.new(color.green, 20), size=size.tiny, title="Sqz Off")
+plotshape(noSqz,  "No Squeeze",  shape.circle, location.bottom,
+    color.new(color.gray,  40), size=size.tiny, title="No Sqz")
+
+alertcondition(sqzOff and sqzOn[1], "Squeeze Fire", "Squeeze Released — {{ticker}}")
