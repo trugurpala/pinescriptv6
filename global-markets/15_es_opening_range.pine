@@ -1,0 +1,83 @@
+//@version=6
+// ES S&P500 — Opening Range Breakout (ORB) Strategy
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: İlk 30 dakikanın yüksek/düşüğünü belirleyip kırılma yönünde giriş yapar.
+//     RTH (09:30-16:00 ET) içinde çalışır. Seans sonunda tüm pozisyonlar kapatılır.
+// EN: Identifies the first 30-minute high/low and enters on breakout.
+//     Works within RTH (09:30-16:00 ET). All positions closed at session end.
+//
+// Sembol / Symbol: CME_MINI:ES1! veya CME_MICRO:MES1!
+// Önerilen TF / Recommended TF: 5M, 15M
+strategy("ES Opening Range Breakout [trugurpala]",
+    overlay           = true,
+    initial_capital   = 25000,
+    default_qty_type  = strategy.fixed,
+    default_qty_value = 1,
+    commission_type   = strategy.commission.cash_per_contract,
+    commission_value  = 4.0,
+    slippage          = 1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   orbMins   = input.int(30, "ORB Minutes", minval=5, maxval=60,
+                    tooltip="İlk N dakikanın high/low'u / First N-minute high/low")
+float atrMult   = input.float(1.5, "SL ATR Mult", step=0.1)
+float rr        = input.float(2.0,  "R:R Ratio",   step=0.1)
+bool  longOnly  = input.bool(false,  "Long Only")
+
+// ── Seans ve ORB Zamanı / Session and ORB Time ───────────────────────────────
+bool  rthOpen   = not na(time(timeframe.period, "0930-0930", "America/New_York"))
+bool  inRTH     = not na(time(timeframe.period, "0930-1600", "America/New_York"))
+bool  inORB     = not na(time(timeframe.period, "0930-" + str.tostring(930 + orbMins), "America/New_York"))
+
+// ORB yüksek/düşük hesapla
+var float orbHigh = na
+var float orbLow  = na
+var bool  orbDone = false
+
+if rthOpen
+    orbHigh := high
+    orbLow  := low
+    orbDone := false
+
+if inORB and not orbDone
+    orbHigh := math.max(orbHigh, high)
+    orbLow  := math.min(orbLow,  low)
+
+if not inORB and not orbDone
+    orbDone := true
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float atrVal    = ta.atr(14)
+bool  longBreak  = orbDone and inRTH and ta.crossover(close, orbHigh)  and strategy.position_size == 0
+bool  shortBreak = orbDone and inRTH and ta.crossunder(close, orbLow)  and strategy.position_size == 0
+
+// RTH sonu kapat / Close at RTH end
+bool  rthEnd    = inRTH[1] and not inRTH
+if rthEnd
+    strategy.close_all(comment="RTH Close")
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if longBreak
+    float sl = close - atrMult * atrVal
+    float tp = close + rr * (close - sl)
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long", stop=sl, limit=tp)
+
+if shortBreak and not longOnly
+    float sl = close + atrMult * atrVal
+    float tp = close - rr * (sl - close)
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short", stop=sl, limit=tp)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(orbDone ? orbHigh : na, "ORB High", color.new(color.green, 30), linewidth=2, style=plot.style_linebr)
+plot(orbDone ? orbLow  : na, "ORB Low",  color.new(color.red,   30), linewidth=2, style=plot.style_linebr)
+bgcolor(inORB  ? color.new(color.orange, 93) : na, title="ORB Window")
+bgcolor(not inRTH ? color.new(color.gray, 96) : na, title="Outside RTH")
+plotshape(longBreak,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(shortBreak, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
+
+alertcondition(longBreak,  "ES ORB Long",  "ES ORB Breakout Long — {{close}}")
+alertcondition(shortBreak, "ES ORB Short", "ES ORB Breakout Short — {{close}}")
