@@ -1,6 +1,16 @@
 MIT License
 
-Copyright (c) 2025 Ugur Pala
+Copyright (c) 2025 Ugur Pala (https://github.com/trugurpala)
+mail@ugurpala.com
+
+Bu lisans; bu reponun yapısı, dosya organizasyonu, LESSONS_LEARNED sistemi,
+LLM_MANIFEST yönlendirme haritası ve SKILL protokolünü kapsamaktadır.
+
+Temel referans materyali olarak TradingView'ın resmi Pine Script v6
+dokümantasyonu kullanılmıştır. TradingView bu repoyla hiçbir bağlantısı
+veya onayı bulunmamaktadır.
+
+---
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
