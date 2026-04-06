@@ -1,0 +1,84 @@
+//@version=6
+// EUR/USD — London Session Breakout Strategy
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: Londra seansı açılmadan önceki dar Asya aralığını belirler,
+//     Londra açılışında bu aralığın kırılması üzerine giriş yapar.
+//     Forex piyasasında en güvenilir kırılma stratejilerinden biri.
+// EN: Identifies the tight Asia session range before London open,
+//     enters on breakout of that range at London open.
+//     One of the most reliable breakout strategies in Forex.
+//
+// Sembol / Symbol: FX:EURUSD / OANDA:EURUSD
+// Önerilen TF / Recommended TF: 15M, 1H
+strategy("EUR/USD London Breakout [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 2,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.005,
+    slippage          = 1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+float atrMult   = input.float(1.5, "SL ATR Mult", step=0.1)
+float rrRatio   = input.float(2.0, "R:R Ratio",   step=0.1)
+bool  closeEOD  = input.bool(true, "Close at NY Close (21:00 GMT)")
+
+// ── Seans Tanımları ──────────────────────────────────────────────────────────
+bool asiaRange   = not na(time(timeframe.period, "0300-0700", "GMT"))
+bool inLondon    = not na(time(timeframe.period, "0800-1600", "GMT"))
+bool nyClose     = not na(time(timeframe.period, "2100-2101", "GMT"))
+
+if closeEOD and nyClose
+    strategy.close_all(comment="NY Close")
+
+// ── Asya Aralığı ─────────────────────────────────────────────────────────────
+var float asiaHigh  = na
+var float asiaLow   = na
+var bool  rangeDone = false
+
+bool newDay = ta.change(time("D")) != 0
+if newDay
+    asiaHigh  := na
+    asiaLow   := na
+    rangeDone := false
+
+if asiaRange
+    asiaHigh := na(asiaHigh) ? high : math.max(asiaHigh, high)
+    asiaLow  := na(asiaLow)  ? low  : math.min(asiaLow,  low)
+
+if not asiaRange and not na(asiaHigh)
+    rangeDone := true
+
+// ── Sinyaller ────────────────────────────────────────────────────────────────
+float atrVal     = ta.atr(14)
+bool  longBreak  = rangeDone and inLondon
+                    and ta.crossover(close, asiaHigh)
+                    and strategy.position_size == 0
+bool  shortBreak = rangeDone and inLondon
+                    and ta.crossunder(close, asiaLow)
+                    and strategy.position_size == 0
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if longBreak
+    float sl = close - atrMult * atrVal
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long", stop=sl, limit=close + rrRatio * (close - sl))
+
+if shortBreak
+    float sl = close + atrMult * atrVal
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short", stop=sl, limit=close - rrRatio * (sl - close))
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(rangeDone ? asiaHigh : na, "Asia High", color.new(color.red,   30), linewidth=2, style=plot.style_linebr)
+plot(rangeDone ? asiaLow  : na, "Asia Low",  color.new(color.green, 30), linewidth=2, style=plot.style_linebr)
+bgcolor(asiaRange ? color.new(color.blue,   93) : na, title="Asia Range")
+bgcolor(inLondon  ? color.new(color.yellow, 96) : na, title="London")
+plotshape(longBreak,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(shortBreak, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
+
+alertcondition(longBreak,  "EURUSD Long",  "EURUSD London Breakout Long")
+alertcondition(shortBreak, "EURUSD Short", "EURUSD London Breakout Short")
