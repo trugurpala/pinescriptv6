@@ -1,0 +1,52 @@
+# Pine Script v6 — Cline Rules
+# Author: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
+# TR: Cline, Roo, Continue ve Aider için kural dosyası
+# EN: Rules for Cline, Roo, Continue, and Aider
+
+## Protocol
+
+Before writing any Pine Script v6 code:
+1. Read LESSONS_LEARNED.md (known errors and fixes)
+2. Check LLM_MANIFEST.md (find the correct reference file)
+3. Read that reference file
+4. Write the code
+5. On error: solve + append to LESSONS_LEARNED.md
+
+## Rules
+
+- //@version=6 on every script — no exceptions
+- Use ta.* functions — never reimplement manually
+- Use input.int(), input.float() etc — NOT bare input()
+- Use request.security() — NOT security()
+- Use indicator() — NOT study()
+- var / varip per execution model
+- No invented function names
+
+## Reference Map
+
+| Task | File |
+|------|------|
+| RSI, EMA, MACD, ATR | reference/functions/ta.md |
+| strategy.entry, exit | reference/functions/strategy.md |
+| plot, line, label | reference/functions/drawing.md |
+| request.security, MTF | reference/functions/request.md |
+| array, map | reference/functions/collections.md |
+| math, str, input, alert | reference/functions/general.md |
+| Errors | concepts/common_errors.md |
+| Execution model | concepts/execution_model.md |
+| **Always first** | LESSONS_LEARNED.md |
+
+## On Error
+
+```
+### [Error title]
+- **Error message:** exact text from TradingView
+- **Cause:** why it happens
+- **Fix:** how to resolve
+
+//@version=6
+// ❌ Wrong
+// ✅ Correct
+```
+
+Append this format to LESSONS_LEARNED.md after every error fix.
