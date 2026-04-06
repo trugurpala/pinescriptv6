@@ -14,12 +14,14 @@
 
 [Ugur Pala](https://github.com/trugurpala) · mail@ugurpala.com
 
-[Hızlı Başlangıç](#-hızlı-başlangıç--quick-start) ·
-[Claude Projects](#-claude-projects) ·
-[Cursor](#%EF%B8%8F-cursor) ·
+[Demo](#-demo--xu030-bist-30-futures) ·
+[Claude](#-claude--claude-code) ·
+[Cursor](#️-cursor) ·
 [Windsurf](#-windsurf) ·
 [Copilot](#-github-copilot) ·
-[Örnekler / Examples](#-örnekler--examples) ·
+[Cline / Roo](#-cline--roo--aider) ·
+[Örnekler](#-örnekler--examples) ·
+[Global Markets](#-global-markets) ·
 [Dosya Yapısı](#-dosya-yapısı--file-structure)
 
 </div>
@@ -68,186 +70,136 @@ git clone https://github.com/trugurpala/pinescriptv6.git
 
 ---
 
-## 🤖 Claude Projects
+## 🤖 Claude / Claude Code
 
-> TR: Claude.ai Projects ile entegrasyon — en tam deneyim için önerilen yöntem.
-> EN: Integration with Claude.ai Projects — recommended for the fullest experience.
-
-### TR | Türkçe — Adım Adım
-
-**1. Projeyi aç**
-
-[claude.ai/projects](https://claude.ai/projects) adresine git → mevcut projenizi açın ya da **+ New project** ile yeni oluşturun.
-
-**2. GitHub reposunu bağla**
-
-Sağ panelde **Files** → **+** → **GitHub** seçin.
-
-Açılan pencerede URL kutusuna yapıştırın:
-
-```
-https://github.com/trugurpala/pinescriptv6
-```
-
-**3. Tüm dosyaları seç**
-
-En üstteki **pinescriptv6** checkbox'ına tıklayın → tüm dosyalar seçilir → **Add files** butonuna basın.
-
-**4. Skill'i aktifleştir**
-
-Proje sohbetinde şunu yazın:
-
-```
-/pinescript-v6
-```
-
-Artık Claude her Pine Script v6 kodu yazmadan önce otomatik olarak `LESSONS_LEARNED.md` ve `LLM_MANIFEST.md` dosyalarını okur.
-
----
-
-### EN | English — Step by Step
-
-**1. Open your project**
-
-Go to [claude.ai/projects](https://claude.ai/projects) → open an existing project or click **+ New project**.
-
-**2. Connect the GitHub repo**
-
-In the right panel: **Files** → **+** → **GitHub**.
-
-In the dialog, paste the URL:
-
-```
-https://github.com/trugurpala/pinescriptv6
-```
-
-**3. Select all files**
-
-Click the top-level **pinescriptv6** checkbox → all files are selected → click **Add files**.
-
-**4. Activate the skill**
-
-In the project chat, type:
-
-```
-/pinescript-v6
-```
-
-Claude will now automatically read `LESSONS_LEARNED.md` and `LLM_MANIFEST.md` before writing any Pine Script v6 code.
-
----
-
-## ⌨️ Cursor
-
-> TR: Cursor v0.44+ için `.cursor/rules/pinescriptv6.mdc`, eski sürümler için `.cursorrules` otomatik yüklenir.
-> EN: `.cursor/rules/pinescriptv6.mdc` loads for Cursor v0.44+, `.cursorrules` for older versions.
+> TR: Claude Projects ve Claude Code ile entegrasyon. En tam deneyim için önerilen yöntem.
+> EN: Integration with Claude Projects and Claude Code. Recommended for the fullest experience.
 
 ### TR | Türkçe
 
-**1. Repoyu klonla**
+**Claude Projects**
+
+[claude.ai/projects](https://claude.ai/projects) → projenizi açın → **Files** → **+** → **GitHub**
+
+```
+https://github.com/trugurpala/pinescriptv6
+```
+
+Tüm dosyaları seçin → **Add files** → proje sohbetinde:
+
+```
+/pinescript-v6
+```
+
+**Claude Code**
 
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 cd pinescriptv6
+claude
 ```
 
-**2. Cursor ile aç**
-
-```bash
-cursor .
-```
-
-Kurallar otomatik devreye girer. Cursor'ın Pine Script v6 yazarken `LESSONS_LEARNED.md` dosyasını her seferinde okuduğunu göreceksiniz.
-
-**3. Sohbette kullan — referans dosyalarını tag'le**
-
-Cursor Chat veya Composer'da:
-
-```
-@LESSONS_LEARNED.md EMA cross stratejisi yaz, XU030 için
-```
-
-```
-@reference/functions/ta.md RSI divergence indikatörü yaz
-```
-
-```
-@concepts/common_errors.md Bu hatanın sebebi ne?
-```
-
-**4. Tüm repoyu bağlam olarak ekle**
-
-Cursor'da `Ctrl+Shift+P` → **Add to context** → klasörü seç.
+`CLAUDE.md` otomatik okunur. Claude artık Pine Script v6 kurallarını ve hata hafızasını biliyor.
 
 ---
 
 ### EN | English
 
-**1. Clone the repo**
+**Claude Projects**
+
+[claude.ai/projects](https://claude.ai/projects) → open your project → **Files** → **+** → **GitHub**
+
+```
+https://github.com/trugurpala/pinescriptv6
+```
+
+Select all files → **Add files** → in project chat:
+
+```
+/pinescript-v6
+```
+
+**Claude Code**
 
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 cd pinescriptv6
+claude
 ```
 
-**2. Open with Cursor**
+`CLAUDE.md` is read automatically. Claude now knows Pine Script v6 rules and the error memory system.
+
+---
+
+## ⌨️ Cursor
+
+> TR: Cursor v0.44+ için `.cursor/rules/pinescriptv6.mdc` otomatik yüklenir. Eski sürümler `.cursorrules` kullanır.
+> EN: `.cursor/rules/pinescriptv6.mdc` loads for Cursor v0.44+. `.cursorrules` for older versions.
+
+### TR | Türkçe
 
 ```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+cd pinescriptv6
 cursor .
 ```
 
-Rules load automatically. Cursor will read `LESSONS_LEARNED.md` before every Pine Script v6 session.
+Kurallar otomatik devreye girer. Chat'te kullan:
 
-**3. Use in chat — tag reference files**
+```
+@LESSONS_LEARNED.md EMA cross stratejisi yaz, XU030 için
+```
+```
+@reference/functions/ta.md RSI divergence indikatörü yaz
+```
+```
+@concepts/common_errors.md Bu hatanın sebebi ne?
+```
 
-In Cursor Chat or Composer:
+---
+
+### EN | English
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+cd pinescriptv6
+cursor .
+```
+
+Rules load automatically. Use in chat:
 
 ```
 @LESSONS_LEARNED.md write an EMA cross strategy for XU030
 ```
-
 ```
 @reference/functions/ta.md write an RSI divergence indicator
 ```
-
 ```
 @concepts/common_errors.md what causes this error?
 ```
-
-**4. Add the whole repo as context**
-
-`Ctrl+Shift+P` → **Add to context** → select the folder.
 
 ---
 
 ## 🌊 Windsurf
 
-> TR: `.windsurfrules` dosyası Windsurf tarafından otomatik okunur.
-> EN: `.windsurfrules` is picked up automatically by Windsurf.
+> TR: `.windsurfrules` dosyası Windsurf / Cascade tarafından otomatik okunur.
+> EN: `.windsurfrules` is picked up automatically by Windsurf / Cascade.
 
 ### TR | Türkçe
-
-**1. Repoyu klonla**
 
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 cd pinescriptv6
-```
-
-**2. Windsurf ile aç**
-
-```bash
 windsurf .
 ```
 
-`.windsurfrules` otomatik yüklenir — Cascade asistanı artık Pine Script v6 kurallarını biliyor.
+`.windsurfrules` otomatik yüklenir. Cascade artık Pine Script v6 kurallarını biliyor.
 
-**3. Cascade'de kullan**
+Chat'te kullan:
 
 ```
 @LESSONS_LEARNED.md Supertrend stratejisi yaz
 ```
-
 ```
 @reference/functions/strategy.md ATR tabanlı SL/TP nasıl yazılır?
 ```
@@ -256,27 +208,19 @@ windsurf .
 
 ### EN | English
 
-**1. Clone the repo**
-
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 cd pinescriptv6
-```
-
-**2. Open with Windsurf**
-
-```bash
 windsurf .
 ```
 
-`.windsurfrules` loads automatically — Cascade now knows Pine Script v6 rules.
+`.windsurfrules` loads automatically. Cascade now knows Pine Script v6 rules.
 
-**3. Use in Cascade**
+Use in Cascade chat:
 
 ```
 @LESSONS_LEARNED.md write a Supertrend strategy
 ```
-
 ```
 @reference/functions/strategy.md how to write ATR-based SL/TP?
 ```
@@ -285,41 +229,21 @@ windsurf .
 
 ## 🐙 GitHub Copilot
 
-> TR: `.github/copilot-instructions.md` VS Code, JetBrains ve diğer Copilot destekli editörlerde otomatik devreye girer.
+> TR: `.github/copilot-instructions.md` VS Code, JetBrains ve Copilot destekli editörlerde otomatik devreye girer.
 > EN: `.github/copilot-instructions.md` activates automatically in VS Code, JetBrains, and any Copilot-enabled editor.
 
 ### TR | Türkçe
 
-**1. Repoyu klonla**
-
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
-```
-
-**2. VS Code ile aç**
-
-```bash
 code pinescriptv6
 ```
 
-GitHub Copilot Chat, `.github/copilot-instructions.md` dosyasını otomatik okur.
-
-**3. Copilot Chat'te kullan**
-
-```
-/pinescript-v6 yaz: Bollinger Band squeeze stratejisi
-```
-
-```
-Bu Pine Script v6 hatasını açıkla ve düzelt
-```
-
-**4. Önerilen chat prompt'ları:**
+Copilot Chat'te kullan:
 
 ```
 LESSONS_LEARNED.md dosyasını kontrol et, sonra bir RSI mean reversion stratejisi yaz.
 ```
-
 ```
 reference/functions/ta.md dosyasına göre ta.pivothigh() imzası nedir?
 ```
@@ -328,39 +252,35 @@ reference/functions/ta.md dosyasına göre ta.pivothigh() imzası nedir?
 
 ### EN | English
 
-**1. Clone the repo**
-
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
-```
-
-**2. Open with VS Code**
-
-```bash
 code pinescriptv6
 ```
 
-GitHub Copilot Chat reads `.github/copilot-instructions.md` automatically.
-
-**3. Use in Copilot Chat**
-
-```
-/pinescript-v6 write: Bollinger Band squeeze strategy
-```
-
-```
-Explain and fix this Pine Script v6 error
-```
-
-**4. Recommended chat prompts:**
+Use in Copilot Chat:
 
 ```
 Check LESSONS_LEARNED.md, then write an RSI mean reversion strategy.
 ```
-
 ```
 According to reference/functions/ta.md, what is the ta.pivothigh() signature?
 ```
+
+---
+
+## 🔧 Cline / Roo / Aider
+
+> TR: `.clinerules` dosyası Cline, Roo, Continue ve Aider tarafından otomatik okunur.
+> EN: `.clinerules` is read automatically by Cline, Roo, Continue, and Aider.
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+cd pinescriptv6
+# Cline, Roo veya Aider ile bu klasörü aç
+# Open this folder with Cline, Roo, or Aider
+```
+
+`.clinerules` otomatik yüklenir. / `.clinerules` loads automatically.
 
 ---
 
@@ -368,23 +288,13 @@ According to reference/functions/ta.md, what is the ta.pivothigh() signature?
 
 ### TR | Türkçe
 
-**1. Repoyu ZIP olarak indir**
+ZIP olarak indir:
 
 [https://github.com/trugurpala/pinescriptv6/archive/refs/heads/main.zip](https://github.com/trugurpala/pinescriptv6/archive/refs/heads/main.zip)
 
-**2. ZIP'i aç ve dosyaları yükle**
+Minimum önerilen yükleme: `LESSONS_LEARNED.md` + `LLM_MANIFEST.md` + `reference/functions/`
 
-Custom GPT Knowledge'a veya tercih ettiğiniz RAG sistemine yükleyin.
-
-**Minimum önerilen yükleme:**
-- `LESSONS_LEARNED.md`
-- `LLM_MANIFEST.md`
-- `reference/functions/ta.md`
-- `reference/functions/strategy.md`
-- `reference/functions/drawing.md`
-- `concepts/common_errors.md`
-
-**3. Sistem promptuna ekle**
+Sistem promptuna ekle:
 
 ```
 Bu proje Pine Script v6 geliştirme için optimize edilmiş bir bilgi tabanıdır.
@@ -397,23 +307,13 @@ Tüm scriptler //@version=6 ile başlamalıdır.
 
 ### EN | English
 
-**1. Download repo as ZIP**
+Download as ZIP:
 
 [https://github.com/trugurpala/pinescriptv6/archive/refs/heads/main.zip](https://github.com/trugurpala/pinescriptv6/archive/refs/heads/main.zip)
 
-**2. Extract and upload files**
+Minimum recommended upload: `LESSONS_LEARNED.md` + `LLM_MANIFEST.md` + `reference/functions/`
 
-Upload to your Custom GPT Knowledge or preferred RAG system.
-
-**Recommended minimum upload:**
-- `LESSONS_LEARNED.md`
-- `LLM_MANIFEST.md`
-- `reference/functions/ta.md`
-- `reference/functions/strategy.md`
-- `reference/functions/drawing.md`
-- `concepts/common_errors.md`
-
-**3. Add to system prompt**
+Add to system prompt:
 
 ```
 This project is a knowledge base optimised for Pine Script v6 development.
@@ -426,10 +326,10 @@ All scripts must start with //@version=6.
 
 ## 📦 Örnekler / Examples
 
-TR: 22 hazır Pine Script v6 örneği — copy-paste hazır, test edilmiş.
-EN: 22 ready-to-use Pine Script v6 examples — copy-paste ready, tested.
+TR: 30+ hazır Pine Script v6 örneği — copy-paste hazır, TradingView'da test edilmiş.
+EN: 30+ ready-to-use Pine Script v6 examples — copy-paste ready, tested in TradingView.
 
-### İndikatörler / Indicators
+### 📊 İndikatörler / Indicators
 
 | # | Dosya | Açıklama / Description |
 |---|-------|------------------------|
@@ -445,8 +345,13 @@ EN: 22 ready-to-use Pine Script v6 examples — copy-paste ready, tested.
 | 10 | [`examples/indicators/10_stoch_rsi.pine`](examples/indicators/10_stoch_rsi.pine) | Stochastic RSI K/D |
 | 11 | [`examples/indicators/11_ichimoku.pine`](examples/indicators/11_ichimoku.pine) | Ichimoku Cloud — all components |
 | 12 | [`examples/indicators/12_mtf_ema.pine`](examples/indicators/12_mtf_ema.pine) | Multi-Timeframe EMA D/W/M |
+| 13 | [`examples/indicators/13_session_highlight.pine`](examples/indicators/13_session_highlight.pine) | Session highlight (VIOP saatli) |
+| 14 | [`examples/indicators/14_rsi_divergence.pine`](examples/indicators/14_rsi_divergence.pine) | RSI Divergence detector |
+| 15 | [`examples/indicators/15_ema_ribbon.pine`](examples/indicators/15_ema_ribbon.pine) | EMA Ribbon 8/13/21/34/55/89/144/233 |
+| 16 | [`examples/indicators/16_chandelier_exit.pine`](examples/indicators/16_chandelier_exit.pine) | Chandelier Exit trailing stop |
+| 17 | [`examples/indicators/17_squeeze_momentum.pine`](examples/indicators/17_squeeze_momentum.pine) | Squeeze Momentum |
 
-### Stratejiler / Strategies
+### 🎯 Stratejiler / Strategies
 
 | # | Dosya | Açıklama / Description |
 |---|-------|------------------------|
@@ -460,6 +365,30 @@ EN: 22 ready-to-use Pine Script v6 examples — copy-paste ready, tested.
 | 08 | [`examples/strategies/08_triple_ema_strategy.pine`](examples/strategies/08_triple_ema_strategy.pine) | Triple EMA 5/13/34 |
 | 09 | [`examples/strategies/09_stoch_strategy.pine`](examples/strategies/09_stoch_strategy.pine) | Stochastic + EMA filter |
 | 10 | [`examples/strategies/10_adx_trend_strategy.pine`](examples/strategies/10_adx_trend_strategy.pine) | ADX Trend Strength |
+| 11 | [`examples/strategies/11_viop_session_strategy.pine`](examples/strategies/11_viop_session_strategy.pine) | VIOP Session — seans bazlı |
+| 12 | [`examples/strategies/12_chandelier_strategy.pine`](examples/strategies/12_chandelier_strategy.pine) | Chandelier Exit Strategy |
+
+---
+
+## 🌍 Global Markets
+
+TR: Dünyanın en çok işlem gören enstrümanları için hazır stratejiler — doğru seans saatleri ve komisyon ayarları dahil.
+EN: Ready strategies for the world's most actively traded instruments — correct session times and commission settings included.
+
+| Enstrüman | Sembol | Dosya |
+|-----------|--------|-------|
+| 🇺🇸 S&P 500 Futures | `CME_MINI:ES1!` | [`global-markets/01_es_sp500.pine`](global-markets/01_es_sp500.pine) |
+| 🇺🇸 Nasdaq-100 Futures | `CME_MINI:NQ1!` | [`global-markets/02_nq_nasdaq.pine`](global-markets/02_nq_nasdaq.pine) |
+| 🥇 Gold Futures | `COMEX:GC1!` | [`global-markets/03_gc_gold.pine`](global-markets/03_gc_gold.pine) |
+| 🛢️ Crude Oil | `NYMEX:CL1!` | [`global-markets/04_cl_crude_oil.pine`](global-markets/04_cl_crude_oil.pine) |
+| 💱 EUR/USD | `FX:EURUSD` | [`global-markets/05_eurusd_forex.pine`](global-markets/05_eurusd_forex.pine) |
+| 💱 GBP/USD | `FX:GBPUSD` | [`global-markets/06_gbpusd_forex.pine`](global-markets/06_gbpusd_forex.pine) |
+| 💱 USD/JPY | `FX:USDJPY` | [`global-markets/07_usdjpy_forex.pine`](global-markets/07_usdjpy_forex.pine) |
+| 🪙 Bitcoin | `BINANCE:BTCUSDT` | [`global-markets/08_btc_crypto.pine`](global-markets/08_btc_crypto.pine) |
+| 🪙 Ethereum | `BINANCE:ETHUSDT` | [`global-markets/09_eth_crypto.pine`](global-markets/09_eth_crypto.pine) |
+| 🇩🇪 DAX Germany | `XETR:DAX` | [`global-markets/10_dax_germany.pine`](global-markets/10_dax_germany.pine) |
+| 🇯🇵 Nikkei 225 | `TVC:NI225` | [`global-markets/11_nikkei_japan.pine`](global-markets/11_nikkei_japan.pine) |
+| 🌍 Universal | `syminfo.tickerid` | [`global-markets/12_universal_strategy.pine`](global-markets/12_universal_strategy.pine) |
 
 ---
 
@@ -468,28 +397,26 @@ EN: 22 ready-to-use Pine Script v6 examples — copy-paste ready, tested.
 ```
 pinescriptv6/
 │
-├── LESSONS_LEARNED.md        TR: Hata hafızası (AI otomatik günceller)
-│                             EN: Error memory (AI auto-updates)
-├── LLM_MANIFEST.md           TR: Sorgu yönlendirme haritası
-│                             EN: Query routing map
-├── SKILL.md                  TR: AI yazma protokolü
-│                             EN: AI writing protocol
+├── CLAUDE.md                   → Claude Code + Claude Projects
+├── AGENTS.md                   → Devin, OpenAI Codex, autonomous agents
+├── LESSONS_LEARNED.md          TR: Hata hafızası / EN: Error memory (AI auto-updates)
+├── LLM_MANIFEST.md             TR: Sorgu yönlendirme / EN: Query routing map
+├── SKILL.md                    TR: AI yazma protokolü / EN: AI writing protocol
 │
 ├── assets/
-│   ├── demo_chart.png        TR: XU030 canlı demo
-│   └── lessons_flow.png      TR: Sistem akış diyagramı
+│   ├── demo_chart.png          XU030 live demo screenshot
+│   └── lessons_flow.png        System flow diagram
 │
-├── CLAUDE.md                 → Claude Code + Claude Projects
-├── AGENTS.md                 → Devin, OpenAI Codex, autonomous agents
 ├── .cursor/rules/
-│   └── pinescriptv6.mdc      → Cursor v0.44+
-├── .cursorrules              → Cursor (legacy fallback)
-├── .windsurfrules            → Windsurf / Codeium
-├── .clinerules               → Cline, Roo, Continue, Aider
-├── .zed/
-│   └── rules                 → Zed editor
+│   └── pinescriptv6.mdc        → Cursor v0.44+
+├── .cursorrules                → Cursor (legacy fallback)
+├── .windsurfrules              → Windsurf / Cascade
+├── .clinerules                 → Cline, Roo, Continue, Aider
+├── .zed/rules                  → Zed editor
 ├── .github/
-│   └── copilot-instructions.md → GitHub Copilot
+│   ├── copilot-instructions.md → GitHub Copilot
+│   ├── pull_request_template.md
+│   └── ISSUE_TEMPLATE/
 │
 ├── concepts/
 │   ├── execution_model.md
@@ -519,9 +446,13 @@ pinescriptv6/
 │   ├── profiling_and_optimization.md
 │   └── limitations.md
 │
-└── examples/
-    ├── indicators/   (12 indicators)
-    └── strategies/   (10 strategies)
+├── examples/
+│   ├── indicators/             17 indicators — copy-paste ready
+│   └── strategies/             12 strategies — copy-paste ready
+│
+├── global-markets/             12 instruments (ES, NQ, GC, CL, EUR/USD, BTC...)
+├── webhook-templates/          Telegram, Discord, JSON payload, VIOP alerts
+└── v5-to-v6-migration/         10 files — v5 to v6 migration guide
 ```
 
 ---
