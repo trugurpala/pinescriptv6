@@ -1,38 +1,21 @@
-# Pine Script v6 — Cursor Rules
-# Maintained by Ugur Pala — mail@ugurpala.com
-# github.com/trugurpala/pinescriptv6
+# Pine Script v6 — Cursor Rules (legacy fallback)
+# Maintainer: Ugur Pala · mail@ugurpala.com
+# For Cursor v0.44+, see .cursor/rules/pinescriptv6.mdc
 
-## Before writing any Pine Script v6 code
+## TR | Kurallar
+- //@version=6 ile başla
+- LESSONS_LEARNED.md oku (kod yazmadan önce)
+- LLM_MANIFEST.md ile dosya bul
+- ta.* kullan, manuel yazma
+- Hata çözümünü LESSONS_LEARNED.md'ye ekle
 
-1. Read LESSONS_LEARNED.md — never repeat a known error
-2. Check LLM_MANIFEST.md — find the correct reference file for the task
-3. Read the relevant reference file before writing
+## EN | Rules
+- Start with //@version=6
+- Read LESSONS_LEARNED.md before writing code
+- Use LLM_MANIFEST.md to find the right reference file
+- Use ta.* — never reimplement
+- Append error fixes to LESSONS_LEARNED.md
 
-## Code Rules
-
-- Every script MUST start with //@version=6
-- Use ta.* functions — do not reimplement manually
-- Use var/varip correctly per the execution model
-- Never invent function names not in the reference docs
-- No v5 syntax (study(), security() at top level, etc.)
-
-## Error Protocol
-
-When you solve a Pine Script v6 error:
-- Update LESSONS_LEARNED.md immediately
-- Format: error message, cause, fix, minimal code example
-
-## Reference Map
-
-| Need | File |
-|------|------|
-| RSI, EMA, crossover, ATR, pivot | reference/functions/ta.md |
-| strategy.entry, exit, position | reference/functions/strategy.md |
-| plot, line, box, label, table | reference/functions/drawing.md |
-| request.security, MTF | reference/functions/request.md |
-| array, map, matrix | reference/functions/collections.md |
-| math, str, input, alert | reference/functions/general.md |
-| open, close, bar_index | reference/variables.md |
-| var, varip, barstate | concepts/execution_model.md |
-| Repainting | concepts/timeframes.md |
-| Errors | concepts/common_errors.md |
+## Reference / Referans
+ta.md | strategy.md | drawing.md | request.md | collections.md | general.md
+concepts/execution_model.md | concepts/common_errors.md
