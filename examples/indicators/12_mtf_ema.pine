@@ -1,0 +1,24 @@
+//@version=6
+// Multi-Timeframe EMA — Daily / Weekly / Monthly — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("MTF EMA [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int  emaLen = input.int(21, "EMA Length", minval=1)
+bool showD  = input.bool(true, "Daily EMA")
+bool showW  = input.bool(true, "Weekly EMA")
+bool showM  = input.bool(false,"Monthly EMA")
+
+// ── Calculations (confirmed bars — no repainting) ────────────────────────────
+float emaD = request.security(syminfo.tickerid, "D", ta.ema(close, emaLen)[1], lookahead=barmerge.lookahead_on)
+float emaW = request.security(syminfo.tickerid, "W", ta.ema(close, emaLen)[1], lookahead=barmerge.lookahead_on)
+float emaM = request.security(syminfo.tickerid, "M", ta.ema(close, emaLen)[1], lookahead=barmerge.lookahead_on)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(showD ? emaD : na, "EMA D", color.new(color.blue,   10), linewidth=2)
+plot(showW ? emaW : na, "EMA W", color.new(color.orange, 10), linewidth=2)
+plot(showM ? emaM : na, "EMA M", color.new(color.red,    10), linewidth=3)
+bool aboveAll = showD and showW and close > emaD and close > emaW
+bool belowAll = showD and showW and close < emaD and close < emaW
+bgcolor(aboveAll ? color.new(color.green, 95) : na)
+bgcolor(belowAll ? color.new(color.red,   95) : na)
