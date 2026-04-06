@@ -1,0 +1,91 @@
+//@version=6
+// DAX / FDAX Germany — Gap Fade + Xetra Session Strategy
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: DAX'ın güniçi boşlukları (gap) kapatma eğiliminden faydalanır.
+//     Xetra seansında (09:00-17:30 CET) çalışır.
+//     NYSE açılışı volatilitesinden kaçınmak için 15:00 CET'te kapat.
+// EN: Exploits DAX's strong tendency to fill intraday gaps.
+//     Active during Xetra session (09:00-17:30 CET).
+//     Positions closed at 15:00 CET to avoid NYSE open volatility.
+//
+// Sembol / Symbol: XETR:DAX / EUREX:FDAX1!
+// Önerilen TF / Recommended TF: 5M, 15M
+strategy("DAX Gap Fade [trugurpala]",
+    overlay           = true,
+    initial_capital   = 25000,
+    default_qty_type  = strategy.fixed,
+    default_qty_value = 1,
+    commission_type   = strategy.commission.cash_per_contract,
+    commission_value  = 5.0,
+    slippage          = 2)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+float gapMult    = input.float(0.3, "Min Gap (ATR mult)", step=0.1)
+float atrMult    = input.float(1.5, "SL ATR Mult",        step=0.1)
+float rrRatio    = input.float(1.5, "R:R Ratio",           step=0.1)
+bool  closeEarly = input.bool(true, "Close at 15:00 CET (before NYSE)")
+
+// ── Xetra Seans: 09:00–17:30 CET ─────────────────────────────────────────────
+bool inXetra     = not na(time(timeframe.period, "0900-1730", "Europe/Berlin"))
+bool xetraOpen   = not na(time(timeframe.period, "0900-0902", "Europe/Berlin"))
+bool preNYSE     = closeEarly and not na(time(timeframe.period, "1500-1501", "Europe/Berlin"))
+bool xetraClose  = inXetra[1] and not inXetra
+
+if xetraClose or preNYSE
+    strategy.close_all(comment="Session End")
+
+// ── Gap Hesapla / Calculate Gap ───────────────────────────────────────────────
+var float prevClose = na
+var bool  gapUp     = false
+var bool  gapDown   = false
+
+float atrVal  = ta.atr(14)
+float minGap  = gapMult * atrVal
+
+// Gün başında gap belirle
+if xetraOpen
+    float gapSize = open - nz(prevClose, open)
+    gapUp   := gapSize >  minGap
+    gapDown := gapSize < -minGap
+else if not inXetra
+    gapUp   := false
+    gapDown := false
+
+// Önceki kapanışı sakla
+if barstate.isconfirmed
+    prevClose := close
+
+// ── Sinyaller ────────────────────────────────────────────────────────────────
+// Gap Up → Short (gap kapanacak, fiyat aşağı gelecek)
+bool shortSignal = gapUp   and xetraOpen and strategy.position_size == 0
+// Gap Down → Long (gap kapanacak, fiyat yukarı gelecek)
+bool longSignal  = gapDown and xetraOpen and strategy.position_size == 0
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if longSignal
+    float sl = open - atrMult * atrVal
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = sl,
+        limit = open + rrRatio * (open - sl))
+
+if shortSignal
+    float sl = open + atrMult * atrVal
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = sl,
+        limit = open - rrRatio * (sl - open))
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(not na(prevClose) ? prevClose : na, "Prev Close",
+    color.new(color.gray, 40), linewidth=1, style=plot.style_linebr)
+bgcolor(gapUp          ? color.new(color.red,   90) : na, title="Gap Up")
+bgcolor(gapDown        ? color.new(color.green, 90) : na, title="Gap Down")
+bgcolor(not inXetra    ? color.new(color.gray,  96) : na, title="Off Hours")
+plotshape(longSignal,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(shortSignal, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
+
+alertcondition(longSignal,  "DAX Gap Long",  "DAX Gap Down Fade Long")
+alertcondition(shortSignal, "DAX Gap Short", "DAX Gap Up Fade Short")
