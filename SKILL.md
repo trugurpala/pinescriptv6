@@ -1,78 +1,118 @@
 ---
 name: pinescript-v6
-description: "Pine Script v6 uzman gelistirici skill - TradingView indiktor ve stratejileri icin dogru, optimize edilmis v6 kodu yazar. Hatalari takip eder ve LESSONS_LEARNED.md'yi otomatik gunceller."
-maintainer: "Ugur Pala - mail@ugurpala.com"
-repo: "github.com/trugurpala/pinescriptv6"
-triggers:
-  - Pine Script
-  - PineScript
-  - indicator
-  - strategy
-  - TradingView
-  - indiktor
-  - strateji
-  - v6
-  - pine
-  - BIST
-  - VIOP
-  - XU030
+description: Pine Script v6 gelistirici skill — dogru v6 kodu yazar, hatalari takip eder.
+maintainer: Ugur Pala · mail@ugurpala.com
+repo: github.com/trugurpala/pinescriptv6
 ---
 
-# Pine Script v6 Gelistirici Skill
+# Pine Script v6 — Skill
 
-## Gorev
-Pine Script v6 ile dogru, optimize ve iyi yapilandirilmis kod yaz.
-Kod yazmadan once mutlaka referans dokumantasyonuna basvur.
-Her hata cozumunden sonra LESSONS_LEARNED.md'yi guncelle.
+---
 
-## Protokol
+## TR | Türkçe
 
-### 1. Kod Yazmadan Once
-- LESSONS_LEARNED.md kontrol et (ayni hatalari tekrarlama)
-- LLM_MANIFEST.md ile ilgili referans dosyasini bul ve oku
+### Görev
+Pine Script v6 ile doğru, optimize edilmiş kod yaz.
+Kod yazmadan önce referansları oku. Hata çözümlerini kaydet.
 
-### 2. Kod Kurallari
-- //@version=6 ile basla
-- Manuel hesaplama yerine ta.* kullan
-- var / varip execution model'e gore dogru kullan
-- Referansta olmayan fonksiyon adi uydurma
+### Protokol
 
-### 3. Hata Oldugunda
-HEMEN LESSONS_LEARNED.md'yi guncelle:
-- Hata mesaji
-- Sebep
-- Cozum + kod ornegi
+**1. Kod yazmadan önce**
+- `LESSONS_LEARNED.md` oku — bilinen hatalar burada
+- `LLM_MANIFEST.md` ile göreve uygun dosyayı bul ve oku
 
-## Referans Dosya Haritasi
+**2. Kod kuralları**
+- `//@version=6` — her scriptin ilk satırı
+- `ta.*` kullan, manuel hesaplama yazma
+- `var` / `varip` execution model'e göre doğru kullan
+- Referansta olmayan fonksiyon adı uydurma
 
-| Ihtiyac | Dosya |
+**3. Hata olduğunda**
+- Hatayı çöz
+- `LESSONS_LEARNED.md` dosyasına hemen ekle (mesaj / sebep / çözüm / örnek)
+
+### Referans Haritası
+
+| İhtiyaç | Dosya |
 |---------|-------|
-| ta.rsi, ta.ema, ta.macd, ta.crossover, ta.atr, ta.pivot | reference/functions/ta.md |
-| strategy.entry, exit, close, position_size | reference/functions/strategy.md |
-| plot, line, box, label, table, plotshape | reference/functions/drawing.md |
-| request.security, financial, MTF | reference/functions/request.md |
-| array, map, matrix | reference/functions/collections.md |
-| math, str, input, alert, timestamp | reference/functions/general.md |
-| open, close, high, low, bar_index, syminfo | reference/variables.md |
-| color.red, shape.*, plot.style_* | reference/constants.md |
-| int, float, bool, series, simple | reference/types.md |
-| if, for, var, varip, switch | reference/keywords.md |
-| @version, @param, @returns | reference/annotations.md |
-| max_bars_back, series string hatasi | concepts/common_errors.md |
-| barstate, var, history, realtime | concepts/execution_model.md |
-| request.security, repainting | concepts/timeframes.md |
-| color.new, color.from_gradient | concepts/colors_and_display.md |
-| User-defined methods | concepts/methods.md |
-| UDT, type, object | concepts/objects.md |
-| Pine Logs, debug | writing_scripts/debugging.md |
-| Profiler, optimizasyon | writing_scripts/profiling_and_optimization.md |
-| Script limitleri | writing_scripts/limitations.md |
-| Kod stili | writing_scripts/style_guide.md |
+| RSI, EMA, MACD, crossover, ATR, pivot | `reference/functions/ta.md` |
+| strategy.entry, exit, close, position | `reference/functions/strategy.md` |
+| plot, line, box, label, table | `reference/functions/drawing.md` |
+| request.security, MTF | `reference/functions/request.md` |
+| array, map, matrix | `reference/functions/collections.md` |
+| math, str, input, alert | `reference/functions/general.md` |
+| open, close, bar_index, syminfo | `reference/variables.md` |
+| color.red, shape.*, style.* | `reference/constants.md` |
+| int, float, series, simple | `reference/types.md` |
+| if, for, var, varip, switch | `reference/keywords.md` |
+| @version, @param, @returns | `reference/annotations.md` |
+| barstate, var, history, realtime | `concepts/execution_model.md` |
+| Repainting, HTF | `concepts/timeframes.md` |
+| color.new, gradient | `concepts/colors_and_display.md` |
+| Bilinen hatalar | `concepts/common_errors.md` |
+| Pine Logs, debug | `writing_scripts/debugging.md` |
+| Optimizasyon | `writing_scripts/profiling_and_optimization.md` |
+| Limitler | `writing_scripts/limitations.md` |
 
-## Kontrol Listesi
-- [ ] LESSONS_LEARNED.md kontrol edildi
-- [ ] //@version=6 mevcut
-- [ ] Fonksiyon imzalari referansla dogrulandi
+### Kontrol Listesi
+- [ ] LESSONS_LEARNED.md okundu
+- [ ] `//@version=6` mevcut
+- [ ] Fonksiyon imzaları referansla doğrulandı
 - [ ] v5 syntax yok
-- [ ] var/varip dogru
-- [ ] Repainting kontrolu yapildi (request.security varsa)
+- [ ] `var`/`varip` doğru
+- [ ] request.security varsa repainting kontrolü yapıldı
+
+---
+
+## EN | English
+
+### Task
+Write correct, optimized Pine Script v6 code.
+Read references before writing. Record error fixes.
+
+### Protocol
+
+**1. Before writing code**
+- Read `LESSONS_LEARNED.md` — known errors are there
+- Use `LLM_MANIFEST.md` to find and read the correct reference file
+
+**2. Code rules**
+- `//@version=6` — first line of every script
+- Use `ta.*` — never reimplement manually
+- Use `var` / `varip` correctly per the execution model
+- Never invent function names not in the reference docs
+
+**3. On error**
+- Solve it
+- Immediately append to `LESSONS_LEARNED.md` (message / cause / fix / example)
+
+### Reference Map
+
+| Need | File |
+|------|------|
+| RSI, EMA, MACD, crossover, ATR, pivot | `reference/functions/ta.md` |
+| strategy.entry, exit, close, position | `reference/functions/strategy.md` |
+| plot, line, box, label, table | `reference/functions/drawing.md` |
+| request.security, MTF | `reference/functions/request.md` |
+| array, map, matrix | `reference/functions/collections.md` |
+| math, str, input, alert | `reference/functions/general.md` |
+| open, close, bar_index, syminfo | `reference/variables.md` |
+| color.red, shape.*, style.* | `reference/constants.md` |
+| int, float, series, simple | `reference/types.md` |
+| if, for, var, varip, switch | `reference/keywords.md` |
+| @version, @param, @returns | `reference/annotations.md` |
+| barstate, var, history, realtime | `concepts/execution_model.md` |
+| Repainting, HTF | `concepts/timeframes.md` |
+| color.new, gradient | `concepts/colors_and_display.md` |
+| Known errors | `concepts/common_errors.md` |
+| Pine Logs, debug | `writing_scripts/debugging.md` |
+| Optimization | `writing_scripts/profiling_and_optimization.md` |
+| Limits | `writing_scripts/limitations.md` |
+
+### Checklist
+- [ ] LESSONS_LEARNED.md read
+- [ ] `//@version=6` present
+- [ ] Function signatures verified against reference
+- [ ] No v5 syntax
+- [ ] `var`/`varip` correct
+- [ ] Repainting checked if request.security used
