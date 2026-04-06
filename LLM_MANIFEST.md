@@ -1,57 +1,110 @@
-# Pine Script v6 — LLM Manifest
-> Maintainer: Ugur Pala — mail@ugurpala.com
-> Bu dosya Claude'un hangi sorun için hangi referans dosyasına bakacagini belirler.
+# LLM Manifest — Pine Script v6
+# Maintainer: Ugur Pala · mail@ugurpala.com
 
-## Protokol
-1. Kullanicinin niyetini belirle
-2. Asagidaki tablodan ilgili dosyayi bul
-3. SADECE o dosyayi oku (context penceresi icin)
+---
 
-## 1. Syntax ve Temel Kavramlar
+## TR | Türkçe
 
-| Anahtar Kelimeler | Dosya |
-|---|---|
-| barstate, history, realtime, var, varip, calc_on_every_tick | concepts/execution_model.md |
-| request.security, timeframe.period, repainting, HTF | concepts/timeframes.md |
-| color.new, color.from_gradient, bgcolor | concepts/colors_and_display.md |
-| Series string, Undeclared identifier, max_bars_back | concepts/common_errors.md |
-| method, user-defined method | concepts/methods.md |
-| type, UDT, object, field | concepts/objects.md |
+Bu dosya, yapay zekanın hangi soruda hangi referans dosyasını okuması
+gerektiğini belirleyen yönlendirme haritasıdır.
 
-## 2. API Referans
+### Protokol
+1. Kullanıcının isteğini belirle
+2. Aşağıdaki tablodan ilgili dosyayı bul
+3. **Her zaman önce `LESSONS_LEARNED.md`'yi kontrol et**
+4. Yalnızca ilgili dosyayı oku (context penceresi verimliliği için)
 
-| Anahtar Kelimeler | Dosya |
-|---|---|
-| open, high, low, close, volume, time, bar_index, syminfo | reference/variables.md |
-| color.red, shape.triangle, plot.style_line, size.small | reference/constants.md |
-| int, float, bool, string, series, simple, input type | reference/types.md |
-| if, else, for, while, switch, var, varip, export | reference/keywords.md |
-| @version, @description, @param, @returns | reference/annotations.md |
+### Kavramlar ve Temel Dil
 
-## 3. Fonksiyon Referansi
+| Anahtar Kelime | Dosya |
+|----------------|-------|
+| barstate, var, varip, history, realtime | `concepts/execution_model.md` |
+| repainting, request.security, HTF, MTF | `concepts/timeframes.md` |
+| color.new, from_gradient, bgcolor | `concepts/colors_and_display.md` |
+| max_bars_back, series string, hata | `concepts/common_errors.md` |
+| method, user-defined method | `concepts/methods.md` |
+| type, UDT, object, field | `concepts/objects.md` |
 
-| Ihtiyac | Dosya |
-|---|---|
-| ta.rsi, ta.ema, ta.sma, ta.macd, ta.crossover, ta.pivot | reference/functions/ta.md |
-| strategy.entry, strategy.exit, strategy.close, position | reference/functions/strategy.md |
-| request.security, request.financial, request.seed | reference/functions/request.md |
-| plot, plotshape, line.new, box.new, label.new, fill | reference/functions/drawing.md |
-| array.new, array.push, matrix, map | reference/functions/collections.md |
-| math.abs, str.tostring, input.int, alert() | reference/functions/general.md |
+### API Referansı
 
-## 4. Kod Yazma
+| Anahtar Kelime | Dosya |
+|----------------|-------|
+| open, close, high, low, volume, bar_index, syminfo | `reference/variables.md` |
+| color.red, shape.*, plot.style_*, size.* | `reference/constants.md` |
+| int, float, bool, string, series, simple | `reference/types.md` |
+| if, for, while, switch, var, varip, export | `reference/keywords.md` |
+| @version, @param, @returns, @type | `reference/annotations.md` |
 
-| Ihtiyac | Dosya |
-|---|---|
-| Stil, isimlendirme, girintileme | writing_scripts/style_guide.md |
-| log.info, Pine Logs, hata ayiklama | writing_scripts/debugging.md |
-| Performans, optimizasyon | writing_scripts/profiling_and_optimization.md |
-| Script limitleri, max bars | writing_scripts/limitations.md |
+### Fonksiyonlar
 
-## Yonlendirme Ornekleri
+| İhtiyaç | Dosya |
+|---------|-------|
+| RSI, EMA, SMA, MACD, ATR, BB, crossover, pivot | `reference/functions/ta.md` |
+| strategy.entry, exit, close, position_size | `reference/functions/strategy.md` |
+| plot, line.new, box.new, label.new, table | `reference/functions/drawing.md` |
+| request.security, financial, currency_rate | `reference/functions/request.md` |
+| array, map, matrix | `reference/functions/collections.md` |
+| math, str, input, alert, timestamp | `reference/functions/general.md` |
 
-- RSI indikatoru yaz → reference/functions/ta.md + reference/functions/drawing.md
-- Strateji backtesti → reference/functions/strategy.md + reference/functions/ta.md
-- Degiskenim neden sifirlaniyor → concepts/execution_model.md
-- max_bars_back hatasi → concepts/common_errors.md
-- Hata var mi diye bak → LESSONS_LEARNED.md (HER ZAMAN ONCE BU)
+### Kod Yazma
+
+| İhtiyaç | Dosya |
+|---------|-------|
+| İsimlendirme, sıralama, yorum | `writing_scripts/style_guide.md` |
+| Pine Logs, debug paneli | `writing_scripts/debugging.md` |
+| Profiler, optimizasyon | `writing_scripts/profiling_and_optimization.md` |
+| Script limitleri, drawing limitleri | `writing_scripts/limitations.md` |
+
+---
+
+## EN | English
+
+This file is the routing map that tells the AI which reference file
+to read for which query.
+
+### Protocol
+1. Identify the user's intent
+2. Find the relevant file in the tables below
+3. **Always check `LESSONS_LEARNED.md` first**
+4. Read only the relevant file (for context window efficiency)
+
+### Concepts & Core Language
+
+| Keyword | File |
+|---------|------|
+| barstate, var, varip, history, realtime | `concepts/execution_model.md` |
+| repainting, request.security, HTF, MTF | `concepts/timeframes.md` |
+| color.new, from_gradient, bgcolor | `concepts/colors_and_display.md` |
+| max_bars_back, series string, error | `concepts/common_errors.md` |
+| method, user-defined method | `concepts/methods.md` |
+| type, UDT, object, field | `concepts/objects.md` |
+
+### API Reference
+
+| Keyword | File |
+|---------|------|
+| open, close, high, low, volume, bar_index, syminfo | `reference/variables.md` |
+| color.red, shape.*, plot.style_*, size.* | `reference/constants.md` |
+| int, float, bool, string, series, simple | `reference/types.md` |
+| if, for, while, switch, var, varip, export | `reference/keywords.md` |
+| @version, @param, @returns, @type | `reference/annotations.md` |
+
+### Functions
+
+| Need | File |
+|------|------|
+| RSI, EMA, SMA, MACD, ATR, BB, crossover, pivot | `reference/functions/ta.md` |
+| strategy.entry, exit, close, position_size | `reference/functions/strategy.md` |
+| plot, line.new, box.new, label.new, table | `reference/functions/drawing.md` |
+| request.security, financial, currency_rate | `reference/functions/request.md` |
+| array, map, matrix | `reference/functions/collections.md` |
+| math, str, input, alert, timestamp | `reference/functions/general.md` |
+
+### Writing Scripts
+
+| Need | File |
+|------|------|
+| Naming, ordering, comments | `writing_scripts/style_guide.md` |
+| Pine Logs, debug panel | `writing_scripts/debugging.md` |
+| Profiler, optimization | `writing_scripts/profiling_and_optimization.md` |
+| Script limits, drawing limits | `writing_scripts/limitations.md` |
