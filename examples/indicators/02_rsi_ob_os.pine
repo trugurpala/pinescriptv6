@@ -1,0 +1,33 @@
+//@version=6
+// RSI OB/OS with Gradient Color — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("RSI OB/OS [trugurpala]", overlay=false)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   rsiLen  = input.int(14, "RSI Length", minval=1)
+float obLevel = input.float(70, "Overbought", minval=50, maxval=100)
+float osLevel = input.float(30, "Oversold",   minval=0,  maxval=50)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float rsi       = ta.rsi(close, rsiLen)
+bool  crossObDn = ta.crossunder(rsi, obLevel)
+bool  crossOsUp = ta.crossover(rsi,  osLevel)
+
+// ── Gradient ─────────────────────────────────────────────────────────────────
+color bullColor = color.from_gradient(rsi, 50, obLevel, color.new(color.aqua, 40), color.new(color.green, 0))
+color bearColor = color.from_gradient(rsi, osLevel, 50, color.new(color.red, 0),   color.new(color.orange, 40))
+color rsiColor  = rsi >= 50 ? bullColor : bearColor
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(rsi, "RSI", rsiColor, linewidth=2)
+hline(obLevel, "OB",  color.new(color.red,   30), hline.style_dashed)
+hline(50,      "Mid", color.new(color.gray,  50), hline.style_dotted)
+hline(osLevel, "OS",  color.new(color.green, 30), hline.style_dashed)
+bgcolor(rsi >= obLevel ? color.new(color.red,   92) : na)
+bgcolor(rsi <= osLevel ? color.new(color.green, 92) : na)
+plotshape(crossObDn, "Exit OB", shape.circle, location.absolute, color.red,   size=size.tiny)
+plotshape(crossOsUp, "Exit OS", shape.circle, location.absolute, color.green, size=size.tiny)
+
+// ── Alerts ───────────────────────────────────────────────────────────────────
+alertcondition(crossObDn, "RSI Exit OB", "RSI OB exit — {{ticker}}")
+alertcondition(crossOsUp, "RSI Exit OS", "RSI OS exit — {{ticker}}")
