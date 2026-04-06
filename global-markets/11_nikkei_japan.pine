@@ -1,0 +1,55 @@
+//@version=6
+// Nikkei 225 / JP225 Strategy
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+//
+// TR: Semboller: TVC:NI225 / OSAKA:NK1! / SPREADEX:JP225
+// EN: Symbols:  TVC:NI225 / OSAKA:NK1! / SPREADEX:JP225
+//
+// Seans / Session: 09:00–15:30 JST (00:00–06:30 GMT)
+// BOJ faiz kararları ve USD/JPY korelasyonuna dikkat
+// Watch BOJ rate decisions and USD/JPY correlation
+strategy("Nikkei Japan Strategy [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 5,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.05,
+    slippage          = 2)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen  = input.int(9,    "Fast EMA",  minval=1)
+int   slowLen  = input.int(21,   "Slow EMA",  minval=1)
+int   atrLen   = input.int(14,   "ATR",       minval=1)
+float slMult   = input.float(1.5, "SL Mult",  step=0.1)
+float tpMult   = input.float(2.5, "TP Mult",  step=0.1)
+
+// ── TSE Seans: 09:00–15:30 JST (=00:00–06:30 GMT) ───────────────────────────
+bool inSession = not na(time(timeframe.period, "0900-1530", "Asia/Tokyo"))
+bool sesEnd    = inSession[1] and not inSession
+if sesEnd
+    strategy.close_all(comment="TSE Close")
+
+// ── Hesaplamalar ──────────────────────────────────────────────────────────────
+float fastEma  = ta.ema(close, fastLen)
+float slowEma  = ta.ema(close, slowLen)
+float atrVal   = ta.atr(atrLen)
+bool bullCross = ta.crossover(fastEma, slowEma) and inSession
+bool bearCross = ta.crossunder(fastEma, slowEma) and inSession
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop=close - slMult*atrVal, limit=close + tpMult*atrVal)
+if bearCross
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop=close + slMult*atrVal, limit=close - tpMult*atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+bgcolor(inSession ? na : color.new(color.gray, 96))
+plot(fastEma, "Fast", fastEma > slowEma ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
+plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green)
+plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red)
