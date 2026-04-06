@@ -1,0 +1,86 @@
+//@version=6
+// GBP/USD — Market Structure + EMA Filter Strategy
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: Pivot high/low kırılması ile market structure takibi.
+//     EMA filtresi ile trend yönünde işlem alınır.
+//     Cable (GBP/USD) için London seansında en etkili.
+// EN: Market structure tracking via pivot high/low breakouts.
+//     EMA filter ensures trading in trend direction.
+//     Most effective during London session for Cable.
+//
+// Sembol / Symbol: FX:GBPUSD / OANDA:GBPUSD
+// Önerilen TF / Recommended TF: 1H, 4H
+strategy("GBP/USD Market Structure [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 2,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.006,
+    slippage          = 1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   pivotLen  = input.int(5,   "Pivot Lookback", minval=2)
+int   trendLen  = input.int(50,  "Trend EMA",      minval=10)
+int   atrLen    = input.int(14,  "ATR",            minval=1)
+float slMult    = input.float(1.5, "SL Mult",      step=0.1)
+float tpMult    = input.float(2.5, "TP Mult",      step=0.1)
+
+// ── London + NY Seans ─────────────────────────────────────────────────────────
+bool inSession  = not na(time(timeframe.period, "0700-2000", "GMT"))
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float trendEma  = ta.ema(close, trendLen)
+float atrVal    = ta.atr(atrLen)
+
+float pivHigh   = ta.pivothigh(high, pivotLen, pivotLen)
+float pivLow    = ta.pivotlow(low,   pivotLen, pivotLen)
+
+var float lastPH = na
+var float lastPL = na
+
+if not na(pivHigh)
+    lastPH := high[pivotLen]
+if not na(pivLow)
+    lastPL := low[pivotLen]
+
+// Kırılma sinyalleri — trend yönünde
+bool bullBreak = not na(lastPH)
+                    and ta.crossover(close, lastPH)
+                    and close > trendEma
+                    and inSession
+                    and strategy.position_size == 0
+
+bool bearBreak = not na(lastPL)
+                    and ta.crossunder(close, lastPL)
+                    and close < trendEma
+                    and inSession
+                    and strategy.position_size == 0
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullBreak
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if bearBreak
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(trendEma, "Trend EMA", color.new(color.orange, 20), linewidth=2)
+plotshape(not na(pivHigh), "Pivot High", shape.triangledown,
+    location.abovebar, color.new(color.red,   40), size=size.tiny)
+plotshape(not na(pivLow),  "Pivot Low",  shape.triangleup,
+    location.belowbar, color.new(color.green, 40), size=size.tiny)
+plotshape(bullBreak, "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(bearBreak, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
+bgcolor(not inSession ? color.new(color.gray, 96) : na)
+
+alertcondition(bullBreak, "GBPUSD Long",  "GBP/USD Structure Break Long")
+alertcondition(bearBreak, "GBPUSD Short", "GBP/USD Structure Break Short")
