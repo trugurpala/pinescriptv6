@@ -62,6 +62,60 @@ bgcolor(ta.crossover(fast, slow)  ? color.new(color.green, 90) :
 
 ---
 
+## 💡 Bu Projenin Varoluş Nedeni / Why This Exists
+
+> TR: Pine Script v6 çıktığında AI editörler v5 yazmaya devam etti. Bu repo o sorunu çözdü.
+> EN: When Pine Script v6 launched, AI editors kept writing v5. This repo fixed that.
+
+### TR | Türkçe
+
+TradingView, Kasım 2024'te Pine Script v6'yı yayınladı.
+
+Sorun şuydu: **Tüm AI editörler v5 kodu yazmaya devam etti.**
+
+- Cursor `study()` öneriyordu — v6'da yok
+- Copilot `security()` yazıyordu — v6'da `request.security()` oldu
+- Claude aynı hataları tekrarlıyordu — çünkü hafızası yoktu
+- Her yeni oturumda sıfırdan başlanıyordu
+
+Bu repo üç şeyi çözüyor:
+
+| Sorun | Çözüm |
+|-------|-------|
+| AI'ın hafızası yok | `LESSONS_LEARNED.md` — çözülen hatalar kalıcı olarak saklanır |
+| v6 referansı büyük | `LLM_MANIFEST.md` — AI sadece gerekli dosyayı okur |
+| Tek editör destekli | 9 AI editör destekleniyor — Claude, Cursor, Windsurf, Copilot, Cline, Roo, Aider, Zed, Devin |
+
+### EN | English
+
+TradingView launched Pine Script v6 in November 2024.
+
+The problem: **All AI editors kept writing v5 code.**
+
+- Cursor suggested `study()` — doesn't exist in v6
+- Copilot wrote `security()` — became `request.security()` in v6
+- Claude repeated the same errors — because it had no memory
+- Every new session started from zero
+
+This repo solves three things:
+
+| Problem | Solution |
+|---------|---------|
+| AI has no memory | `LESSONS_LEARNED.md` — solved errors stored permanently |
+| v6 reference is large | `LLM_MANIFEST.md` — AI reads only the needed file |
+| Single editor support | 9 AI editors supported — Claude, Cursor, Windsurf, Copilot, Cline, Roo, Aider, Zed, Devin |
+
+### Kullandığını Nasıl Anlarsın? / How Do You Know It's Working?
+
+| ✅ Çalışıyor / Working | ❌ Çalışmıyor / Not Working |
+|------------------------|---------------------------|
+| AI "LESSONS_LEARNED.md okudum" diyor | AI bunu söylemiyor |
+| Kod `//@version=6` ile başlıyor | `study()` veya `security()` görüyorsun |
+| ta.* fonksiyonları kullanılıyor | Aynı hata tekrarlanıyor |
+| Hata olunca LESSONS_LEARNED.md güncelleniyor | AI hata geçmişini bilmiyor |
+
+---
+
 ## 🚀 Hızlı Başlangıç / Quick Start
 
 ```bash
