@@ -479,10 +479,15 @@ pinescriptv6/
 │   ├── demo_chart.png        TR: XU030 canlı demo
 │   └── lessons_flow.png      TR: Sistem akış diyagramı
 │
+├── CLAUDE.md                 → Claude Code + Claude Projects
+├── AGENTS.md                 → Devin, OpenAI Codex, autonomous agents
 ├── .cursor/rules/
 │   └── pinescriptv6.mdc      → Cursor v0.44+
 ├── .cursorrules              → Cursor (legacy fallback)
 ├── .windsurfrules            → Windsurf / Codeium
+├── .clinerules               → Cline, Roo, Continue, Aider
+├── .zed/
+│   └── rules                 → Zed editor
 ├── .github/
 │   └── copilot-instructions.md → GitHub Copilot
 │
