@@ -1,82 +1,73 @@
-# ta.* Fonksiyonlari — Pine Script v6
-Maintainer: Ugur Pala — mail@ugurpala.com
+# ta.* - Pine Script v6
+Maintainer: Ugur Pala - mail@ugurpala.com
 
 ## Hareketli Ortalamalar
 ```pine
-ta.sma(source, length)      // Basit
-ta.ema(source, length)      // Ustel
-ta.wma(source, length)      // Agirlikli
-ta.rma(source, length)      // RSI'da kullanilan (alpha=1/length)
-ta.vwma(source, length)     // Hacim agirlikli
-ta.hma(source, length)      // Hull
-ta.swma(source)             // Symmetric weighted (4 bar)
-ta.alma(source, length, offset, sigma)  // Arnaud Legoux
+ta.sma(source, length)   // Basit
+ta.ema(source, length)   // Ustel
+ta.wma(source, length)   // Agirlikli
+ta.rma(source, length)   // RSI MA
+ta.vwma(source, length)  // Hacim agirlikli
+ta.hma(source, length)   // Hull
+ta.alma(source, length, offset, sigma)
 ```
 
-## Osilatörler
+## Osilatorler
 ```pine
-ta.rsi(source, length)                    // RSI
-[macd, signal, hist] = ta.macd(source, fast, slow, signal)
-ta.cci(source, length)                    // CCI
-ta.cmo(source, length)                    // Chande Momentum
-ta.mfi(source, length)                    // Money Flow Index
-ta.roc(source, length)                    // Rate of Change
-ta.stoch(source, high, low, length)       // Stochastic
+ta.rsi(source, length)
+[macd, signal, hist] = ta.macd(src, fast, slow, sig)
+ta.cci(source, length)
+ta.mfi(source, length)
+ta.roc(source, length)
 [k, d] = ta.stoch(high, low, close, length)
 ```
 
 ## Volatilite
 ```pine
-ta.atr(length)                            // ATR
-[upper, lower] = ta.bb(source, length, mult)   // Bollinger Bands
-ta.bbw(source, length, mult)              // Bollinger Band Width
-ta.tr(handle_na)                          // True Range
+ta.atr(length)
+[upper, basis, lower] = ta.bb(src, len, mult)
+ta.bbw(source, length, mult)
+ta.tr(handle_na)
 ```
 
 ## Kesisimler
 ```pine
-ta.crossover(source1, source2)   // source1 yukari kesti
-ta.crossunder(source1, source2)  // source1 asagi kesti
-ta.cross(source1, source2)       // herhangi yonde kesisti
+ta.crossover(source1, source2)   // Yukari kesti
+ta.crossunder(source1, source2)  // Asagi kesti
+ta.cross(source1, source2)       // Herhangi yone
 ```
 
-## Min / Max / Pivot
+## Min/Max/Pivot
 ```pine
-ta.highest(source, length)       // En yuksek
-ta.lowest(source, length)        // En dusuk
-ta.highestbars(source, length)   // En yuksek kac bar once
-ta.lowestbars(source, length)    // En dusuk kac bar once
-ta.pivothigh(left, right)        // Pivot yukseği
-ta.pivotlow(left, right)         // Pivot dusugu
+ta.highest(source, length)
+ta.lowest(source, length)
+ta.highestbars(source, length)
+ta.lowestbars(source, length)
+ta.pivothigh(left, right)  // na dondurur yoksa
+ta.pivotlow(left, right)
 ```
 
-## Diger
+## Yardimci
 ```pine
-ta.change(source, length)        // Degisim
-ta.change(source)                // 1 bar degisim
-ta.cum(source)                   // Kumulatif toplam
-ta.falling(source, length)       // Dususte mi?
-ta.rising(source, length)        // Yukseliyor mu?
-ta.valuewhen(cond, source, occurrence)  // Kosul saglandiginda deger
-ta.barssince(condition)          // Son kosuldan beri kac bar
-ta.range(source, length)         // max-min farki
+ta.change(source)               // 1 barlik degisim
+ta.change(source, length)       // length barlik degisim
+ta.cum(source)                  // Kumulatif toplam
+ta.falling(source, length)      // Dususte mi?
+ta.rising(source, length)       // Yukseliyor mu?
+ta.barssince(condition)         // Son kosuldan beri kac bar
+ta.valuewhen(cond, src, n)      // n. kosul anindaki deger
+ta.range(source, length)        // max - min
 ```
 
-## Ornek: RSI + EMA Stratejisi
+## Ornek - RSI + EMA Stratejisi
 ```pine
 //@version=6
-strategy("RSI + EMA", overlay=false)
+strategy("RSI+EMA", overlay=false)
 rsi = ta.rsi(close, 14)
-ema = ta.ema(close, 200)
-
-longCond  = ta.crossover(rsi, 30) and close > ema
-shortCond = ta.crossunder(rsi, 70) and close < ema
-
+ema200 = ta.ema(close, 200)
+longCond = ta.crossover(rsi, 30) and close > ema200
 if longCond
     strategy.entry("Long", strategy.long)
-if shortCond
-    strategy.entry("Short", strategy.short)
-
 plot(rsi, "RSI", color.blue)
 hline(70), hline(30)
 ```
