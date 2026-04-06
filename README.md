@@ -268,10 +268,10 @@ All scripts must start with //@version=6.
 
 ## 📦 Örnekler / Examples
 
-TR: **50+ hazır Pine Script v6 örneği** — copy-paste hazır, TradingView'da test edilmiş.
-EN: **50+ ready-to-use Pine Script v6 examples** — copy-paste ready, tested in TradingView.
+TR: **55+ hazır Pine Script v6 örneği** — copy-paste hazır, TradingView'da test edilmiş.
+EN: **55+ ready-to-use Pine Script v6 examples** — copy-paste ready, tested in TradingView.
 
-### 📊 İndikatörler / Indicators (17)
+### 📊 İndikatörler / Indicators (18)
 
 | # | Dosya | Açıklama / Description |
 |---|-------|------------------------|
@@ -292,8 +292,9 @@ EN: **50+ ready-to-use Pine Script v6 examples** — copy-paste ready, tested in
 | 15 | [`15_ema_ribbon.pine`](examples/indicators/15_ema_ribbon.pine) | EMA Ribbon 8/13/21/34/55/89/144/233 |
 | 16 | [`16_chandelier_exit.pine`](examples/indicators/16_chandelier_exit.pine) | Chandelier Exit trailing stop |
 | 17 | [`17_squeeze_momentum.pine`](examples/indicators/17_squeeze_momentum.pine) | Squeeze Momentum |
+| 18 | [`18_fakeout_filter.pine`](examples/indicators/18_fakeout_filter.pine) | Fakeout Filter — 4-Layer Signal Quality |
 
-### 🎯 Stratejiler / Strategies (12)
+### 🎯 Stratejiler / Strategies (13)
 
 | # | Dosya | Açıklama / Description |
 |---|-------|------------------------|
@@ -309,6 +310,7 @@ EN: **50+ ready-to-use Pine Script v6 examples** — copy-paste ready, tested in
 | 10 | [`10_adx_trend_strategy.pine`](examples/strategies/10_adx_trend_strategy.pine) | ADX Trend Strength |
 | 11 | [`11_viop_session_strategy.pine`](examples/strategies/11_viop_session_strategy.pine) | VIOP Session — seans bazlı |
 | 12 | [`12_chandelier_strategy.pine`](examples/strategies/12_chandelier_strategy.pine) | Chandelier Exit Strategy |
+| 13 | [`13_fakeout_confirmed_strategy.pine`](examples/strategies/13_fakeout_confirmed_strategy.pine) | Fakeout-Confirmed — 4 filters, high accuracy |
 
 ---
 
@@ -420,7 +422,8 @@ pinescriptv6/
 │   ├── timeframes.md            request.security, repainting
 │   ├── colors_and_display.md    color.new, gradients
 │   ├── methods.md               user-defined methods
-│   └── objects.md               UDT, type system
+│   ├── objects.md               UDT, type system
+│   └── signal_quality.md        Fakeout filters, volume, MTF, ATR
 │
 ├── reference/
 │   ├── variables.md
@@ -443,8 +446,8 @@ pinescriptv6/
 │   └── limitations.md
 │
 ├── examples/
-│   ├── indicators/   (17 — copy-paste ready, tested in TradingView)
-│   └── strategies/   (12 — copy-paste ready, tested in TradingView)
+│   ├── indicators/   (18 — copy-paste ready, tested in TradingView)
+│   └── strategies/   (13 — copy-paste ready, tested in TradingView)
 │
 ├── global-markets/   (22 strategies — ES, NQ, BTC, ETH, Gold, Forex, DAX, Nikkei)
 ├── webhook-templates/ (7 files — Telegram, Discord, JSON, VIOP)
