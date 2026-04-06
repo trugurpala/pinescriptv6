@@ -1,0 +1,24 @@
+//@version=6
+// Ichimoku Cloud — All Components — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("Ichimoku [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int tenkanLen    = input.int(9,  "Tenkan-sen",   minval=1)
+int kijunLen     = input.int(26, "Kijun-sen",    minval=1)
+int senkouBLen   = input.int(52, "Senkou B",     minval=1)
+int displacement = input.int(26, "Displacement", minval=1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float tenkan  = (ta.highest(tenkanLen)  + ta.lowest(tenkanLen))  / 2
+float kijun   = (ta.highest(kijunLen)   + ta.lowest(kijunLen))   / 2
+float senkouA = (tenkan + kijun) / 2
+float senkouB = (ta.highest(senkouBLen) + ta.lowest(senkouBLen)) / 2
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(tenkan,  "Tenkan",  color.new(color.red,    20), linewidth=2)
+plot(kijun,   "Kijun",   color.new(color.blue,   20), linewidth=2)
+plot(close,   "Chikou",  color.new(color.purple, 40), linewidth=1, offset=-displacement)
+p1 = plot(senkouA, "Senkou A", color.new(color.green, 40), offset=displacement)
+p2 = plot(senkouB, "Senkou B", color.new(color.red,   40), offset=displacement)
+fill(p1, p2, senkouA > senkouB ? color.new(color.green, 85) : color.new(color.red, 85))
