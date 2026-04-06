@@ -1,0 +1,41 @@
+//@version=6
+// Session Highlight — VİOP / BIST30 Seans Vurgulayıcı
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+indicator("Session Highlight [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+string session1   = input.session("0930-1815", "VİOP Seans / Session")
+string timezone1  = input.string("UTC+3",      "Timezone", options=["UTC", "UTC+3", "UTC+2", "America/New_York"])
+bool   showLabels = input.bool(true, "Seans Etiketi / Session Label")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+bool inSession = not na(time(timeframe.period, session1, timezone1))
+bool sesStart  = inSession and not inSession[1]
+bool sesEnd    = not inSession and inSession[1]
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+bgcolor(inSession ? color.new(color.blue, 93) : na, title="Seans")
+
+if showLabels
+    if sesStart
+        label.new(bar_index, low,  "Açılış / Open",
+            style=label.style_label_up,
+            color=color.new(color.green, 50), textcolor=color.white, size=size.small)
+    if sesEnd
+        label.new(bar_index, high, "Kapanış / Close",
+            style=label.style_label_down,
+            color=color.new(color.red, 50), textcolor=color.white, size=size.small)
+
+// Gün içi yüksek/düşük
+var float sesHigh = na
+var float sesLow  = na
+
+if sesStart
+    sesHigh := high
+    sesLow  := low
+if inSession
+    sesHigh := math.max(sesHigh, high)
+    sesLow  := math.min(sesLow,  low)
+
+plot(inSession ? sesHigh : na, "Seans Yüksek", color.new(color.red,   30), linewidth=1, style=plot.style_linebr)
+plot(inSession ? sesLow  : na, "Seans Düşük",  color.new(color.green, 30), linewidth=1, style=plot.style_linebr)
