@@ -1,0 +1,26 @@
+//@version=6
+// Volume Analysis + OBV — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("Volume Analysis [trugurpala]", overlay=false)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   volLen   = input.int(20, "MA Length", minval=1)
+float highMult = input.float(1.5, "High Vol Mult", step=0.1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float volMa  = ta.sma(volume, volLen)
+bool  highVol = volume > volMa * highMult
+bool  bullBar = close > open
+float obv    = ta.cum(close > close[1] ? volume : close < close[1] ? -volume : 0)
+
+// ── Colors ───────────────────────────────────────────────────────────────────
+color volColor = highVol
+    ? (bullBar ? color.new(color.green, 0) : color.new(color.red,  0))
+    : (bullBar ? color.new(color.green,50) : color.new(color.red, 50))
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(volume, "Volume", volColor, style=plot.style_histogram)
+plot(volMa,  "Vol MA", color.new(color.orange, 20), linewidth=2)
+plot(obv,    "OBV",    color.new(color.blue, 20),   display=display.none)
+plotshape(highVol and bullBar,      "High Bull", shape.triangleup,   location.bottom, color.green, size=size.tiny)
+plotshape(highVol and not bullBar,  "High Bear", shape.triangledown, location.bottom, color.red,   size=size.tiny)
