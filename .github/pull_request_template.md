@@ -1,35 +1,21 @@
-## TR | Türkçe
+## Ne değişti? / What changed?
 
-### Bu PR Ne Yapıyor?
-<!-- Kısa açıklama -->
-
-### Değişiklik Türü
-- [ ] Hata düzeltme (yanlış dokümantasyon)
-- [ ] Yeni içerik (eksik fonksiyon, örnek)
-- [ ] LESSONS_LEARNED girişi
-- [ ] Diğer
-
-### Kontrol Listesi
-- [ ] Kod örnekleri `//@version=6` ile başlıyor
-- [ ] TradingView'da test edildi
-- [ ] v5 syntax yok
-- [ ] Commit formatı: `docs: ...` / `fix: ...` / `lesson: ...`
+<!-- TR: Kısaca açıkla. EN: Brief description. -->
 
 ---
 
-## EN | English
+## Tür / Type
 
-### What does this PR do?
-<!-- Short description -->
+- [ ] `docs` — referans dosyası güncelleme / reference file update
+- [ ] `fix` — yanlış bilgi düzeltme / incorrect info fix
+- [ ] `lesson` — LESSONS_LEARNED.md'ye yeni hata ekleme / new error added
+- [ ] `feat` — yeni dosya veya bölüm / new file or section
 
-### Type of Change
-- [ ] Bug fix (incorrect documentation)
-- [ ] New content (missing function, example)
-- [ ] LESSONS_LEARNED entry
-- [ ] Other
+---
 
-### Checklist
-- [ ] Code examples start with `//@version=6`
-- [ ] Tested in TradingView
-- [ ] No v5 syntax
-- [ ] Commit format: `docs: ...` / `fix: ...` / `lesson: ...`
+## Kontrol listesi / Checklist
+
+- [ ] Kod örnekleri `//@version=6` ile başlıyor / Code examples start with `//@version=6`
+- [ ] TradingView'da test edildi / Tested in TradingView
+- [ ] v5 syntax yok / No v5 syntax
+- [ ] Commit mesajı formata uygun / Commit message follows format
