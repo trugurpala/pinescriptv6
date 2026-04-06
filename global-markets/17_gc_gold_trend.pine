@@ -1,0 +1,83 @@
+//@version=6
+// Gold / XAUUSD — Triple EMA Trend Strategy
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: Üç EMA'nın hizalanması ile trend yönünde giriş yapar.
+//     Altın için optimize edilmiş — uzun vadeli trend takibi.
+//     ADX filtresi ile yeterli trend gücü olduğunda işlem yapar.
+// EN: Enters when three EMAs align in trend direction.
+//     Optimised for Gold — long-term trend following.
+//     ADX filter ensures sufficient trend strength.
+//
+// Sembol / Symbol: COMEX:GC1! veya OANDA:XAUUSD
+// Önerilen TF / Recommended TF: 1H, 4H, 1D
+strategy("Gold Triple EMA [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 5,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.03,
+    slippage          = 2)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   e1Len    = input.int(8,   "EMA 1 (Fast)", minval=1)
+int   e2Len    = input.int(21,  "EMA 2 (Mid)",  minval=1)
+int   e3Len    = input.int(55,  "EMA 3 (Slow)", minval=1)
+int   adxLen   = input.int(14,  "ADX Length",   minval=1)
+float adxMin   = input.float(20, "ADX Min",     minval=10, maxval=40)
+int   atrLen   = input.int(14,  "ATR",          minval=1)
+float slMult   = input.float(1.5, "SL Mult",    step=0.1)
+float tpMult   = input.float(3.0, "TP Mult",    step=0.1)
+bool  longOnly = input.bool(true, "Long Only (Gold bull bias)")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float ema1  = ta.ema(close, e1Len)
+float ema2  = ta.ema(close, e2Len)
+float ema3  = ta.ema(close, e3Len)
+float atrVal = ta.atr(atrLen)
+
+[diPlus, diMinus, adxVal] = ta.dmi(adxLen, adxLen)
+bool  trendStrong = adxVal >= adxMin
+
+// Tam hizalama
+bool  bullAlign   = ema1 > ema2 and ema2 > ema3
+bool  bearAlign   = ema1 < ema2 and ema2 < ema3
+
+// Yeni hizalama oluştu mu?
+bool  prevBull    = ema1[1] > ema2[1] and ema2[1] > ema3[1]
+bool  prevBear    = ema1[1] < ema2[1] and ema2[1] < ema3[1]
+bool  longEntry   = bullAlign and not prevBull and trendStrong
+bool  shortEntry  = bearAlign and not prevBear and trendStrong and not longOnly
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if longEntry
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if shortEntry
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// Hizalama bozulunca kapat / Close when alignment breaks
+if strategy.position_size > 0 and not bullAlign
+    strategy.close("Long",  comment="Alignment Lost")
+if strategy.position_size < 0 and not bearAlign
+    strategy.close("Short", comment="Alignment Lost")
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+color c = bullAlign ? color.green : bearAlign ? color.red : color.gray
+plot(ema1, "EMA 8",  c, linewidth=1)
+plot(ema2, "EMA 21", c, linewidth=2)
+plot(ema3, "EMA 55", c, linewidth=3)
+bgcolor(bullAlign ? color.new(color.green, 95) : bearAlign ? color.new(color.red, 95) : na)
+plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
+
+alertcondition(longEntry,  "Gold Long",  "Gold Triple EMA Long — {{close}}")
+alertcondition(shortEntry, "Gold Short", "Gold Triple EMA Short — {{close}}")
