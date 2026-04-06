@@ -1,51 +1,23 @@
-# Lessons Learned — Pine Script v6
-# Maintainer: Ugur Pala · mail@ugurpala.com
+# Hatalardan Öğrenilenler / Lessons Learned
+
+TR: Bu dosya AI tarafından otomatik güncellenir. Her Pine Script v6 hata çözümü buraya eklenir.
+EN: This file is auto-updated by the AI. Every Pine Script v6 error fix is appended here.
 
 ---
 
-## TR | Türkçe
-
-Bu dosya, Pine Script v6 yazarken karşılaşılan hataları ve çözümlerini
-kalıcı olarak saklar. AI her oturumda kodu yazmadan önce bunu okur.
-
-### Format
+## Format
 
 ```markdown
-### [Hata Başlığı]
-- **Hata mesajı:** TradingView'dan tam hata metni
-- **Sebep:** Neden oluşuyor?
-- **Çözüm:** Nasıl düzeltilir?
-- **Örnek:**
+### [Kısa Başlık / Short Title]
+- **Hata / Error:** `exact error text`
+- **Sebep / Cause:** ...
+- **Çözüm / Fix:** ...
+
 ```pine
 //@version=6
-// ❌ Yanlış
+// ❌ Wrong / Yanlış
 ...
-// ✅ Doğru
-...
-```
----
-```
-
----
-
-## EN | English
-
-This file permanently stores Pine Script v6 errors and their fixes.
-The AI reads this before writing any code in every session.
-
-### Format
-
-```markdown
-### [Error Title]
-- **Error message:** Exact text from TradingView
-- **Cause:** Why it happens
-- **Fix:** How to resolve it
-- **Example:**
-```pine
-//@version=6
-// ❌ Wrong
-...
-// ✅ Correct
+// ✅ Correct / Doğru
 ...
 ```
 ---
@@ -55,5 +27,5 @@ The AI reads this before writing any code in every session.
 
 ## Kayıtlı Hatalar / Recorded Errors
 
-> TR: Henüz kayıt yok. İlk hata çözümünde Claude bu dosyayı otomatik güncelleyecek.
-> EN: No entries yet. Claude will automatically update this file on the first error fix.
+> TR: Henüz hata kaydı yok. İlk Pine Script v6 kodu yazılıp hata alındığında Claude buraya otomatik ekleyecek.
+> EN: No errors recorded yet. When the first Pine Script v6 error is solved, Claude will append it here automatically.
