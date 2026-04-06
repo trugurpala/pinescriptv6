@@ -5,36 +5,81 @@ alwaysApply: true
 ---
 
 # Pine Script v6 — Cursor Rules
-# Maintainer: Ugur Pala · mail@ugurpala.com
+# Maintainer: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
 
-## TR | Türkçe — Kod Kuralları
-- Her script `//@version=6` ile başlar
-- `ta.*` fonksiyonlarını kullan, manuel yeniden yazmaya gerek yok
-- `var` / `varip` kullanımını execution model'e göre yap
-- Kod yazmadan önce mutlaka `LESSONS_LEARNED.md` oku
-- `LLM_MANIFEST.md` ile doğru referans dosyasını bul
+---
 
-## EN | English — Code Rules
-- Every script starts with `//@version=6`
-- Use `ta.*` functions — never reimplement them
-- Use `var` / `varip` correctly per the execution model
-- Always read `LESSONS_LEARNED.md` before writing code
-- Use `LLM_MANIFEST.md` to find the correct reference file
+## TR | Protokol
 
-## Reference Map / Referans Haritası
+Kod yazmadan önce:
+1. `LESSONS_LEARNED.md` oku — bilinen hatalar burada
+2. `LLM_MANIFEST.md` ile göreve uygun dosyayı bul
+3. O dosyayı oku, sonra kodu yaz
+4. Hata olunca: çöz + `LESSONS_LEARNED.md`'ye ekle
 
-| Need / İhtiyaç | File / Dosya |
-|----------------|-------------|
-| RSI, EMA, MACD, crossover, ATR | `reference/functions/ta.md` |
-| strategy.entry, exit, position | `reference/functions/strategy.md` |
-| plot, line, box, label, table | `reference/functions/drawing.md` |
-| request.security, MTF | `reference/functions/request.md` |
-| array, map, matrix | `reference/functions/collections.md` |
-| math, str, input, alert | `reference/functions/general.md` |
-| var, varip, barstate | `concepts/execution_model.md` |
-| Errors / Hatalar | `concepts/common_errors.md` |
-| **Always first / Her zaman önce** | `LESSONS_LEARNED.md` |
+## EN | Protocol
 
-## On Error / Hata Olduğunda
-TR: Hatayı çözünce hemen `LESSONS_LEARNED.md` dosyasına ekle.
-EN: After solving an error, immediately append it to `LESSONS_LEARNED.md`.
+Before writing code:
+1. Read `LESSONS_LEARNED.md` — known errors are there
+2. Use `LLM_MANIFEST.md` to find the correct file
+3. Read that file, then write the code
+4. On error: solve + append to `LESSONS_LEARNED.md`
+
+---
+
+## Kesin Kurallar / Non-Negotiable Rules
+
+```pine
+//@version=6   // her scriptin ilk satırı / first line of EVERY script
+```
+
+| ❌ v5 — Kullanma | ✅ v6 — Kullan |
+|-----------------|---------------|
+| `study("name")` | `indicator("name")` |
+| `security(ticker, tf, expr)` | `request.security(ticker, tf, expr)` |
+| `input(14, type=input.integer)` | `input.int(14, "Label")` |
+| `array.new_float(0)` | `array.new<float>(0)` |
+| Manuel EMA hesaplama | `ta.ema(close, len)` |
+
+---
+
+## Referans Haritası / Reference Map
+
+| Görev / Task | Dosya / File |
+|--------------|-------------|
+| RSI, EMA, SMA, MACD, ATR, BB, crossover, pivot | `@reference/functions/ta.md` |
+| strategy.entry, exit, close, position_size | `@reference/functions/strategy.md` |
+| plot, plotshape, line, box, label, table | `@reference/functions/drawing.md` |
+| request.security, financial, MTF | `@reference/functions/request.md` |
+| array, map, matrix | `@reference/functions/collections.md` |
+| math, str, input, alert, timestamp | `@reference/functions/general.md` |
+| open, close, bar_index, syminfo | `@reference/variables.md` |
+| color.red, shape.*, plot.style_* | `@reference/constants.md` |
+| int, float, series, simple | `@reference/types.md` |
+| if, for, var, varip, switch | `@reference/keywords.md` |
+| barstate, var, history, realtime | `@concepts/execution_model.md` |
+| Repainting, HTF | `@concepts/timeframes.md` |
+| Yaygın hatalar / Common errors | `@concepts/common_errors.md` |
+| **Her zaman önce / Always first** | `@LESSONS_LEARNED.md` |
+
+---
+
+## Cursor Chat Örnekleri / Cursor Chat Examples
+
+```
+@LESSONS_LEARNED.md XU030 için EMA cross stratejisi yaz
+@reference/functions/ta.md RSI divergence indikatörü
+@concepts/common_errors.md Bu hatanın sebebi ne?
+@reference/functions/strategy.md ATR tabanlı SL/TP nasıl yazılır?
+```
+
+---
+
+## Checklist
+
+- [ ] `@LESSONS_LEARNED.md` okundu / read
+- [ ] `//@version=6` mevcut / present
+- [ ] v5 syntax yok / no v5 syntax
+- [ ] Fonksiyon imzaları doğrulandı / signatures verified
+- [ ] `var`/`varip` doğru / correct
+- [ ] `request.security` varsa repainting kontrolü / checked
