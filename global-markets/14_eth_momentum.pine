@@ -1,0 +1,65 @@
+//@version=6
+// ETH/USDT — Volume-Confirmed Momentum Breakout
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: Yüksek hacimle desteklenen fiyat kırılması üzerine giriş yapar.
+//     ETH için optimize edilmiş — BTC'den daha yüksek volatilite.
+// EN: Enters on price breakout confirmed by high volume.
+//     Optimised for ETH — higher volatility than BTC.
+//
+// Önerilen TF / Recommended TF: 1H, 4H
+// Sembol / Symbol: BINANCE:ETHUSDT
+strategy("ETH Momentum Breakout [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 5,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.1,
+    slippage          = 3)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   lookback  = input.int(20, "Breakout Lookback", minval=5)
+int   volLen    = input.int(20, "Volume MA",         minval=5)
+float volMult   = input.float(1.5, "Vol Multiplier", step=0.1)
+int   trendLen  = input.int(50, "Trend EMA",         minval=10)
+int   atrLen    = input.int(14, "ATR",               minval=1)
+float slMult    = input.float(2.5, "SL Mult",        step=0.1)
+float tpMult    = input.float(3.5, "TP Mult",        step=0.1)
+bool  longOnly  = input.bool(true, "Long Only")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float highestHigh = ta.highest(high, lookback)[1]   // önceki mum kırılması için [1]
+float lowestLow   = ta.lowest(low,   lookback)[1]
+float volMa       = ta.sma(volume, volLen)
+float trendEma    = ta.ema(close, trendLen)
+float atrVal      = ta.atr(atrLen)
+bool  highVol     = volume > volMa * volMult
+
+// Kırılma sinyalleri
+bool  longEntry   = ta.crossover(close, highestHigh) and highVol and close > trendEma
+bool  shortEntry  = ta.crossunder(close, lowestLow)  and highVol and close < trendEma and not longOnly
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if longEntry
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if shortEntry
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(highestHigh, "Resistance", color.new(color.red,   40), style=plot.style_circles)
+plot(lowestLow,   "Support",    color.new(color.green, 40), style=plot.style_circles)
+plot(trendEma,    "Trend EMA",  color.new(color.orange,20), linewidth=2)
+plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
+
+alertcondition(longEntry,  "ETH Long",  "ETH Breakout Long — {{close}}")
+alertcondition(shortEntry, "ETH Short", "ETH Breakout Short — {{close}}")
