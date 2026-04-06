@@ -3,6 +3,9 @@
 ## Pine Dosyası
 `examples/indicators/18_fakeout_filter.pine`
 
+## TradingView URL ✅ PUBLISHED
+https://tr.tradingview.com/script/SY1XkTBH/
+
 ## TradingView Title
 ```
 Fakeout Filter — 4-Layer Signal Quality [trugurpala]
