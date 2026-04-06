@@ -1,0 +1,72 @@
+//@version=6
+// VİOP / BIST30 Alert Strategy — Webhook Ready
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+//
+// TR: Bu strateji VİOP F_XU030 futures için optimize edilmiştir.
+//     TradingView Alert kurulumu için webhook-templates/05_json_payload_templates.md
+// EN: Optimized for VIOP F_XU030 futures.
+//     For webhook alert setup see webhook-templates/05_json_payload_templates.md
+strategy("VİOP BIST30 Alert Strategy [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 10,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.03,   // VİOP komisyon oranı
+    slippage          = 2)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen  = input.int(9,    "Fast EMA",    minval=1)
+int   slowLen  = input.int(21,   "Slow EMA",    minval=1)
+int   rsiLen   = input.int(14,   "RSI",         minval=1)
+float rsiMin   = input.float(55, "RSI Min Long", minval=50, maxval=80)
+float rsiMax   = input.float(45, "RSI Max Short",minval=20, maxval=50)
+int   atrLen   = input.int(14,   "ATR",         minval=1)
+float slMult   = input.float(2.0, "SL Mult",    step=0.1)
+float tpMult   = input.float(3.0, "TP Mult",    step=0.1)
+bool  longOnly = input.bool(false, "Sadece Long / Long Only")
+
+// ── Session Filtresi — VİOP saatleri 09:30-18:15 ─────────────────────────────
+bool inSession = not na(time(timeframe.period, "0930-1815", "UTC+3"))
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float fastEma = ta.ema(close, fastLen)
+float slowEma = ta.ema(close, slowLen)
+float rsi     = ta.rsi(close, rsiLen)
+float atrVal  = ta.atr(atrLen)
+
+bool bullCross = ta.crossover(fastEma, slowEma)  and rsi > rsiMin and inSession
+bool bearCross = ta.crossunder(fastEma, slowEma) and rsi < rsiMax and inSession
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+    // Alert mesajı (TradingView Alert → Message kutusuna yapıştır):
+    // {"market":"VIOP","symbol":"F_XU030","action":"buy","price":{{close}},"lot":{{strategy.order.contracts}},"time":"{{timenow}}"}
+
+if bearCross and not longOnly
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+    // Alert mesajı:
+    // {"market":"VIOP","symbol":"F_XU030","action":"sell","price":{{close}},"lot":{{strategy.order.contracts}},"time":"{{timenow}}"}
+
+// ── Alert Conditions ─────────────────────────────────────────────────────────
+alertcondition(bullCross,
+    "VİOP Long Signal",
+    "🟢 VIOP LONG | {{ticker}} | {{close}} | {{timenow}}")
+
+alertcondition(bearCross,
+    "VİOP Short Signal",
+    "🔴 VIOP SHORT | {{ticker}} | {{close}} | {{timenow}}")
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+bgcolor(inSession ? na : color.new(color.gray, 95), title="Session")
+plot(fastEma, "Fast", fastEma > slowEma ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
+plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
