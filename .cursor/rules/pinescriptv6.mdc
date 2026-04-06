@@ -1,0 +1,40 @@
+---
+description: Pine Script v6 geliştirme kuralları — Ugur Pala | github.com/trugurpala/pinescriptv6
+globs: ["**/*.pine", "**/*.tv"]
+alwaysApply: true
+---
+
+# Pine Script v6 — Cursor Rules
+# Maintainer: Ugur Pala · mail@ugurpala.com
+
+## TR | Türkçe — Kod Kuralları
+- Her script `//@version=6` ile başlar
+- `ta.*` fonksiyonlarını kullan, manuel yeniden yazmaya gerek yok
+- `var` / `varip` kullanımını execution model'e göre yap
+- Kod yazmadan önce mutlaka `LESSONS_LEARNED.md` oku
+- `LLM_MANIFEST.md` ile doğru referans dosyasını bul
+
+## EN | English — Code Rules
+- Every script starts with `//@version=6`
+- Use `ta.*` functions — never reimplement them
+- Use `var` / `varip` correctly per the execution model
+- Always read `LESSONS_LEARNED.md` before writing code
+- Use `LLM_MANIFEST.md` to find the correct reference file
+
+## Reference Map / Referans Haritası
+
+| Need / İhtiyaç | File / Dosya |
+|----------------|-------------|
+| RSI, EMA, MACD, crossover, ATR | `reference/functions/ta.md` |
+| strategy.entry, exit, position | `reference/functions/strategy.md` |
+| plot, line, box, label, table | `reference/functions/drawing.md` |
+| request.security, MTF | `reference/functions/request.md` |
+| array, map, matrix | `reference/functions/collections.md` |
+| math, str, input, alert | `reference/functions/general.md` |
+| var, varip, barstate | `concepts/execution_model.md` |
+| Errors / Hatalar | `concepts/common_errors.md` |
+| **Always first / Her zaman önce** | `LESSONS_LEARNED.md` |
+
+## On Error / Hata Olduğunda
+TR: Hatayı çözünce hemen `LESSONS_LEARNED.md` dosyasına ekle.
+EN: After solving an error, immediately append it to `LESSONS_LEARNED.md`.
