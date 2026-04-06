@@ -1,21 +1,34 @@
-# Pine Script v6 — Cursor Rules (legacy fallback)
+# Pine Script v6 — Cursor Rules
+# Repo: github.com/trugurpala/pinescriptv6
 # Maintainer: Ugur Pala · mail@ugurpala.com
-# For Cursor v0.44+, see .cursor/rules/pinescriptv6.mdc
 
-## TR | Kurallar
-- //@version=6 ile başla
-- LESSONS_LEARNED.md oku (kod yazmadan önce)
-- LLM_MANIFEST.md ile dosya bul
-- ta.* kullan, manuel yazma
-- Hata çözümünü LESSONS_LEARNED.md'ye ekle
+## Protocol
+1. Read LESSONS_LEARNED.md first — never repeat a known error
+2. Check LLM_MANIFEST.md — find the correct reference file for the task
+3. Read that file before writing any code
 
-## EN | Rules
-- Start with //@version=6
-- Read LESSONS_LEARNED.md before writing code
-- Use LLM_MANIFEST.md to find the right reference file
-- Use ta.* — never reimplement
-- Append error fixes to LESSONS_LEARNED.md
+## Code Rules
+- Every script must start with //@version=6
+- Use ta.* functions — do not reimplement manually
+- var / varip must follow the execution model
+- Never invent function names not found in the reference files
+- No v5 syntax (study(), security() at top level, etc.)
 
-## Reference / Referans
-ta.md | strategy.md | drawing.md | request.md | collections.md | general.md
-concepts/execution_model.md | concepts/common_errors.md
+## On Error
+Append to LESSONS_LEARNED.md immediately:
+- Error message (exact)
+- Cause
+- Fix
+- Minimal //@version=6 example
+
+## Quick Reference
+| Need | File |
+|------|------|
+| RSI, EMA, crossover, ATR | reference/functions/ta.md |
+| strategy.entry, exit | reference/functions/strategy.md |
+| plot, line, box, label | reference/functions/drawing.md |
+| request.security, MTF | reference/functions/request.md |
+| array, map, matrix | reference/functions/collections.md |
+| math, str, input, alert | reference/functions/general.md |
+| var, varip, barstate | concepts/execution_model.md |
+| Errors & fixes | concepts/common_errors.md |
