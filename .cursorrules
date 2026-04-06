@@ -1,34 +1,57 @@
-# Pine Script v6 — Cursor Rules
-# Repo: github.com/trugurpala/pinescriptv6
-# Maintainer: Ugur Pala · mail@ugurpala.com
+# Pine Script v6 Reference — Cursor Rules
+# Author: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
+# TradingView: https://tr.tradingview.com/u/trugurpala/
+# X: https://x.com/trugurpala
+#
+# Cursor (legacy fallback for pre-v0.44)
+# For Cursor v0.44+ see .cursor/rules/pinescriptv6.mdc
 
-## Protocol
-1. Read LESSONS_LEARNED.md first — never repeat a known error
-2. Check LLM_MANIFEST.md — find the correct reference file for the task
-3. Read that file before writing any code
+## Bu Repo Neden Var? / Why This Repo Exists?
 
-## Code Rules
-- Every script must start with //@version=6
-- Use ta.* functions — do not reimplement manually
-- var / varip must follow the execution model
-- Never invent function names not found in the reference files
-- No v5 syntax (study(), security() at top level, etc.)
+TR: TradingView Pine Script v6 çıktığında AI editörler v5 yazmaya devam etti.
+    Bu repo AI'a doğru v6 referansı ve kalıcı hata hafızası verir.
 
-## On Error
-Append to LESSONS_LEARNED.md immediately:
-- Error message (exact)
-- Cause
-- Fix
-- Minimal //@version=6 example
+EN: When Pine Script v6 launched, AI editors kept writing v5 code.
+    This repo gives AI correct v6 reference and permanent error memory.
 
-## Quick Reference
-| Need | File |
-|------|------|
-| RSI, EMA, crossover, ATR | reference/functions/ta.md |
+## Kullandığını Nasıl Anlarsın? / How to Verify It's Working?
+
+TR: Bu kurallar aktifse AI şunları yapmalı:
+    ✅ LESSONS_LEARNED.md okuduğunu belirtmeli
+    ✅ //@version=6 ile başlamalı
+    ✅ ta.* kullanmalı, security() veya study() yazmamalı
+    ❌ v5 syntax görüyorsan kurallar aktif değil
+
+EN: If these rules are active, AI should:
+    ✅ Mention reading LESSONS_LEARNED.md
+    ✅ Start with //@version=6
+    ✅ Use ta.*, never write security() or study()
+    ❌ If you see v5 syntax, rules are not active
+
+## Protokol / Protocol
+
+Kod yazmadan önce:
+1. LESSONS_LEARNED.md oku
+2. LLM_MANIFEST.md ile doğru dosyayı bul
+3. O dosyayı oku, sonra yaz
+4. Hata olunca: çöz + LESSONS_LEARNED.md'ye ekle
+
+## v5 → v6 Dönüşüm / Migration
+
+| ❌ v5 | ✅ v6 |
+|-------|-------|
+| study() | indicator() |
+| security() | request.security() |
+| input(14, type=input.integer) | input.int(14) |
+| array.new_float() | array.new<float>() |
+
+## Referans / Reference
+
+| İhtiyaç / Need | Dosya / File |
+|----------------|-------------|
+| RSI, EMA, MACD, ATR | reference/functions/ta.md |
 | strategy.entry, exit | reference/functions/strategy.md |
-| plot, line, box, label | reference/functions/drawing.md |
-| request.security, MTF | reference/functions/request.md |
-| array, map, matrix | reference/functions/collections.md |
-| math, str, input, alert | reference/functions/general.md |
-| var, varip, barstate | concepts/execution_model.md |
-| Errors & fixes | concepts/common_errors.md |
+| plot, line, label | reference/functions/drawing.md |
+| request.security | reference/functions/request.md |
+| Bilinen hatalar / Errors | concepts/common_errors.md |
+| **Her zaman önce / Always first** | LESSONS_LEARNED.md |
