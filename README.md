@@ -12,7 +12,7 @@
 **TradingView Pine Script v6 — AI destekli geliştirme ortamı**
 **TradingView Pine Script v6 — AI-assisted development reference**
 
-Tasarım ve geliştirme / Designed & built by [Ugur Pala](https://github.com/trugurpala) · mail@ugurpala.com
+Yapımcı / Author: [Ugur Pala](https://github.com/trugurpala) · mail@ugurpala.com
 
 </div>
 
@@ -20,9 +20,9 @@ Tasarım ve geliştirme / Designed & built by [Ugur Pala](https://github.com/tru
 
 ## 📺 Demo
 
-> **XU030 (BIST 30 Futures) — EMA Cross Indicator**
-> Aşağıdaki kod bu repodaki referans dosyaları kullanılarak Claude ile yazıldı.
-> The code below was written by Claude using the reference files in this repo.
+> **XU030 BIST 30 Futures — EMA Cross**
+> TR: Bu kod, repodaki referans dosyaları kullanılarak Claude ile yazıldı.
+> EN: This code was written by Claude using the reference files in this repo.
 
 ![EMA Cross Demo on XU030](docs/demo_chart.png)
 
@@ -41,7 +41,7 @@ bgcolor(ta.crossover(fast, slow)  ? color.new(color.green, 90) :
 
 ## ⚙️ LESSONS_LEARNED Sistemi / System
 
-![How it works](docs/lessons_flow.png)
+![How LESSONS_LEARNED Works](docs/lessons_flow.png)
 
 ---
 
@@ -49,54 +49,94 @@ bgcolor(ta.crossover(fast, slow)  ? color.new(color.green, 90) :
 
 ### Bu Repo Nedir?
 
-Bu repo; TradingView'ın resmi Pine Script v6 dokümantasyonunu temel kaynak alarak,
-**yapay zeka destekli geliştirme için baştan tasarlanmış** özgün bir bilgi tabanıdır.
+TradingView'ın resmi Pine Script v6 dokümantasyonu temel kaynak alınarak,
+yapay zeka destekli geliştirme için tasarlanmış bir bilgi tabanıdır.
+Tüm içerik, sistem ve yapı **Uğur Pala** tarafından oluşturulmuştur.
 
-Tüm içerik, sistem tasarımı ve yapı **Uğur Pala** tarafından oluşturulmuştur.
+| Özellik | Açıklama |
+|---------|----------|
+| `LESSONS_LEARNED.md` | AI her hata çözümünde buraya yazar. Sonraki oturumda önce okur, hatayı tekrar yapmaz. |
+| `LLM_MANIFEST.md` | Hangi soruda hangi dosyanın okunacağını belirler. Tüm repo yerine sadece ilgili dosyayı çeker. |
+| `SKILL.md` | AI'ın yazma protokolü. |
 
-Bu repoya özgü özellikler:
+> Temel referans: TradingView Pine Script v6 resmi dokümantasyonu.
+> TradingView bu projeyle hiçbir bağlantısı veya onayı bulunmamaktadır.
 
-| Özellik | Ne İşe Yarar? |
-|---------|--------------|
-| **LESSONS_LEARNED.md** | AI her hata çözümünde buraya yazar. Bir dahaki oturumda önce bunu okur, aynı hatayı bir daha yapmaz. |
-| **LLM_MANIFEST.md** | Hangi soruda hangi dosyanın okunacağını belirleyen yönlendirme haritası. Tüm repoyu yüklemek yerine sadece ilgili dosyayı çeker. |
-| **SKILL.md** | AI'ın bu repodaki yazma protokolü. |
-| **Entegrasyon** | Claude / Cursor / Windsurf / Copilot — kutu açılır açılmaz hazır. |
-
-> **Kaynak notu:** Temel referans materyali olarak TradingView'ın resmi Pine Script v6
-> dokümantasyonundan yararlanılmıştır. TradingView bu projeyle hiçbir bağlantısı veya
-> onayı bulunmamaktadır.
-
-### Hızlı Başlangıç
+### 🚀 Hızlı Başlangıç
 
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 ```
 
-### Claude Projects ile Kullanım
+---
+
+### 🤖 Claude ile Kullanım
 
 1. [Claude.ai](https://claude.ai) → Projects → Projeniz
-2. Files → **+** → GitHub → Yapıştır:
-   `https://github.com/trugurpala/pinescriptv6`
+2. **Files** → `+` → **GitHub** → yapıştır:
+   ```
+   https://github.com/trugurpala/pinescriptv6
+   ```
 3. Tüm dosyaları seç → **Add files**
-4. Sohbette `/pinescript-v6` yazarak skill'i aktifleştir
+4. Sohbette `/pinescript-v6` yaz → skill aktif
 
-### Cursor / Windsurf / Copilot ile Kullanım
+---
 
-Repoyu klonlayın — `.cursorrules` ve `.github/copilot-instructions.md` otomatik devreye girer.
+### ⌨️ Cursor ile Kullanım
+
+Repoyu klonlayın — `.cursor/rules/pinescriptv6.mdc` otomatik yüklenir (Cursor v0.44+).
+Eski sürümler için `.cursorrules` fallback olarak çalışır.
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+cd pinescriptv6
+# Cursor'ı bu klasörde açın — kurallar otomatik devreye girer
+cursor .
+```
+
+Veya kod yazarken direkt referans edin:
 
 | Görev | Dosya |
 |-------|-------|
-| İndikatör yazıyorum | `@reference/functions/ta.md` + `@reference/functions/drawing.md` |
+| İndikatör yazıyorum | `@reference/functions/ta.md` |
 | Strateji yazıyorum | `@reference/functions/strategy.md` |
-| Çoklu zaman dilimi | `@reference/functions/request.md` |
 | Hata alıyorum | `@concepts/common_errors.md` |
 | **Her şeyden önce** | `@LESSONS_LEARNED.md` |
 
-### Lisans
+---
 
-MIT — detaylar için [LICENSE](LICENSE) dosyasına bakın.
-Telif Hakkı © 2025 [Uğur Pala](https://github.com/trugurpala) · mail@ugurpala.com
+### 🌊 Windsurf ile Kullanım
+
+Repoyu klonlayın — `.windsurfrules` otomatik yüklenir.
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+# Windsurf'ü bu klasörde açın
+windsurf .
+```
+
+---
+
+### 🐙 GitHub Copilot ile Kullanım
+
+Repoyu klonlayın — `.github/copilot-instructions.md` otomatik devreye girer.
+VS Code, JetBrains veya herhangi bir Copilot destekli editörde çalışır.
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+# Editörünüzde bu klasörü açın — Copilot kuralları aktif olur
+```
+
+---
+
+### 🤗 Diğer LLM'ler / Custom GPT
+
+1. Repoyu ZIP olarak indirin
+2. Custom GPT Knowledge veya RAG sisteminize yükleyin
+3. Minimum yükleme önerisi:
+   - `LLM_MANIFEST.md`
+   - `LESSONS_LEARNED.md`
+   - `reference/functions/` klasörü
 
 ---
 
@@ -104,63 +144,115 @@ Telif Hakkı © 2025 [Uğur Pala](https://github.com/trugurpala) · mail@ugurpal
 
 ### What is this?
 
-This repository takes the official TradingView Pine Script v6 documentation as its
-primary source and builds an original, purpose-built knowledge base for AI-assisted development.
+A knowledge base purpose-built for AI-assisted Pine Script v6 development.
+The official TradingView Pine Script v6 documentation is the primary source.
+All content, system design and structure created by **Ugur Pala**.
 
-All content, system design, and structure were created by **Ugur Pala**.
-
-| Feature | What it does |
+| Feature | Description |
 |---------|-------------|
-| **LESSONS_LEARNED.md** | The AI appends every solved error here. Next session it reads this first — same mistake never happens twice. |
-| **LLM_MANIFEST.md** | Routing map that tells the AI which file to read for which query, instead of loading the entire repo. |
-| **SKILL.md** | The AI's writing protocol for this codebase. |
-| **Integrations** | Claude / Cursor / Windsurf / Copilot — works out of the box. |
+| `LESSONS_LEARNED.md` | AI appends every solved error here. Next session reads it first — same mistake never repeated. |
+| `LLM_MANIFEST.md` | Tells the AI which file to read for which query. Loads only relevant files, not the whole repo. |
+| `SKILL.md` | AI's writing protocol. |
 
-> **Source note:** The official TradingView Pine Script v6 documentation was used as the
-> primary reference material. TradingView is not affiliated with or endorsing this project.
+> Source: TradingView Pine Script v6 official documentation.
+> TradingView is not affiliated with or endorsing this project.
 
-### Quick Start
+### 🚀 Quick Start
 
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 ```
 
-### Use with Claude Projects
+---
+
+### 🤖 Use with Claude
 
 1. [Claude.ai](https://claude.ai) → Projects → your project
-2. Files → **+** → GitHub → paste:
-   `https://github.com/trugurpala/pinescriptv6`
+2. **Files** → `+` → **GitHub** → paste:
+   ```
+   https://github.com/trugurpala/pinescriptv6
+   ```
 3. Select all files → **Add files**
-4. Type `/pinescript-v6` in chat to activate the skill
+4. Type `/pinescript-v6` in chat → skill active
 
-### Use with Cursor / Windsurf / Copilot
+---
 
-Clone the repo — `.cursorrules` and `.github/copilot-instructions.md` are picked up automatically.
+### ⌨️ Use with Cursor
+
+Clone the repo — `.cursor/rules/pinescriptv6.mdc` loads automatically (Cursor v0.44+).
+`.cursorrules` works as fallback for older versions.
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+cursor .
+```
+
+Or reference files directly in chat:
 
 | Task | File |
 |------|------|
-| Writing an indicator | `@reference/functions/ta.md` + `@reference/functions/drawing.md` |
+| Writing an indicator | `@reference/functions/ta.md` |
 | Writing a strategy | `@reference/functions/strategy.md` |
-| Multi-timeframe data | `@reference/functions/request.md` |
 | Fixing an error | `@concepts/common_errors.md` |
 | **Before anything** | `@LESSONS_LEARNED.md` |
 
-### Use with Custom GPTs or Other LLMs
+---
 
-1. Download this repo as a ZIP
-2. Upload to your Custom GPT Knowledge or RAG pipeline
-3. Recommended minimum: `LLM_MANIFEST.md` + `LESSONS_LEARNED.md` + `reference/functions/`
+### 🌊 Use with Windsurf
 
-### File Structure
+Clone the repo — `.windsurfrules` loads automatically.
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+windsurf .
+```
+
+---
+
+### 🐙 Use with GitHub Copilot
+
+Clone the repo — `.github/copilot-instructions.md` activates automatically.
+Works in VS Code, JetBrains, or any Copilot-enabled editor.
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+# Open this folder in your editor — Copilot rules are active
+```
+
+---
+
+### 🤗 Other LLMs / Custom GPT
+
+1. Download the repo as ZIP
+2. Upload to your Custom GPT Knowledge or RAG system
+3. Recommended minimum upload:
+   - `LLM_MANIFEST.md`
+   - `LESSONS_LEARNED.md`
+   - `reference/functions/` folder
+
+---
+
+## Dosya Yapısı / File Structure
 
 ```
 pinescriptv6/
-├── LESSONS_LEARNED.md          TR: Hata hafızası   / EN: Auto-updated error log
-├── SKILL.md                    TR: AI yazma prot.  / EN: AI writing protocol
-├── LLM_MANIFEST.md             TR: Sorgu yönl.     / EN: Query routing map
+│
+├── LESSONS_LEARNED.md      TR: Hata hafızası      EN: Auto-updated error log
+├── SKILL.md                TR: AI yazma protokolü EN: AI writing protocol
+├── LLM_MANIFEST.md         TR: Sorgu yönlendirme  EN: Query routing map
+│
+├── .cursor/
+│   └── rules/
+│       └── pinescriptv6.mdc   ← Cursor v0.44+
+├── .cursorrules                ← Cursor (legacy)
+├── .windsurfrules              ← Windsurf / Codeium
+├── .github/
+│   └── copilot-instructions.md ← GitHub Copilot
+│
 ├── docs/
-│   ├── demo_chart.png          ← XU030 demo screenshot
-│   └── lessons_flow.png        ← System flow diagram
+│   ├── demo_chart.png          ← XU030 demo
+│   └── lessons_flow.png        ← System diagram
+│
 ├── concepts/
 │   ├── execution_model.md
 │   ├── common_errors.md
@@ -168,6 +260,7 @@ pinescriptv6/
 │   ├── colors_and_display.md
 │   ├── methods.md
 │   └── objects.md
+│
 ├── reference/
 │   ├── variables.md
 │   ├── constants.md
@@ -181,6 +274,7 @@ pinescriptv6/
 │       ├── request.md
 │       ├── collections.md
 │       └── general.md
+│
 └── writing_scripts/
     ├── style_guide.md
     ├── debugging.md
@@ -188,17 +282,19 @@ pinescriptv6/
     └── limitations.md
 ```
 
-### License
+---
 
-MIT — see [LICENSE](LICENSE) for details.
-Copyright © 2025 [Ugur Pala](https://github.com/trugurpala) · mail@ugurpala.com
+## Lisans / License
+
+MIT — [LICENSE](LICENSE) dosyasına bakın.
+Telif Hakkı / Copyright © 2025 [Ugur Pala](https://github.com/trugurpala) · mail@ugurpala.com
 
 ---
 
 <div align="center">
 
-⭐ **If this repo saved you time, please give it a star!** ⭐
-Bu repo işinize yaradıysa lütfen yıldız verin!
+⭐ TR: Bu repo işinize yaradıysa lütfen yıldız verin!
+⭐ EN: If this repo saved you time, please give it a star!
 
 [![Star History Chart](https://api.star-history.com/svg?repos=trugurpala/pinescriptv6&type=Date)](https://star-history.com/#trugurpala/pinescriptv6&Date)
 
