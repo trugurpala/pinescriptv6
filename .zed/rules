@@ -1,0 +1,41 @@
+# Pine Script v6 — Zed Rules
+# Author: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
+# TR: Zed editörü için Pine Script v6 kural dosyası
+# EN: Pine Script v6 rules for Zed editor
+
+## Protocol
+
+Before writing any Pine Script v6 code:
+1. Read LESSONS_LEARNED.md — known errors and fixes
+2. Use LLM_MANIFEST.md to find the correct reference file
+3. Read that file, then write the code
+4. On error: solve it + append to LESSONS_LEARNED.md
+
+## Non-Negotiable Rules
+
+1. //@version=6 — first line of EVERY script
+2. ta.* functions — never reimplement manually
+3. input.int(), input.float() etc — never bare input()
+4. request.security() — never security()
+5. indicator() — never study()
+
+## Reference Map
+
+| Need | File |
+|------|------|
+| Indicators (RSI, EMA, MACD, ATR) | reference/functions/ta.md |
+| Strategies | reference/functions/strategy.md |
+| Drawings (plot, line, label, table) | reference/functions/drawing.md |
+| MTF (request.security) | reference/functions/request.md |
+| Arrays, maps, matrices | reference/functions/collections.md |
+| Math, string, input, alert | reference/functions/general.md |
+| Errors | concepts/common_errors.md |
+| **Always first** | LESSONS_LEARNED.md |
+
+## Checklist
+
+- [ ] LESSONS_LEARNED.md read
+- [ ] //@version=6 present
+- [ ] No v5 syntax
+- [ ] Function signatures verified against reference
+- [ ] var/varip used correctly
