@@ -1,21 +1,26 @@
 ---
-name: "💡 Çözülen Hata / Solved Error"
-about: "TR: Çözdüğünüz bir Pine Script v6 hatasını paylaşın / EN: Share a Pine Script v6 error you solved"
+name: "📝 Hata Kaydı / Lessons Learned"
+about: "TR: Çözdüğün bir Pine Script v6 hatasını paylaş. EN: Share a Pine Script v6 error you solved."
 title: "[LESSON] "
 labels: enhancement
 assignees: trugurpala
 ---
 
-## TR | Türkçe
+## TR | Hata Mesajı
 
-**Hata mesajı:**
 ```
-TradingView'dan tam hata metni buraya
+TradingView'dan birebir kopyala
 ```
 
-**Sebep:**
+## Sebep
 
-**Çözüm:**
+<!-- Neden oluşuyor? -->
+
+## Çözüm
+
+<!-- Nasıl düzeltilir? -->
+
+## Örnek
 
 ```pine
 //@version=6
@@ -26,16 +31,21 @@ TradingView'dan tam hata metni buraya
 
 ---
 
-## EN | English
+## EN | Error Message
 
-**Error message:**
 ```
-Paste exact error from TradingView here
+Copy verbatim from TradingView
 ```
 
-**Cause:**
+## Cause
 
-**Fix:**
+<!-- Why does it happen? -->
+
+## Fix
+
+<!-- How to resolve it? -->
+
+## Example
 
 ```pine
 //@version=6
