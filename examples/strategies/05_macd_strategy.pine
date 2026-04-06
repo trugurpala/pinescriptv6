@@ -1,0 +1,37 @@
+//@version=6
+// MACD Signal Cross + EMA Trend Filter — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+strategy("MACD Strategy [trugurpala]",
+    overlay=true, initial_capital=10000,
+    default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+    commission_type=strategy.commission.percent, commission_value=0.1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen  = input.int(12, "MACD Fast",   minval=1)
+int   slowLen  = input.int(26, "MACD Slow",   minval=1)
+int   sigLen   = input.int(9,  "Signal",      minval=1)
+int   trendLen = input.int(200,"Trend EMA",   minval=1)
+int   atrLen   = input.int(14, "ATR Length",  minval=1)
+float slMult   = input.float(2.0, "SL Mult",  step=0.1)
+float tpMult   = input.float(2.5, "TP Mult",  step=0.1)
+bool  useTrend = input.bool(true, "Use Trend Filter")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+[macdLine, signalLine, _] = ta.macd(close, fastLen, slowLen, sigLen)
+float trendEma = ta.ema(close, trendLen)
+float atrVal   = ta.atr(atrLen)
+bool  bullCross = ta.crossover(macdLine,  signalLine) and (not useTrend or close > trendEma)
+bool  bearCross = ta.crossunder(macdLine, signalLine) and (not useTrend or close < trendEma)
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long", stop=close - slMult * atrVal, limit=close + tpMult * atrVal)
+if bearCross
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short", stop=close + slMult * atrVal, limit=close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(trendEma, "Trend EMA", color.new(color.orange, 20), linewidth=2)
+plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
