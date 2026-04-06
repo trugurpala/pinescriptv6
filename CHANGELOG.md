@@ -1,25 +1,48 @@
-# Değişiklik Günlüğü / Changelog
+# Changelog
 
-Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+> TR: Önemli değişiklikler burada. Format: [Keep a Changelog](https://keepachangelog.com)
+> EN: Notable changes documented here. Format: [Keep a Changelog](https://keepachangelog.com)
 
 ---
 
 ## [Unreleased]
 
-### Planlananlar / Planned
-- VİOP/BIST30 strateji örnekleri / VIOP/BIST30 strategy examples
-- Webhook alert şablonları / Webhook alert templates
+### TR | Planlananlar
+- VIOP / BIST30 strateji örnekleri
+- Webhook alert mesaj şablonları
+- Pine Script v6 strateji backtest şablonları
+
+### EN | Planned
+- VIOP / BIST30 strategy examples
+- Webhook alert message templates
+- Pine Script v6 strategy backtest templates
 
 ---
 
-## [1.0.0] — 2025-04-06
+## [1.0.0] — 2025-04-07
 
-### Eklenenler / Added
-- TR/EN çift dilli Pine Script v6 referansı / Bilingual Pine Script v6 reference
-- `LESSONS_LEARNED.md` — AI hata hafızası / AI error memory system
-- `LLM_MANIFEST.md` — Sorgu yönlendirme / Query routing map
-- `SKILL.md` — AI yazma protokolü / AI writing protocol
-- `.cursorrules` · `.windsurfrules` · `.github/copilot-instructions.md`
-- `.github/` — Issue templates, PR template, FUNDING
-- `assets/` — Demo ekranı (XU030), sistem akış diyagramı
-- Community files: CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, LICENSE (MIT)
+### TR | Eklenenler
+- Pine Script v6 referansı — sıfırdan, Uğur Pala tarafından
+- `LESSONS_LEARNED.md` — AI hata hafızası sistemi
+- `SKILL.md` — AI yazma protokolü
+- `LLM_MANIFEST.md` — sorgu yönlendirme haritası
+- `.cursor/rules/pinescriptv6.mdc` — Cursor v0.44+
+- `.cursorrules` — Cursor legacy fallback
+- `.windsurfrules` — Windsurf / Codeium
+- `.github/copilot-instructions.md` — GitHub Copilot
+- Issue şablonları, PR şablonu, topluluk dosyaları
+- `docs/` — demo ekran görüntüsü (XU030) ve akış diyagramı
+- MIT Lisansı
+
+### EN | Added
+- Pine Script v6 reference — built from scratch by Ugur Pala
+- `LESSONS_LEARNED.md` — AI error memory system
+- `SKILL.md` — AI writing protocol
+- `LLM_MANIFEST.md` — query routing map
+- `.cursor/rules/pinescriptv6.mdc` — Cursor v0.44+
+- `.cursorrules` — Cursor legacy fallback
+- `.windsurfrules` — Windsurf / Codeium
+- `.github/copilot-instructions.md` — GitHub Copilot
+- Issue templates, PR template, community files
+- `docs/` — demo screenshot (XU030) and flow diagram
+- MIT License
