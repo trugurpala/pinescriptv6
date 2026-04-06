@@ -1,0 +1,29 @@
+//@version=6
+// ATR Dynamic Support/Resistance Levels — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("ATR Levels [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   atrLen = input.int(14, "ATR Length", minval=1)
+float mult1  = input.float(1.0, "Level 1", step=0.1)
+float mult2  = input.float(2.0, "Level 2", step=0.1)
+float mult3  = input.float(3.0, "Level 3", step=0.1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float atrVal = ta.atr(atrLen)
+float basis  = ta.sma(close, atrLen)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(basis,               "Basis", color.orange, linewidth=2)
+plot(basis + mult1*atrVal,"R1",    color.new(color.red,   50))
+plot(basis + mult2*atrVal,"R2",    color.new(color.red,   30))
+plot(basis + mult3*atrVal,"R3",    color.red,             linewidth=2)
+plot(basis - mult1*atrVal,"S1",    color.new(color.green, 50))
+plot(basis - mult2*atrVal,"S2",    color.new(color.green, 30))
+plot(basis - mult3*atrVal,"S3",    color.green,           linewidth=2)
+
+if barstate.islast
+    label.new(bar_index + 2, basis + mult3*atrVal,
+        "ATR: " + str.tostring(math.round(atrVal, 2)),
+        style=label.style_label_left,
+        color=color.new(color.gray, 70), textcolor=color.white)
