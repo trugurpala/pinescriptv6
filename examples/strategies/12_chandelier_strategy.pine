@@ -1,0 +1,50 @@
+//@version=6
+// Chandelier Exit Strategy
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+strategy("Chandelier Strategy [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 10,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   atrLen   = input.int(22,   "ATR Length",    minval=1)
+float atrMult  = input.float(3.0, "ATR Multiplier", step=0.1)
+bool  longOnly = input.bool(false, "Long Only")
+
+// ── Chandelier Exit ──────────────────────────────────────────────────────────
+float atr       = ta.atr(atrLen)
+float longStop  = ta.highest(high, atrLen) - atrMult * atr
+float shortStop = ta.lowest(low,  atrLen)  + atrMult * atr
+
+var float chandLong  = na
+var float chandShort = na
+var int   direction  = 1
+
+chandLong  := longStop  > nz(chandLong[1],  longStop)  ? longStop  : nz(chandLong[1],  longStop)
+chandShort := shortStop < nz(chandShort[1], shortStop) ? shortStop : nz(chandShort[1], shortStop)
+
+if close > nz(chandShort[1], chandShort)
+    direction := 1
+if close < nz(chandLong[1],  chandLong)
+    direction := -1
+
+bool bullChange = direction == 1  and direction[1] == -1
+bool bearChange = direction == -1 and direction[1] ==  1
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullChange
+    strategy.close("Short")
+    strategy.entry("Long", strategy.long)
+
+if bearChange and not longOnly
+    strategy.close("Long")
+    strategy.entry("Short", strategy.short)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(direction == 1  ? chandLong  : na, "Long Stop",  color.green, linewidth=2, style=plot.style_linebr)
+plot(direction == -1 ? chandShort : na, "Short Stop", color.red,   linewidth=2, style=plot.style_linebr)
+plotshape(bullChange, "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(bearChange, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
