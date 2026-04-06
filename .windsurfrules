@@ -1,28 +1,31 @@
 # Pine Script v6 — Windsurf Rules
+# Repo: github.com/trugurpala/pinescriptv6
 # Maintainer: Ugur Pala · mail@ugurpala.com
-# github.com/trugurpala/pinescriptv6
 
-## TR | Türkçe
-Pine Script v6 kodu yazarken şu kuralları uygula:
-- Her script //@version=6 ile başlar
-- Kod yazmadan önce LESSONS_LEARNED.md'yi oku
-- LLM_MANIFEST.md ile göreve uygun referans dosyasını bul
-- ta.* fonksiyonlarını kullan
-- Hata çözümünde LESSONS_LEARNED.md'yi güncelle
+## Protocol
+1. Read LESSONS_LEARNED.md first — never repeat a known error
+2. Check LLM_MANIFEST.md — find the correct reference file
+3. Read that file before writing
 
-## EN | English
-When writing Pine Script v6 code:
-- Every script starts with //@version=6
-- Read LESSONS_LEARNED.md before writing any code
-- Use LLM_MANIFEST.md to find the correct reference file
+## Code Rules
+- Every script must start with //@version=6
 - Use ta.* functions — never reimplement manually
-- Update LESSONS_LEARNED.md after solving any error
+- var / varip must follow execution_model.md
+- Never invent function signatures not in the reference
+- No v5 syntax
 
-## Reference Map
-| Task | File |
+## On Error
+Append to LESSONS_LEARNED.md:
+- Error message · Cause · Fix · Minimal example (//@version=6)
+
+## Quick Reference
+| Need | File |
 |------|------|
-| Indicators | reference/functions/ta.md |
-| Strategies | reference/functions/strategy.md |
-| Drawing | reference/functions/drawing.md |
-| MTF Data | reference/functions/request.md |
-| Always first | LESSONS_LEARNED.md |
+| RSI, EMA, crossover, ATR | reference/functions/ta.md |
+| strategy.entry, exit | reference/functions/strategy.md |
+| plot, line, box, label | reference/functions/drawing.md |
+| request.security, MTF | reference/functions/request.md |
+| array, map, matrix | reference/functions/collections.md |
+| math, str, input, alert | reference/functions/general.md |
+| var, varip, barstate | concepts/execution_model.md |
+| Errors & fixes | concepts/common_errors.md |
