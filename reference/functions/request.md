@@ -1,49 +1,38 @@
-# request.* Fonksiyonlari — Pine Script v6
-Maintainer: Ugur Pala — mail@ugurpala.com
+# request.* - Pine Script v6
+Maintainer: Ugur Pala - mail@ugurpala.com
 
 ## request.security()
 ```pine
-// Baska sembolu veya timeframe'i cek
-request.security(symbol, timeframe, expression, 
-                 gaps, lookahead, ignore_invalid_symbol,
-                 currency, calc_bars_count)
+dailyClose = request.security(syminfo.tickerid, "D", close)
+weeklyEma  = request.security(syminfo.tickerid, "W", ta.ema(close, 20))
+btcClose   = request.security("BINANCE:BTCUSDT", "D", close)
 
-// Ornekler
-daily = request.security(syminfo.tickerid, "D", close)
-btc   = request.security("BINANCE:BTCUSDT", "D", close)
+// GUVENLI - repainting yok
+htf_safe = request.security(syminfo.tickerid, "D", close[1])
 
-// Guvenli (repainting olmadan)
-daily_safe = request.security(syminfo.tickerid, "D", close[1])
+// Coklu deger
+[o, h, l, c] = request.security(syminfo.tickerid, "D",
+                                 [open, high, low, close])
+```
+
+## request.security_lower_tf()
+```pine
+lowerCloses = request.security_lower_tf(syminfo.tickerid, "1", close)
+// array<float> dondurur
 ```
 
 ## request.financial()
 ```pine
-// Finansal veri (P/E, EPS vb.)
-pe = request.financial(syminfo.tickerid, "P_E", "TTM")
+pe  = request.financial(syminfo.tickerid, "P_E", "TTM")
 eps = request.financial(syminfo.tickerid, "EARNINGS_PER_SHARE", "FQ")
 ```
 
 ## request.currency_rate()
 ```pine
-// Doviz kuru
 usdtry = request.currency_rate("USD", "TRY")
 ```
 
-## request.security_lower_tf()
-```pine
-// Alt timeframe OHLCV array olarak
-lowerClose = request.security_lower_tf(syminfo.tickerid, "1", close)
-// lowerClose bir array<float> dondurur
-```
-
-## Onemli Not — Repainting
-```pine
-// REPAINTING YAPABILIR (canli cubuk verisini kullanir)
-htf = request.security(syminfo.tickerid, "D", close)
-
-// GUVENLI
-htf = request.security(syminfo.tickerid, "D", close[1])
-// veya
-htf = request.security(syminfo.tickerid, "D", close, 
-                       lookahead=barmerge.lookahead_off)
-```
+## Limitler
+- Max 40 request.security() per script
+- Performans icin minimize et
+- Koleksiyon dondururken memory dikkat
