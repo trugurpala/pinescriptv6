@@ -1,29 +1,36 @@
-# Davranış Kuralları / Code of Conduct
+# Code of Conduct
+
+> TR: Kısa ve net. Saygılı ol, katkı sağla, hepsi bu.
+> EN: Short and clear. Be respectful, contribute, that's it.
 
 ---
 
 ## TR | Türkçe
 
-Bu toplulukta herkes saygılı ve kapsayıcı bir ortamı hak eder.
+Bu proje herkese açıktır. Katılmak için tek beklenti şu:
+başkalarına, katkılarına ve fikirlerine saygı göster.
 
-**Kabul Edilebilir:** Saygılı dil · Farklı görüşlere hoşgörü · Yapıcı eleştiri
+**Kabul edilmez:**
+- Aşağılayıcı yorum, kişisel saldırı, taciz
+- Başkasının özel bilgisini paylaşmak
+- Topluluğu rahatsız edecek her türlü davranış
 
-**Kabul Edilemez:** Taciz · Aşağılama · Kişisel saldırı · İzinsiz kişisel bilgi paylaşımı
-
-İhlaller için: **mail@ugurpala.com**
+İhlal bildirimi: **mail@ugurpala.com**
 
 ---
 
 ## EN | English
 
-Everyone in this community deserves a respectful and inclusive environment.
+This project is open to everyone. The only expectation:
+respect others, their contributions, and their ideas.
 
-**Acceptable:** Respectful language · Tolerance for different views · Constructive criticism
+**Not acceptable:**
+- Insulting comments, personal attacks, harassment
+- Sharing someone's private information
+- Any behaviour that makes others uncomfortable
 
-**Unacceptable:** Harassment · Insults · Personal attacks · Sharing private information without consent
-
-Report violations to: **mail@ugurpala.com**
+Report violations: **mail@ugurpala.com**
 
 ---
 
-*[Contributor Covenant](https://www.contributor-covenant.org) v2.1 uyarlanmıştır / adapted from.*
+*Based on [Contributor Covenant](https://www.contributor-covenant.org) v2.1*
