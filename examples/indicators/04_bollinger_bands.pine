@@ -1,0 +1,25 @@
+//@version=6
+// Bollinger Bands + Squeeze Detection — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("Bollinger Bands [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   bbLen       = input.int(20,   "BB Length", minval=1)
+float bbMult      = input.float(2.0, "BB Mult",   step=0.1)
+bool  showSqueeze = input.bool(true, "Show Squeeze")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+[upper, basis, lower] = ta.bb(close, bbLen, bbMult)
+float bbWidth = ta.bbw(close, bbLen, bbMult)
+bool  squeeze = showSqueeze and bbWidth == ta.lowest(bbWidth, 20)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+p1 = plot(upper, "Upper", color.new(color.blue, 40))
+p2 = plot(lower, "Lower", color.new(color.blue, 40))
+plot(basis, "Basis", color.new(color.orange, 20), linewidth=2)
+fill(p1, p2, color.new(color.blue, 90))
+bgcolor(squeeze ? color.new(color.purple, 88) : na, title="Squeeze")
+plotshape(squeeze, "Squeeze", shape.circle, location.bottom, color.new(color.purple, 30), size=size.tiny)
+
+// ── Alerts ───────────────────────────────────────────────────────────────────
+alertcondition(squeeze, "BB Squeeze", "Bollinger Squeeze — {{ticker}} @ {{close}}")
