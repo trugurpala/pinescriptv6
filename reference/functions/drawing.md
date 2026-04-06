@@ -1,18 +1,18 @@
-# Drawing Fonksiyonlari — Pine Script v6
-Maintainer: Ugur Pala — mail@ugurpala.com
+# Drawing - Pine Script v6
+Maintainer: Ugur Pala - mail@ugurpala.com
 
 ## plot()
 ```pine
-plot(close, "Close", color.blue, 2)
-plot(close, style=plot.style_histogram, color=color.green)
-plot(na)  // gorulmez plot (placeholder)
+plot(close, "Kapanis", color.blue, linewidth=2)
+plot(close, style=plot.style_histogram)
+plot(na)  // gorulmez
 ```
 
 ## plotshape()
 ```pine
 plotshape(buySignal, style=shape.triangleup,
-          location=location.belowbar, color=color.green,
-          size=size.small, title="Buy")
+          location=location.belowbar,
+          color=color.green, size=size.small)
 ```
 
 ## hline()
@@ -23,31 +23,35 @@ hline(30, "OS", color.green)
 
 ## bgcolor()
 ```pine
-bgcolor(isWeekend ? color.new(color.blue, 90) : na)
+bgcolor(condition ? color.new(color.green, 90) : na)
 ```
 
 ## line.new()
 ```pine
 var line myLine = na
-myLine := line.new(bar_index[1], close[1], bar_index, close,
-                   color=color.blue, width=2)
-// Sadece son cizgiyi tut
-line.delete(myLine[1])
+if barstate.islast
+    line.delete(myLine)
+    myLine := line.new(bar_index-10, ta.lowest(10),
+                       bar_index, ta.highest(10),
+                       color=color.orange, width=2)
 ```
 
 ## box.new()
 ```pine
 var box myBox = na
-myBox := box.new(bar_index - 10, ta.highest(10), bar_index, ta.lowest(10),
-                 border_color=color.red, bgcolor=color.new(color.red, 90))
 box.delete(myBox[1])
+myBox := box.new(bar_index-20, ta.highest(20),
+                 bar_index, ta.lowest(20),
+                 border_color=color.blue,
+                 bgcolor=color.new(color.blue, 90))
 ```
 
 ## label.new()
 ```pine
-label.new(bar_index, high, "High: " + str.tostring(high),
-          style=label.style_label_down, color=color.green,
-          textcolor=color.white)
+label.new(bar_index, high,
+          "PH: " + str.tostring(high, format.mintick),
+          style=label.style_label_down,
+          color=color.red, textcolor=color.white)
 ```
 
 ## fill()
@@ -55,4 +59,14 @@ label.new(bar_index, high, "High: " + str.tostring(high),
 p1 = plot(ta.ema(close, 9))
 p2 = plot(ta.ema(close, 21))
 fill(p1, p2, color=color.new(color.blue, 80))
+```
+
+## table.new()
+```pine
+var table t = table.new(position.top_right, 2, 3,
+                         bgcolor=color.new(color.black, 70))
+if barstate.islast
+    table.cell(t, 0, 0, "RSI", text_color=color.white)
+    table.cell(t, 1, 0, str.tostring(math.round(ta.rsi(close,14))),
+               text_color=color.yellow)
 ```
