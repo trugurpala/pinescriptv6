@@ -73,183 +73,323 @@ When TradingView launched Pine Script v6, everything changed. But AI editors did
 
 ## ⚙️ Nasıl Çalışır / How It Works
 
-> **TR: Repo bağlandıktan sonra arka planda tam olarak neler oluyor?**
-> **EN: What exactly happens under the hood after connecting the repo?**
+> **TR: Repo bağlandıktan sonra arka planda tam olarak neler oluyor — adım adım, gerçek örneklerle.**
+> **EN: Exactly what happens under the hood after connecting — step by step, with real examples.**
 
 ---
 
-### TR | Türkçe — 5 Adım
-
-**Adım 1 — AI önce `LESSONS_LEARNED.md`'yi okur**
-
-Sen: *"XU030 için EMA cross stratejisi yaz"* dediğinde AI önce hata hafızasını kontrol eder:
-
-```
-AI: "LESSONS_LEARNED.md okudum. Bilinen hatalar:
-     ⚠ ta.stoch() v6'da tuple döndürmez, sadece K döner
-     ⚠ math.avg() v6'da yok, (a+b)/2 kullan
-     ⚠ Hacim onayı olmadan EMA cross = muhtemelen fakeout
-     Şimdi kodu yazıyorum..."
-```
-
-> Bu dosya olmadan AI bu hataları bilmez ve tekrarlar.
-> `LESSONS_LEARNED.md` zamanla büyür → repo daha akıllı olur.
+### TR | Türkçe — 5 Adım, Gerçek Örneklerle
 
 ---
 
-**Adım 2 — `LLM_MANIFEST.md` ile doğru referans dosyası bulunur**
+#### Adım 1 — Sen bir şey istersin. AI önce `LESSONS_LEARNED.md`'yi okur.
 
-Görev "EMA cross stratejisi" → AI sadece gerekli 2 dosyayı okur:
+Bağlantısız bir AI'ya "XU030 için strateji yaz" dersen ne olur?
 
 ```
-AI: "LLM_MANIFEST.md'ye baktım.
-     Bu görev için: reference/functions/ta.md + reference/functions/strategy.md
-     Dosyaları okuyorum... hazır."
+❌ Bağlantısız AI:
+//@version=6
+study("Strategy")               ← hata! study() v6'da yok
+htf = security(...)             ← hata! security() v6'da yok
+[k, d] = ta.stoch(...)          ← hata! v6'da tuple döndürmez
 ```
 
-> Tüm doküman yerine 2 dosya okunur. Context korunur. Yanıt kalitesi artar.
+Aynı isteği bu repo bağlıyken yapınca ne olur?
+
+```
+✅ Bu repo bağlıyken AI:
+"LESSONS_LEARNED.md okudum. Bilinen hatalar:
+  ⚠  study() yok → indicator() kullan
+  ⚠  security() yok → request.security() kullan
+  ⚠  ta.stoch() tuple döndürmez → sadece K döner
+  ⚠  math.avg() yok → (a+b)/2 kullan
+  ⚠  Hacim onayı olmadan EMA cross = muhtemelen fakeout
+Şimdi yazıyorum..."
+```
+
+**Fark:** Birinci AI "neyin yanlış olduğunu" bilmeden başlıyor. İkinci AI **daha koda başlamadan** tuzakları biliyor.
+
+> 📄 `LESSONS_LEARNED.md` — bu repo kullanıldıkça büyür. Her yeni hata çözülünce otomatik eklenir. Repo zamanla daha akıllı hale gelir.
 
 ---
 
-**Adım 3 — `//@version=6` ile başlayan temiz, çalışan kod yazılır**
+#### Adım 2 — `LLM_MANIFEST.md` doğru referans dosyasını yönlendirir.
+
+Tüm v6 dokümanını AI'a vermek imkânsız — çok büyük, context'e sığmaz.
+Bu repo sorunu şöyle çözdü: **Her görev için sadece 1-2 dosya okunur.**
+
+```
+Sen: "EMA cross stratejisi yaz"
+
+AI: "LLM_MANIFEST.md'ye baktım:
+     → Bu görev için: reference/functions/ta.md + reference/functions/strategy.md
+     İki dosyayı okuyorum... hazır. Şimdi yazıyorum."
+```
+
+```
+Sen: "request.security neden repainting yapıyor?"
+
+AI: "LLM_MANIFEST.md'ye baktım:
+     → Bu soru için: concepts/timeframes.md
+     Dosyayı okuyorum... sorunun cevabı şu..."
+```
+
+**Sonuç:** AI gereksiz dosya okumaz → context korunur → cevap kalitesi artar → hata azalır.
+
+> 📄 `LLM_MANIFEST.md` — 40+ referans dosyasını hangi soruda hangi dosyanın okunacağına göre eşleştirir.
+
+---
+
+#### Adım 3 — Temiz, çalışan v6 kodu yazılır. İlk seferde.
+
+Repo olmadan `ta.stoch()` hatası, `security()` hatası, seans filtresi eksikliği normaldir.
+Bu repo bağlıyken aynı isteğe gelen yanıt:
 
 ```pine
 //@version=6
+// XU030 (BIST30 Futures) — EMA Cross Strategy
 // github.com/trugurpala/pinescriptv6 — Ugur Pala
-strategy("EMA Cross [trugurpala]", overlay=true,
-    initial_capital   = 10000,
+strategy("EMA Cross [trugurpala]",
+    overlay           = true,
+    initial_capital   = 100000,
     default_qty_type  = strategy.percent_of_equity,
     default_qty_value = 10,
     commission_type   = strategy.commission.percent,
-    commission_value  = 0.03)   // VİOP komisyon oranı
+    commission_value  = 0.03,   // VİOP komisyon oranı
+    slippage          = 2)
 
-int   fastLen = input.int(9,  "Fast EMA", minval=1)
-int   slowLen = input.int(21, "Slow EMA", minval=1)
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen = input.int(9,   "Fast EMA", minval=1)
+int   slowLen = input.int(21,  "Slow EMA", minval=1)
 float slMult  = input.float(2.0, "SL Mult", step=0.1)
 float tpMult  = input.float(3.0, "TP Mult", step=0.1)
 
+// ── Calculations ─────────────────────────────────────────────────────────────
 float fast   = ta.ema(close, fastLen)
 float slow   = ta.ema(close, slowLen)
 float atrVal = ta.atr(14)
-bool  inSes  = not na(time(timeframe.period, "0930-1815", "UTC+3"))
+float volAvg = ta.sma(volume, 20)
 
-if ta.crossover(fast, slow) and inSes
+// VİOP seans filtresi: 09:30–18:15 UTC+3
+bool  inSes  = not na(time(timeframe.period, "0930-1815", "UTC+3"))
+// Hacim onayı — fakeout filtresi
+bool  volOK  = volume > volAvg * 1.5
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if ta.crossover(fast, slow) and inSes and volOK
     strategy.entry("Long", strategy.long)
     strategy.exit("LE", "Long",
         stop  = close - slMult * atrVal,
         limit = close + tpMult * atrVal)
 
 if ta.crossunder(fast, slow) and inSes
-    strategy.close("Long")
+    strategy.close("Long", comment="Cross Down")
 
-plot(fast, "Fast", fast > slow ? color.green : color.red,    linewidth=2)
-plot(slow, "Slow", fast > slow ? color.lime  : color.orange, linewidth=2)
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(fast, "Fast EMA", fast > slow ? color.green : color.red,    linewidth=2)
+plot(slow, "Slow EMA", fast > slow ? color.lime  : color.orange, linewidth=2)
+bgcolor(not inSes ? color.new(color.gray, 95) : na, title="Seans Dışı")
 ```
 
-> v5 syntax yok. Seans filtresi var. ATR SL/TP var. **İlk seferde çalışır.**
+**Bu kodda neler var ki bağlantısız AI yazmıyor?**
+
+| ✅ Bu Repo Bağlıyken | ❌ Bağlantısız AI |
+|---------------------|------------------|
+| `strategy()` — doğru seçim yapıldı | `study()` — hata |
+| `input.int()` / `input.float()` | eski `input()` — hata |
+| `ta.ema()` — fonksiyon kullanıldı | manuel EMA hesabı |
+| VİOP seans filtresi | seans filtresi yok |
+| Hacim onayı — fakeout azalıyor | her sinyale giriyor |
+| ATR tabanlı SL/TP — adaptif | sabit puan SL/TP |
+| Komisyon + slippage ayarlı | gerçekçi olmayan backtest |
+| Kod yorumunda kaynak var | kaynak yok |
 
 ---
 
-**Adım 4 — Hata alınırsa çözülür ve `LESSONS_LEARNED.md`'ye eklenir**
+#### Adım 4 — Hata alınırsa: çözülür ve `LESSONS_LEARNED.md`'ye eklenir. Bir daha sorulmaz.
 
-TradingView'da hata: `"Cannot call 'ta.stoch' with these arguments"`
+TradingView'da hata mesajı geldi:
 
 ```
-Sen: "Bu hata ne anlama geliyor?"
+Cannot call 'ta.stoch' with these arguments
+```
 
-AI: "ta.stoch() v6'da tuple döndürmüyor. Çözüm şu:
-     float rawK = ta.stoch(high, low, close, 14)
-     float k    = ta.sma(rawK, 3)
-     
+```
+Sen: "Bu hatanın sebebi ne?"
+
+AI: "ta.stoch() Pine Script v6'da tuple döndürmüyor.
+     v5'te [k, d] = ta.stoch(...) çalışırdı, v6'da çalışmaz.
+
+     ✅ Doğru kullanım v6'da:
+     float rawK = ta.stoch(high, low, close, 14)  // sadece K döner
+     float k    = ta.sma(rawK, 3)                  // K smoothing
+     float d    = ta.sma(k, 3)                     // D = SMA of K
+
      Bu hatayı LESSONS_LEARNED.md'ye ekliyorum
      ki bir daha sorman gerekmesin."
 ```
 
-`LESSONS_LEARNED.md` otomatik güncellenir — bir daha o hata tekrarlanmaz.
+`LESSONS_LEARNED.md` otomatik güncellendi. **Bir daha o hatayı açıklamak zorunda kalmayacaksın.**
 
 ---
 
-**Adım 5 — Bir sonraki oturumda aynı hata sıfırdan anlatılmaz**
+#### Adım 5 — Bir sonraki oturumda: geçmiş tamamen hatırlanır.
 
-Yarın yeni bir oturum. Farklı bir strateji istiyorsun.
+Dün ta.stoch hatasını çözdün. Bugün yeni bir oturum, farklı bir strateji istiyorsun.
 
 ```
 Sen: "Stochastic + EMA stratejisi yaz"
 
 AI: "LESSONS_LEARNED.md okudum.
      NOT: ta.stoch() v6'da sadece K döndürür, tuple değil.
-     Bu bilgiyle yazıyorum..."
+     Bu bilgiyle yazmaya başlıyorum — hata almayacaksın."
+```
+
+Bir ay sonra, elli farklı strateji sonra:
+
+```
+AI: "LESSONS_LEARNED.md okudum. Bilinen 12 hata:
+     [1] ta.stoch() tuple yok
+     [2] math.avg() yok
+     [3] Hacim onaysız EMA = fakeout
+     [4] repainting için [1]+lookahead_on şart
+     ... 8 hata daha
+     Bunların hiçbirini yapmadan yazıyorum."
 ```
 
 > **Bir kez öğrenildi. Sonsuza kadar hatırlandı.**
+> Bu sistem zamanla büyüyen, kendini düzelten bir geliştirme ortamı kurar.
+> Repo ne kadar çok kullanılırsa, o kadar akıllı olur.
 
 ---
 
 ### Kullandığını Nasıl Anlarsın? / How Do You Know It's Working?
 
-| ✅ Repo Aktif | ❌ Repo Bağlı Değil |
-|--------------|---------------------|
-| AI "LESSONS_LEARNED.md okudum" diyor | AI direkt koda giriyor |
-| `//@version=6` ile başlıyor | `study()` veya `security()` yazıyor |
-| `indicator()` + `request.security()` + `input.int()` kullanıyor | v5 syntax var |
-| Hata alınınca "LESSONS_LEARNED.md'ye ekliyorum" diyor | Aynı hata tekrarlanıyor |
-| Seans filtresi, ATR SL/TP, komisyon var | Basit, filtresiz kod |
-| Yorumda `// github.com/trugurpala/pinescriptv6` var | Kaynak yok |
+| ✅ Repo Aktif — Bunları görürsün | ❌ Repo Bağlı Değil — Bunları görürsün |
+|---------------------------------|----------------------------------------|
+| AI "LESSONS_LEARNED.md okudum" diyor | AI direkt koda atlıyor |
+| Kod `//@version=6` ile başlıyor | `study()` veya `security()` var |
+| `indicator()` + `request.security()` + `input.int()` | v5 syntax hataları |
+| Seans filtresi, ATR SL/TP, komisyon ayarı var | Basit, filtresiz, eksik kod |
+| Hata alınınca "LESSONS_LEARNED.md'ye ekliyorum" | Aynı hata bir hafta sonra tekrar |
+| Yorumda `// github.com/trugurpala/pinescriptv6` | Kaynak yok |
 
 ---
 
-### EN | English — 5 Steps
-
-**Step 1 — AI reads `LESSONS_LEARNED.md` first**
-
-You say *"Write an EMA cross strategy for ES futures"*. AI checks error memory first:
-
-```
-AI: "Read LESSONS_LEARNED.md. Known issues:
-     ⚠ ta.stoch() returns only K in v6, not a tuple
-     ⚠ math.avg() removed — use (a+b)/2
-     ⚠ EMA cross without volume = likely fakeout
-     Now writing the code..."
-```
-
-> Without this file, AI doesn't know these and repeats them.
-> `LESSONS_LEARNED.md` grows over time → repo gets smarter.
+### EN | English — 5 Steps, With Real Examples
 
 ---
 
-**Step 2 — `LLM_MANIFEST.md` routes to the correct reference file**
+#### Step 1 — You make a request. AI reads `LESSONS_LEARNED.md` first.
 
-Task is "EMA cross strategy" → AI reads only 2 files:
+Without this repo connected, asking "write a strategy for ES futures" gives:
 
 ```
-AI: "Checked LLM_MANIFEST.md.
-     For this task: reference/functions/ta.md + reference/functions/strategy.md
-     Reading... ready."
+❌ Unconnected AI:
+study("Strategy")          ← error! study() doesn't exist in v6
+htf = security(...)        ← error! security() doesn't exist in v6
+[k, d] = ta.stoch(...)     ← error! doesn't return a tuple in v6
 ```
 
-> 2 files instead of full documentation. Context preserved. Quality higher.
+Same request with this repo connected:
+
+```
+✅ With this repo:
+"Read LESSONS_LEARNED.md. Known issues:
+  ⚠  study() gone → use indicator()
+  ⚠  security() gone → use request.security()
+  ⚠  ta.stoch() returns only K, not a tuple
+  ⚠  math.avg() removed — use (a+b)/2
+  ⚠  EMA cross without volume = likely fakeout
+Now writing..."
+```
+
+**The difference:** The first AI starts not knowing what's wrong. The second AI **knows the traps before writing a single line.**
+
+> 📄 `LESSONS_LEARNED.md` — grows as the repo is used. Every new solved error added automatically. The repo gets smarter over time.
 
 ---
 
-**Step 3 — Clean code written starting with `//@version=6`**
+#### Step 2 — `LLM_MANIFEST.md` routes to the correct reference file.
 
-> No v5 syntax. Session filter included. ATR SL/TP included. **Works first time.**
+Giving AI the entire v6 docs is impossible — too large, won't fit in context.
+This repo solved the problem: **Only 1-2 files are read per task.**
+
+```
+You: "Write an EMA cross strategy"
+AI:  "Checked LLM_MANIFEST.md:
+      → For this task: reference/functions/ta.md + reference/functions/strategy.md
+      Reading two files... ready. Writing now."
+```
+
+```
+You: "Why does request.security cause repainting?"
+AI:  "Checked LLM_MANIFEST.md:
+      → For this question: concepts/timeframes.md
+      Reading... here's the answer..."
+```
+
+**Result:** AI doesn't read unnecessary files → context preserved → answer quality higher → fewer errors.
+
+> 📄 `LLM_MANIFEST.md` — maps 40+ reference files to the right question type.
 
 ---
 
-**Step 4 — On error: solved and saved to `LESSONS_LEARNED.md`**
+#### Step 3 — Clean, working v6 code. First time.
+
+Without the repo: `ta.stoch()` error, `security()` error, missing session filter.
+With this repo connected — the same request produces code that works immediately:
+
+| ✅ With This Repo | ❌ Unconnected AI |
+|------------------|-----------------|
+| `strategy()` — correct choice made | `study()` — error |
+| `input.int()` / `input.float()` | old `input()` — error |
+| `ta.ema()` — built-in used | manual EMA calculation |
+| Session filter included | no session filter |
+| Volume confirmation — fewer fakeouts | enters every signal |
+| ATR-based SL/TP — adaptive | fixed-point SL/TP |
+| Commission + slippage set | unrealistic backtest |
+| Source comment in code | no attribution |
+
+---
+
+#### Step 4 — On error: solved and saved to `LESSONS_LEARNED.md`. Never asked again.
 
 ```
 You: "What does this error mean?"
-AI:  "ta.stoch() doesn't return a tuple in v6. Here's the fix...
-     Adding this to LESSONS_LEARNED.md so you never have to ask again."
+AI:  "ta.stoch() doesn't return a tuple in v6.
+     In v5 [k, d] = ta.stoch(...) worked. In v6 it doesn't.
+
+     ✅ Correct v6 usage:
+     float rawK = ta.stoch(high, low, close, 14)  // only K returned
+     float k    = ta.sma(rawK, 3)
+     float d    = ta.sma(k, 3)
+
+     Adding this to LESSONS_LEARNED.md
+     so you never have to ask again."
 ```
+
+`LESSONS_LEARNED.md` updated automatically. **You'll never need to explain that error again.**
 
 ---
 
-**Step 5 — Next session: same error never explained from scratch**
+#### Step 5 — Next session: full history remembered.
+
+One month later, after fifty different strategies:
+
+```
+AI: "Read LESSONS_LEARNED.md. 12 known issues:
+     [1] ta.stoch() no tuple
+     [2] math.avg() removed
+     [3] EMA without volume = fakeout
+     [4] repainting needs [1]+lookahead_on
+     ... 8 more
+     Writing without any of these mistakes."
+```
 
 > **Learned once. Remembered forever.**
+> This system builds a self-correcting development environment that improves over time.
+> The more the repo is used, the smarter it gets.
 
 ---
 
@@ -669,8 +809,8 @@ MIT — [LICENSE](LICENSE) · Copyright © 2025 [Ugur Pala](https://github.com/t
 
 <div align="center">
 
-**TR: Bu repo işinize yaradıysa, bir yıldız vermek başkalarının bulmasını kolaylaştırır.**
-**EN: If this repo saved you time, starring it helps others find it.**
+**TR: Bu repo Pine Script v6 yazarken zaman kazandırdıysa, bir yıldız vermek başkalarının da bulmasını sağlar.**
+**EN: If this repo saved you time writing Pine Script v6, starring it helps others find it too.**
 
 ⭐ **[Star this repo](https://github.com/trugurpala/pinescriptv6)** ⭐
 
