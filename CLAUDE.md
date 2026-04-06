@@ -96,6 +96,7 @@ EN: After connecting this repo, the AI should:
 | request.security, MTF | `reference/functions/request.md` |
 | array, map, matrix | `reference/functions/collections.md` |
 | math, str, input, alert | `reference/functions/general.md` |
+| Sinyal kalitesi / Fakeout | `concepts/signal_quality.md` |
 | Bilinen hatalar / Known errors | `concepts/common_errors.md` |
 | var, varip, barstate | `concepts/execution_model.md` |
 | **Her zaman önce / Always first** | `LESSONS_LEARNED.md` |
