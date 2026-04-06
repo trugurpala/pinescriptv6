@@ -1,37 +1,43 @@
 ---
 name: "🐛 Hata Raporu / Bug Report"
-about: "TR: Yanlış veya eksik dokümantasyon bildirin / EN: Report incorrect or missing documentation"
+about: "TR: Yanlış veya eksik bilgi bildir. EN: Report incorrect or missing information."
 title: "[BUG] "
 labels: bug
 assignees: trugurpala
 ---
 
-## TR | Türkçe
+## TR | Hangi dosyada sorun var?
 
-**Hangi dosya / bölüm yanlış?**
-<!-- Örnek: reference/functions/ta.md — ta.pivothigh imzası -->
+<!-- Örnek: reference/functions/ta.md — ta.pivothigh imzası yanlış -->
 
-**Sorun nedir?**
+## Sorun ne?
 
-**Doğru bilgi nedir?**
+<!-- Mevcut hatalı içerik nedir? -->
+
+## Doğrusu ne olmalı?
+
+<!-- Doğru imza, açıklama veya örnek -->
 
 ```pine
 //@version=6
-// Doğru örnek buraya
+// Düzeltilmiş örnek buraya
 ```
 
 ---
 
-## EN | English
+## EN | Which file has the issue?
 
-**Which file / section is wrong?**
-<!-- e.g. reference/functions/ta.md — ta.pivothigh signature -->
+<!-- Example: reference/functions/ta.md — ta.pivothigh signature is wrong -->
 
-**What is incorrect?**
+## What's wrong?
 
-**What should it say?**
+<!-- What is the current incorrect content? -->
+
+## What should it be?
+
+<!-- Correct signature, description, or example -->
 
 ```pine
 //@version=6
-// Correct example here
+// Corrected example here
 ```
