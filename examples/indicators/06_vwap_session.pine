@@ -1,0 +1,38 @@
+//@version=6
+// VWAP + Standard Deviation Bands — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("VWAP Bands [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+bool  showBands = input.bool(true, "Show Bands")
+float mult1     = input.float(1.0, "Band 1 Mult", step=0.1)
+float mult2     = input.float(2.0, "Band 2 Mult", step=0.1)
+
+// ── Calculations (cumulative from day start) ─────────────────────────────────
+bool isNewDay = ta.change(time("D")) != 0
+var float cumVol    = 0.0
+var float cumVolPx  = 0.0
+var float cumVolPx2 = 0.0
+
+if isNewDay
+    cumVol    := 0.0
+    cumVolPx  := 0.0
+    cumVolPx2 := 0.0
+
+cumVol    += volume
+cumVolPx  += volume * hlc3
+cumVolPx2 += volume * hlc3 * hlc3
+
+float vwapVal  = cumVolPx / cumVol
+float variance = cumVolPx2 / cumVol - vwapVal * vwapVal
+float stdev    = math.sqrt(math.max(variance, 0))
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(vwapVal, "VWAP", color.new(color.orange, 0), linewidth=2)
+p1u = plot(showBands ? vwapVal + mult1 * stdev : na, "Upper 1", color.new(color.blue, 50))
+p1l = plot(showBands ? vwapVal - mult1 * stdev : na, "Lower 1", color.new(color.blue, 50))
+p2u = plot(showBands ? vwapVal + mult2 * stdev : na, "Upper 2", color.new(color.purple, 50))
+p2l = plot(showBands ? vwapVal - mult2 * stdev : na, "Lower 2", color.new(color.purple, 50))
+fill(p1u, p1l, color.new(color.blue,   93))
+fill(p2u, p1u, color.new(color.purple, 93))
+fill(p1l, p2l, color.new(color.purple, 93))
