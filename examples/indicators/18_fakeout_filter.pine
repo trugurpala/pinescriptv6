@@ -1,0 +1,111 @@
+//@version=6
+// Fakeout Filter Indicator — 4-Layer Signal Quality
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: 4 katmanlı sinyal kalitesi filtresi:
+//     1. Hacim onayı (Volume Confirmation)
+//     2. Bar onayı (Bar Confirmation)
+//     3. HTF trend filtresi (Multi-Timeframe Filter)
+//     4. ATR gürültü filtresi (ATR Noise Filter)
+//     Skor 0-4: 3+ = Güçlü sinyal / 2 = Orta / 0-1 = Zayıf
+//
+// EN: 4-layer signal quality filter:
+//     1. Volume confirmation
+//     2. Bar confirmation
+//     3. HTF trend filter
+//     4. ATR noise filter
+//     Score 0-4: 3+ = Strong signal / 2 = Medium / 0-1 = Weak
+//
+// Önerilen: Bu indikatörü stratejilerinize filtre olarak ekleyin.
+// Recommended: Add this indicator as a filter to your strategies.
+indicator("Fakeout Filter [trugurpala]", overlay=false, max_bars_back=500)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+string htfTF    = input.string("60",  "HTF Timeframe",
+    options=["15","30","60","240","D"],
+    tooltip="Trend yönü için üst TF / Upper TF for trend direction")
+int    htfLen   = input.int(50,  "HTF EMA Length",   minval=10)
+int    volLen   = input.int(20,  "Volume MA Length",  minval=5)
+float  volMult  = input.float(1.5, "Volume Mult",    step=0.1,
+    tooltip="Hacim ortalamanın kaç katı olmalı / How many x of volume avg")
+int    atrLen   = input.int(14,  "ATR Length",        minval=1)
+float  atrMult  = input.float(0.3, "ATR Min Move",   step=0.05,
+    tooltip="Minimum hareket (ATR katı) / Min move (ATR multiple)")
+int    fastLen  = input.int(9,   "Fast EMA",          minval=1)
+int    slowLen  = input.int(21,  "Slow EMA",          minval=1)
+int    minScore = input.int(3,   "Min Score to Trade", minval=1, maxval=4,
+    tooltip="Kaç filtreden geçmeli / How many filters must pass")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float fastEma = ta.ema(close, fastLen)
+float slowEma = ta.ema(close, slowLen)
+float atrVal  = ta.atr(atrLen)
+float volAvg  = ta.sma(volume, volLen)
+
+// HTF trend — repainting yok / no repainting
+float htfEma  = request.security(syminfo.tickerid, htfTF,
+    ta.ema(close, htfLen)[1], lookahead=barmerge.lookahead_on)
+
+// ── 4 Filtre / 4 Filters ─────────────────────────────────────────────────────
+// F1: Hacim / Volume
+bool f1_vol    = volume > volAvg * volMult
+
+// F2: HTF Trend
+bool f2_htf    = close > htfEma   // genel yön yukarı / general direction up
+
+// F3: ATR Gürültü / Noise
+bool f3_atr    = math.abs(close - close[1]) > atrVal * atrMult
+
+// F4: EMA Hizalama / Alignment
+bool f4_align  = fastEma > slowEma
+
+// ── Skor / Score ──────────────────────────────────────────────────────────────
+int score = (f1_vol   ? 1 : 0)
+          + (f2_htf   ? 1 : 0)
+          + (f3_atr   ? 1 : 0)
+          + (f4_align ? 1 : 0)
+
+bool strongSignal = score >= minScore
+
+// ── Raw Signal ───────────────────────────────────────────────────────────────
+bool rawLong  = ta.crossover(fastEma, slowEma)
+bool rawShort = ta.crossunder(fastEma, slowEma)
+
+bool filtLong  = rawLong  and strongSignal
+bool filtShort = rawShort and (score <= (4 - minScore))  // ters yönde düşük skor
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+// Skor histogram
+color scoreCol = score >= 3 ? color.new(color.green,  20)
+               : score == 2 ? color.new(color.orange, 20)
+               :               color.new(color.red,   40)
+plot(score, "Signal Score", scoreCol, style=plot.style_histogram, linewidth=4)
+
+// Filtre çizgileri
+hline(minScore, "Min Score",  color.new(color.green, 40), hline.style_dashed)
+hline(2,        "Medium",     color.new(color.orange,50), hline.style_dotted)
+hline(1,        "Weak",       color.new(color.red,   50), hline.style_dotted)
+hline(0,        "Zero",       color.new(color.gray,  60))
+
+// Filtre durumu göstergesi
+var table t = table.new(position.top_right, 2, 5, border_width=1)
+if barstate.islast
+    table.cell(t, 0, 0, "Filter",   text_color=color.gray,  bgcolor=color.new(color.gray, 90))
+    table.cell(t, 1, 0, "Status",   text_color=color.gray,  bgcolor=color.new(color.gray, 90))
+    table.cell(t, 0, 1, "F1 Volume", text_size=size.small,  bgcolor=color.new(color.gray, 85))
+    table.cell(t, 1, 1, f1_vol ? "✓ ON" : "✗ OFF",
+        text_color=f1_vol ? color.green : color.red, bgcolor=color.new(color.gray, 85))
+    table.cell(t, 0, 2, "F2 HTF",   text_size=size.small,  bgcolor=color.new(color.gray, 85))
+    table.cell(t, 1, 2, f2_htf ? "✓ ON" : "✗ OFF",
+        text_color=f2_htf ? color.green : color.red, bgcolor=color.new(color.gray, 85))
+    table.cell(t, 0, 3, "F3 ATR",   text_size=size.small,  bgcolor=color.new(color.gray, 85))
+    table.cell(t, 1, 3, f3_atr ? "✓ ON" : "✗ OFF",
+        text_color=f3_atr ? color.green : color.red, bgcolor=color.new(color.gray, 85))
+    table.cell(t, 0, 4, "F4 EMA",   text_size=size.small,  bgcolor=color.new(color.gray, 85))
+    table.cell(t, 1, 4, f4_align ? "✓ ON" : "✗ OFF",
+        text_color=f4_align ? color.green : color.red, bgcolor=color.new(color.gray, 85))
+
+// Alert
+alertcondition(filtLong,  "Filtered Long",  "Fakeout Filter: LONG signal — Score: {{plot_0}}")
+alertcondition(filtShort, "Filtered Short", "Fakeout Filter: SHORT signal — Score: {{plot_0}}")
