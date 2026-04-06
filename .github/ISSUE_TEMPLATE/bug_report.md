@@ -1,28 +1,37 @@
 ---
-name: Bug report / Error fix
-about: Report an incorrect or missing entry in the reference docs
-title: '[BUG] '
+name: "🐛 Hata Raporu / Bug Report"
+about: "TR: Yanlış veya eksik dokümantasyon bildirin / EN: Report incorrect or missing documentation"
+title: "[BUG] "
 labels: bug
 assignees: trugurpala
 ---
 
-## What file / section is wrong?
+## TR | Türkçe
 
-<!-- e.g. reference/functions/ta.md — ta.pivothigh signature -->
+**Hangi dosya / bölüm yanlış?**
+<!-- Örnek: reference/functions/ta.md — ta.pivothigh imzası -->
 
-## What is incorrect?
+**Sorun nedir?**
 
-<!-- Describe the issue clearly -->
-
-## Correct information
-
-<!-- What should it say? Include a working Pine Script v6 example if possible -->
+**Doğru bilgi nedir?**
 
 ```pine
 //@version=6
-// Your corrected example here
+// Doğru örnek buraya
 ```
 
-## TradingView version tested on
+---
 
-<!-- e.g. TradingView.com, Pine Script v6, April 2025 -->
+## EN | English
+
+**Which file / section is wrong?**
+<!-- e.g. reference/functions/ta.md — ta.pivothigh signature -->
+
+**What is incorrect?**
+
+**What should it say?**
+
+```pine
+//@version=6
+// Correct example here
+```
