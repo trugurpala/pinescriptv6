@@ -24,10 +24,11 @@ bool sqzOn  = bbLower > kcLower and bbUpper < kcUpper
 bool sqzOff = bbLower < kcLower and bbUpper > kcUpper
 bool noSqz  = not sqzOn and not sqzOff
 
-// Momentum
-float highLow   = math.avg(ta.highest(kcLen), ta.lowest(kcLen))
-float highClose = math.avg(ta.highest(kcLen), close)
-float mom       = ta.linreg(close - math.avg(highLow, highClose), kcLen, 0)
+// Momentum — math.avg() v6'da yok, (a+b)/2 kullan
+float highLow   = (ta.highest(kcLen) + ta.lowest(kcLen)) / 2
+float highClose = (ta.highest(kcLen) + close) / 2
+float midVal    = (highLow + highClose) / 2
+float mom       = ta.linreg(close - midVal, kcLen, 0)
 
 // ── Colors ───────────────────────────────────────────────────────────────────
 color momColor = mom > 0
