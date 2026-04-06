@@ -1,0 +1,45 @@
+//@version=6
+// RSI Divergence Detector — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("RSI Divergence [trugurpala]", overlay=false)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   rsiLen   = input.int(14,  "RSI Length",   minval=1)
+int   lbR      = input.int(5,   "Pivot Right",  minval=1)
+int   lbL      = input.int(5,   "Pivot Left",   minval=1)
+int   rangeUpper = input.int(60, "Max Lookback", minval=5)
+int   rangeLower = input.int(5,  "Min Lookback", minval=1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float rsi = ta.rsi(close, rsiLen)
+
+// RSI pivot noktaları
+float rsiPivHigh = ta.pivothigh(rsi,   lbL, lbR)
+float rsiPivLow  = ta.pivotlow(rsi,    lbL, lbR)
+float pricePivHigh = ta.pivothigh(high, lbL, lbR)
+float pricePivLow  = ta.pivotlow(low,   lbL, lbR)
+
+// Bearish Divergence: Fiyat YY ama RSI DD
+bool bearDiv = not na(rsiPivHigh) and not na(pricePivHigh) and
+    high[lbR] > ta.valuewhen(not na(ta.pivothigh(high, lbL, lbR)), high[lbR], 1) and
+    rsi[lbR]  < ta.valuewhen(not na(ta.pivothigh(rsi,  lbL, lbR)), rsi[lbR],  1)
+
+// Bullish Divergence: Fiyat DD ama RSI YY
+bool bullDiv = not na(rsiPivLow) and not na(pricePivLow) and
+    low[lbR] < ta.valuewhen(not na(ta.pivotlow(low, lbL, lbR)), low[lbR], 1) and
+    rsi[lbR] > ta.valuewhen(not na(ta.pivotlow(rsi, lbL, lbR)), rsi[lbR], 1)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+hline(70, "OB", color.new(color.red,   40), hline.style_dashed)
+hline(50, "Mid",color.new(color.gray,  60), hline.style_dotted)
+hline(30, "OS", color.new(color.green, 40), hline.style_dashed)
+
+plot(rsi, "RSI", color.new(color.blue, 20), linewidth=2)
+
+plotshape(bearDiv, "Bear Div",
+    shape.triangledown, location.abovebar, color.red,   size=size.small)
+plotshape(bullDiv, "Bull Div",
+    shape.triangleup,   location.belowbar, color.green, size=size.small)
+
+alertcondition(bearDiv, "Bearish Divergence", "RSI Bearish Div — {{ticker}}")
+alertcondition(bullDiv, "Bullish Divergence", "RSI Bullish Div — {{ticker}}")
