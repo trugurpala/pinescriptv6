@@ -10,20 +10,228 @@
 ![TR | EN](https://img.shields.io/badge/TR%20%7C%20EN-Bilingual-8B5CF6?style=for-the-badge)
 
 **TradingView Pine Script v6 için AI destekli, hata hafızalı geliştirme ortamı.**
-**AI-powered Pine Script v6 development environment with error memory.**
+**AI-powered Pine Script v6 development environment with permanent error memory.**
 
 [Ugur Pala](https://github.com/trugurpala) · [TradingView](https://tr.tradingview.com/u/trugurpala/) · [X / Twitter](https://x.com/trugurpala) · mail@ugurpala.com
 
-[Demo](#-demo) · [Neden / Why](#-neden-var--why-this-exists) · [Claude](#-claude--claude-code) · [Cursor](#️-cursor) · [Windsurf](#-windsurf) · [Copilot](#-github-copilot) · [Cline/Roo](#-cline--roo--aider) · [Örnekler](#-örnekler--examples) · [Global Markets](#-global-markets-22) · [Webhook](#-webhook-templates-7) · [v5→v6](#-v5--v6-migration-10) · [Yapı](#-dosya-yapısı--file-structure)
+[Neden?](#-neden-var--why-this-exists) · [Nasıl Çalışır?](#️-nasıl-çalışır--how-it-works) · [Claude](#-claude--claude-code) · [Cursor](#️-cursor) · [Windsurf](#-windsurf) · [Copilot](#-github-copilot) · [Cline/Roo](#-cline--roo--aider) · [Örnekler](#-örnekler--examples) · [Global Markets](#-global-markets-22) · [Webhook](#-webhook-templates-7) · [v5→v6](#-v5--v6-migration-10)
 
 </div>
 
 ---
 
-## 📺 Demo
+## 💡 Neden Var / Why This Exists
 
-> TR: Aşağıdaki indikatör, bu repodaki referanslar kullanılarak Claude ile yazıldı.
-> EN: The indicator below was written by Claude using the reference files in this repo.
+> **TR: Pine Script v6 çıktı. AI editörler hâlâ v5 yazıyordu. Bu repo o sorunu kalıcı olarak çözdü.**
+> **EN: Pine Script v6 launched. AI editors still wrote v5. This repo permanently fixed that.**
+
+### TR | Türkçe — Tam Hikaye
+
+TradingView 2024'te Pine Script v6'yı yayınladığında **tüm AI kodlama araçları v5 kodu yazmaya devam etti.** Bu bir bug değildi, yapısal bir sorundu:
+
+**Problem 1 — Hafıza yok:**
+Claude, Cursor veya Copilot ile bir Pine Script yazıyorsunuz. Hata alıyor, düzeltiyorsunuz. Yarın yeni oturum açıyorsunuz — AI aynı hatayı tekrar yapıyor. Her oturum sıfırdan başlıyor.
+
+**Problem 2 — Yanlış referans:**
+v6 dokümantasyonu büyük. AI bağlamına sığmıyor. `ta.stoch()` artık tuple döndürmüyor ama AI bunu bilmiyor. `math.avg()` v6'da yok ama AI ısrarla yazıyor.
+
+**Problem 3 — Tek editör desteği yok:**
+Her AI editörün kendi kural dosyası var. Claude için CLAUDE.md, Cursor için .cursorrules, Windsurf için .windsurfrules... Bunları ayrı ayrı yazmak ve güncel tutmak bir iş yükü.
+
+**Bu repo 3 çözümü tek pakette sunuyor:**
+
+| Sorun | Çözüm | Dosya |
+|-------|-------|-------|
+| AI aynı hatayı tekrarlıyor | Kalıcı hata hafızası | `LESSONS_LEARNED.md` |
+| AI yanlış referansa bakıyor | Akıllı yönlendirme haritası | `LLM_MANIFEST.md` |
+| Her editör ayrı kural istiyor | 9 editör için hazır kural dosyaları | `.cursorrules`, `.windsurfrules`, `CLAUDE.md`... |
+
+---
+
+### EN | English — Full Story
+
+When TradingView launched Pine Script v6 in 2024, **all AI coding tools kept writing v5 code.** This wasn't a bug — it was a structural problem:
+
+**Problem 1 — No memory:**
+You write a Pine Script with Claude or Cursor. You hit an error, fix it. Next session — AI makes the same mistake again. Every session starts from zero.
+
+**Problem 2 — Wrong reference:**
+v6 docs are large. They don't fit in AI context. `ta.stoch()` no longer returns a tuple but AI doesn't know. `math.avg()` doesn't exist in v6 but AI insists on writing it.
+
+**Problem 3 — No multi-editor support:**
+Every AI editor has its own rule file format. CLAUDE.md for Claude, .cursorrules for Cursor, .windsurfrules for Windsurf... Writing and maintaining them separately is overhead.
+
+**This repo delivers 3 solutions in one package:**
+
+| Problem | Solution | File |
+|---------|---------|------|
+| AI repeats the same error | Permanent error memory | `LESSONS_LEARNED.md` |
+| AI looks at wrong reference | Smart routing map | `LLM_MANIFEST.md` |
+| Each editor needs separate rules | Ready rule files for 9 editors | `.cursorrules`, `.windsurfrules`, `CLAUDE.md`... |
+
+---
+
+## ⚙️ Nasıl Çalışır / How It Works
+
+> **TR: Sistemi bir kez kuruyorsunuz. Sonra AI her oturumda kendi kendine öğrenmeye devam ediyor.**
+> **EN: You set it up once. Then AI keeps learning on its own every session.**
+
+---
+
+### TR | Türkçe — Adım Adım
+
+**Adım 1 — Kodu yazmadan önce LESSONS_LEARNED.md okunur**
+
+AI'ın ilk yaptığı şey `LESSONS_LEARNED.md` dosyasını okumaktır. Bu dosya, daha önce bu repo ile çalışırken keşfedilen gerçek hataları ve çözümlerini içerir. Örneğin:
+
+- `ta.stoch()` v6'da tuple döndürmez → çözüm: `rawK = ta.stoch(...)` sonra `ta.sma(rawK, 3)`
+- `math.avg()` v6'da yok → çözüm: `(a + b) / 2`
+- `security()` v6'da yok → çözüm: `request.security()`
+- Hacim olmadan EMA cross = muhtemelen fakeout → çözüm: hacim filtresi ekle
+
+AI bu listeyi okuduktan sonra **aynı hataları yapmadan** koda başlar.
+
+---
+
+**Adım 2 — LLM_MANIFEST.md ile doğru referans dosyası bulunur**
+
+Her soru için hangi dosyanın okunması gerektiğini belirten bir yönlendirme haritası. Örneğin:
+
+- "RSI divergence nasıl yazılır?" → `reference/functions/ta.md`
+- "strategy.exit() nasıl kullanılır?" → `reference/functions/strategy.md`
+- "Fakeout nasıl filtrelenir?" → `concepts/signal_quality.md`
+- "max_bars_back hatası neden olur?" → `concepts/common_errors.md`
+- "var ile varip farkı nedir?" → `concepts/execution_model.md`
+
+AI 2000 satırlık tam dokümantasyonu okumak yerine **sadece ilgili dosyayı** okur.
+
+---
+
+**Adım 3 — Temiz, v6 uyumlu kod yazılır**
+
+Artık AI şunları biliyor:
+- Hangi hatalar var ve nasıl çözülür (LESSONS_LEARNED)
+- Hangi fonksiyon nasıl çalışır (referans dosyaları)
+- v5 syntax yazmak yasak: `study()`, `security()`, bare `input()`
+- Fakeout filtreleri nasıl eklenir (signal_quality.md)
+
+Sonuç: `//@version=6` ile başlayan, `ta.*` kullanan, seans filtreli, komisyon ayarlı, fakeout korumalı, **çalışan** kod.
+
+---
+
+**Adım 4 — Hata oluşursa çözülür ve LESSONS_LEARNED.md'ye eklenir**
+
+Yeni bir hatayla karşılaşıldığında AI şunu yapar:
+1. Hatayı çözer
+2. `LESSONS_LEARNED.md`'ye şu formatla ekler:
+
+```
+### Hatanın adı
+- **Hata:** TradingView'dan tam hata metni
+- **Sebep:** Neden oluşuyor
+- **Çözüm:** Nasıl düzeltilir
+// ❌ Yanlış
+// ✅ Doğru
+```
+
+Bu hafıza **kalıcıdır** — repo klonlandığı sürece kaybolmaz.
+
+---
+
+**Adım 5 — Sonraki oturumda aynı hata bir daha yapılmaz**
+
+Yarın yeni bir oturum açarsınız. AI yine `LESSONS_LEARNED.md`'yi okur. Dünkü hata artık orada. **Aynı hatayı bir daha yapamaz.**
+
+Bu döngü her oturumda tekrarlanır. Repo zamanla daha akıllı hale gelir.
+
+---
+
+### EN | English — Step by Step
+
+**Step 1 — Read LESSONS_LEARNED.md before writing any code**
+
+The first thing AI does is read `LESSONS_LEARNED.md`. This file contains real errors discovered while working with this repo, and their fixes. For example:
+
+- `ta.stoch()` doesn't return a tuple in v6 → fix: `rawK = ta.stoch(...)` then `ta.sma(rawK, 3)`
+- `math.avg()` doesn't exist in v6 → fix: `(a + b) / 2`
+- `security()` doesn't exist in v6 → fix: `request.security()`
+- EMA cross without volume = likely fakeout → fix: add volume filter
+
+After reading this list, AI starts coding **without making those mistakes**.
+
+---
+
+**Step 2 — Find the correct reference file via LLM_MANIFEST.md**
+
+A routing map that tells which file to read for each type of question. For example:
+
+- "How to write RSI divergence?" → `reference/functions/ta.md`
+- "How to use strategy.exit()?" → `reference/functions/strategy.md`
+- "How to filter fakeouts?" → `concepts/signal_quality.md`
+- "Why does max_bars_back error occur?" → `concepts/common_errors.md`
+- "What is the difference between var and varip?" → `concepts/execution_model.md`
+
+Instead of reading a 2000-line full documentation, AI reads **only the relevant file**.
+
+---
+
+**Step 3 — Write clean, v6-compliant code**
+
+Now AI knows:
+- Which errors exist and how to fix them (LESSONS_LEARNED)
+- How each function works (reference files)
+- v5 syntax is forbidden: `study()`, `security()`, bare `input()`
+- How to add fakeout filters (signal_quality.md)
+
+Result: Code starting with `//@version=6`, using `ta.*`, session-filtered, commission-configured, fakeout-protected, **working** code.
+
+---
+
+**Step 4 — If an error occurs, solve it and append to LESSONS_LEARNED.md**
+
+When a new error is encountered, AI does this:
+1. Solves the error
+2. Appends to `LESSONS_LEARNED.md` in this format:
+
+```
+### Error name
+- **Error:** Exact error text from TradingView
+- **Cause:** Why it happens
+- **Fix:** How to resolve
+// ❌ Wrong
+// ✅ Correct
+```
+
+This memory is **permanent** — it stays as long as the repo is cloned.
+
+---
+
+**Step 5 — Next session, the same mistake is never made again**
+
+Tomorrow you open a new session. AI reads `LESSONS_LEARNED.md` again. Yesterday's error is there now. **It can't make the same mistake again.**
+
+This cycle repeats every session. The repo gets smarter over time.
+
+---
+
+### Kullandığını Nasıl Anlarsın? / How Do You Know It's Working?
+
+| ✅ Çalışıyor / Working | ❌ Çalışmıyor / Not Working |
+|------------------------|---------------------------|
+| AI ilk mesajda "LESSONS_LEARNED.md okudum" diyor | AI bu dosyadan bahsetmiyor |
+| Kod `//@version=6` ile başlıyor — istisnasız | `study("name")` veya `security(...)` görüyorsun |
+| `ta.ema()`, `ta.rsi()`, `ta.crossover()` kullanılıyor | AI ta.* yerine elle hesaplama yapıyor |
+| Hata alınınca "bunu LESSONS_LEARNED.md'ye ekleyeceğim" diyor | AI hatayı çözüp unutuyor |
+| `request.security()` + `[1]` + `lookahead_on` var | Repainting riski taşıyan kod üretiyor |
+| Strateji dosyasında `commission_type` ve `slippage` var | Gerçekçi olmayan backtest varsayımları |
+| Fakeout koruması için hacim ve HTF filtresi var | Ham crossover sinyali — filtresiz |
+
+---
+
+## 📺 Demo — XU030 (BIST 30 Futures)
+
+> TR: Aşağıdaki indikatör bu repodaki referanslar kullanılarak Claude ile yazıldı. Tek satır bile manuel düzeltme yapılmadı.
+> EN: The indicator below was written by Claude using this repo's references. Not a single line was manually corrected.
 
 ![EMA Cross on XU030](assets/demo_chart.png)
 
@@ -40,75 +248,14 @@ bgcolor(ta.crossover(fast, slow)  ? color.new(color.green, 90) :
 
 ---
 
-## ⚙️ Nasıl Çalışır / How It Works
-
-![System Flow](assets/lessons_flow.png)
-
-| Adım / Step | TR | EN |
-|---|---|---|
-| 1 | Kodu yazmadan önce `LESSONS_LEARNED.md` okunur | Read `LESSONS_LEARNED.md` before writing |
-| 2 | `LLM_MANIFEST.md` ile doğru referans dosyası bulunur | Find the right file via `LLM_MANIFEST.md` |
-| 3 | Temiz, v6 uyumlu kod yazılır | Write clean, v6-compliant code |
-| 4 | Hata oluşursa çözülür ve **otomatik kaydedilir** | On error: solved and **auto-saved** |
-| 5 | Sonraki oturumda aynı hata bir daha yapılmaz | Same mistake never repeated next session |
-
----
-
-## 💡 Neden Var / Why This Exists
-
-> TR: Pine Script v6 çıktığında AI editörler v5 yazmaya devam etti. Bu repo o sorunu çözdü.
-> EN: When Pine Script v6 launched, AI editors kept writing v5. This repo fixed that.
-
-### TR | Türkçe
-
-TradingView Pine Script v6'yı yayınladığında **tüm AI editörler v5 kodu yazmaya devam etti.**
-
-- Cursor `study()` öneriyordu — v6'da yok
-- Copilot `security()` yazıyordu — v6'da `request.security()` oldu
-- Claude aynı hataları tekrarlıyordu — çünkü hafızası yoktu
-- Her yeni oturumda sıfırdan başlanıyordu
-
-Bu repo üç şeyi çözüyor:
-
-| Sorun | Çözüm |
-|-------|-------|
-| AI'ın hafızası yok | `LESSONS_LEARNED.md` — çözülen hatalar kalıcı saklanır |
-| v6 referansı büyük | `LLM_MANIFEST.md` — AI sadece gerekli dosyayı okur |
-| Tek editör desteği | 9 AI editör — Claude, Cursor, Windsurf, Copilot, Cline, Roo, Aider, Zed, Devin |
-
-### EN | English
-
-When TradingView launched Pine Script v6, **all AI editors kept writing v5 code.**
-
-- Cursor suggested `study()` — doesn't exist in v6
-- Copilot wrote `security()` — became `request.security()` in v6
-- Claude repeated the same errors — because it had no memory
-- Every new session started from zero
-
-This repo solves three things:
-
-| Problem | Solution |
-|---------|---------|
-| AI has no memory | `LESSONS_LEARNED.md` — solved errors stored permanently |
-| v6 reference is large | `LLM_MANIFEST.md` — AI reads only the needed file |
-| Single editor support | 9 AI editors — Claude, Cursor, Windsurf, Copilot, Cline, Roo, Aider, Zed, Devin |
-
-### Kullandığını Nasıl Anlarsın? / How Do You Know It's Working?
-
-| ✅ Çalışıyor / Working | ❌ Çalışmıyor / Not Working |
-|------------------------|---------------------------|
-| AI "LESSONS_LEARNED.md okudum" diyor | AI bunu söylemiyor |
-| Kod `//@version=6` ile başlıyor | `study()` veya `security()` görüyorsun |
-| `ta.*` fonksiyonları kullanılıyor | Aynı hata tekrarlanıyor |
-| Hata olunca LESSONS_LEARNED güncelleniyor | AI hata geçmişini bilmiyor |
-
----
-
 ## 🚀 Hızlı Başlangıç / Quick Start
 
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 ```
+
+TR: Klonladıktan sonra favori AI editörünüzle açın. Kurulum bitti — kurallar otomatik yüklenir.
+EN: After cloning, open with your favourite AI editor. Setup done — rules load automatically.
 
 ---
 
@@ -117,37 +264,55 @@ git clone https://github.com/trugurpala/pinescriptv6.git
 > TR: Claude Projects ve Claude Code ile entegrasyon — en tam deneyim için önerilen yöntem.
 > EN: Integration with Claude Projects and Claude Code — recommended for the fullest experience.
 
-**Claude Projects — TR:**
-[claude.ai/projects](https://claude.ai/projects) → projenizi açın → **Files** → **+** → **GitHub**
+### TR | Türkçe
+
+**Claude Projects (claude.ai/projects)**
+
+1. [claude.ai/projects](https://claude.ai/projects) → projenizi açın → **Files** → **+** → **GitHub**
+2. URL kutusuna yapıştırın:
 ```
 https://github.com/trugurpala/pinescriptv6
 ```
-Tüm dosyaları seçin → **Add files** → proje sohbetinde: `/pinescript-v6`
+3. Tüm dosyaları seçin → **Add files**
+4. Proje sohbetinde yazın:
+```
+/pinescript-v6
+```
+Artık Claude her Pine Script v6 sorusunda önce `LESSONS_LEARNED.md` okur, sonra `LLM_MANIFEST.md` ile doğru referansı bulur.
 
-**Claude Code — TR:**
+**Claude Code (terminal)**
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 cd pinescriptv6
 claude
 ```
-`CLAUDE.md` otomatik okunur. Claude artık Pine Script v6 kurallarını ve hata hafızasını biliyor.
+`CLAUDE.md` otomatik okunur. Repo bağlı olduğu sürece her oturumda hafıza aktif.
 
 ---
 
-**Claude Projects — EN:**
-[claude.ai/projects](https://claude.ai/projects) → open your project → **Files** → **+** → **GitHub**
+### EN | English
+
+**Claude Projects (claude.ai/projects)**
+
+1. [claude.ai/projects](https://claude.ai/projects) → open your project → **Files** → **+** → **GitHub**
+2. Paste the URL:
 ```
 https://github.com/trugurpala/pinescriptv6
 ```
-Select all files → **Add files** → in project chat: `/pinescript-v6`
+3. Select all files → **Add files**
+4. Type in project chat:
+```
+/pinescript-v6
+```
+Claude now reads `LESSONS_LEARNED.md` first and finds the right reference via `LLM_MANIFEST.md` for every Pine Script v6 question.
 
-**Claude Code — EN:**
+**Claude Code (terminal)**
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 cd pinescriptv6
 claude
 ```
-`CLAUDE.md` is read automatically. Claude now knows Pine Script v6 rules and the error memory system.
+`CLAUDE.md` is read automatically. Memory stays active for every session while repo is connected.
 
 ---
 
@@ -156,23 +321,37 @@ claude
 > TR: Cursor v0.44+ için `.cursor/rules/pinescriptv6.mdc` otomatik yüklenir. Eski sürümler `.cursorrules` kullanır.
 > EN: `.cursor/rules/pinescriptv6.mdc` loads for Cursor v0.44+. `.cursorrules` for older versions.
 
+### TR | Türkçe
+
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 cd pinescriptv6
 cursor .
 ```
 
-**TR** — Chat'te kullan:
+Kurallar otomatik devreye girer. Chat veya Composer'da kullan:
 ```
 @LESSONS_LEARNED.md EMA cross stratejisi yaz, XU030 için
 @reference/functions/ta.md RSI divergence indikatörü yaz
+@concepts/signal_quality.md Fakeout filtreli strateji yaz
 @concepts/common_errors.md Bu hatanın sebebi ne?
 ```
 
-**EN** — Use in chat:
+---
+
+### EN | English
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+cd pinescriptv6
+cursor .
+```
+
+Rules load automatically. Use in Chat or Composer:
 ```
 @LESSONS_LEARNED.md write an EMA cross strategy for XU030
 @reference/functions/ta.md write an RSI divergence indicator
+@concepts/signal_quality.md write a fakeout-filtered strategy
 @concepts/common_errors.md what causes this error?
 ```
 
@@ -183,46 +362,73 @@ cursor .
 > TR: `.windsurfrules` dosyası Windsurf / Cascade tarafından otomatik okunur.
 > EN: `.windsurfrules` is picked up automatically by Windsurf / Cascade.
 
+### TR | Türkçe
+
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 cd pinescriptv6
 windsurf .
 ```
 
-**TR** — Cascade chat'te kullan:
+`.windsurfrules` otomatik yüklenir. Cascade chat'te kullan:
 ```
 @LESSONS_LEARNED.md Supertrend stratejisi yaz
 @reference/functions/strategy.md ATR tabanlı SL/TP nasıl yazılır?
+@concepts/signal_quality.md Hacim onaylı kırılma stratejisi yaz
 ```
 
-**EN** — Use in Cascade:
+---
+
+### EN | English
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+cd pinescriptv6
+windsurf .
+```
+
+`.windsurfrules` loads automatically. Use in Cascade:
 ```
 @LESSONS_LEARNED.md write a Supertrend strategy
 @reference/functions/strategy.md how to write ATR-based SL/TP?
+@concepts/signal_quality.md write a volume-confirmed breakout strategy
 ```
 
 ---
 
 ## 🐙 GitHub Copilot
 
-> TR: `.github/copilot-instructions.md` VS Code, JetBrains ve Copilot destekli editörlerde otomatik devreye girer.
+> TR: `.github/copilot-instructions.md` VS Code, JetBrains ve Copilot destekli tüm editörlerde otomatik devreye girer.
 > EN: `.github/copilot-instructions.md` activates automatically in VS Code, JetBrains, and any Copilot-enabled editor.
+
+### TR | Türkçe
 
 ```bash
 git clone https://github.com/trugurpala/pinescriptv6.git
 code pinescriptv6
 ```
 
-**TR** — Copilot Chat'te kullan:
+Copilot Chat'te kullan:
 ```
-LESSONS_LEARNED.md dosyasını kontrol et, sonra bir RSI mean reversion stratejisi yaz.
+LESSONS_LEARNED.md dosyasını kontrol et, sonra BTC için RSI pullback stratejisi yaz.
 reference/functions/ta.md dosyasına göre ta.pivothigh() imzası nedir?
+concepts/signal_quality.md'ye göre fakeout filtresi ekle.
 ```
 
-**EN** — Use in Copilot Chat:
+---
+
+### EN | English
+
+```bash
+git clone https://github.com/trugurpala/pinescriptv6.git
+code pinescriptv6
 ```
-Check LESSONS_LEARNED.md, then write an RSI mean reversion strategy.
+
+Use in Copilot Chat:
+```
+Check LESSONS_LEARNED.md, then write an RSI pullback strategy for BTC.
 According to reference/functions/ta.md, what is the ta.pivothigh() signature?
+Add a fakeout filter according to concepts/signal_quality.md.
 ```
 
 ---
@@ -238,38 +444,50 @@ cd pinescriptv6
 # Cline, Roo veya Aider ile aç / Open with Cline, Roo, or Aider
 ```
 
-`.clinerules` otomatik yüklenir / loads automatically.
+`.clinerules` otomatik yüklenir / loads automatically. Hafıza sistemi aktif / Error memory active.
 
 ---
 
 ## 🤗 Custom GPT / Diğer LLM'ler / Other LLMs
 
+### TR | Türkçe
+
 ZIP: [main.zip](https://github.com/trugurpala/pinescriptv6/archive/refs/heads/main.zip)
 
-Yükle / Upload: `LESSONS_LEARNED.md` + `LLM_MANIFEST.md` + `reference/functions/`
+**Minimum yükleme:** `LESSONS_LEARNED.md` + `LLM_MANIFEST.md` + `reference/functions/` + `concepts/`
 
-**TR sistem promptu:**
+**Sistem promptuna ekle:**
 ```
 Bu proje Pine Script v6 geliştirme için optimize edilmiş bir bilgi tabanıdır.
 Kod yazmadan önce her zaman LESSONS_LEARNED.md içeriğini kontrol et.
 Hangi dosyayı okuyacağını belirlemek için LLM_MANIFEST.md'ye başvur.
 Tüm scriptler //@version=6 ile başlamalıdır.
+v5 syntax kesinlikle kullanılmamalı: study(), security(), bare input() yasak.
 ```
 
-**EN system prompt:**
+---
+
+### EN | English
+
+ZIP: [main.zip](https://github.com/trugurpala/pinescriptv6/archive/refs/heads/main.zip)
+
+**Minimum upload:** `LESSONS_LEARNED.md` + `LLM_MANIFEST.md` + `reference/functions/` + `concepts/`
+
+**Add to system prompt:**
 ```
 This project is a knowledge base optimised for Pine Script v6 development.
 Always check LESSONS_LEARNED.md before writing any code.
 Consult LLM_MANIFEST.md to determine which file to read for each task.
 All scripts must start with //@version=6.
+v5 syntax is strictly forbidden: study(), security(), bare input() are banned.
 ```
 
 ---
 
 ## 📦 Örnekler / Examples
 
-TR: **55+ hazır Pine Script v6 örneği** — copy-paste hazır, TradingView'da test edilmiş.
-EN: **55+ ready-to-use Pine Script v6 examples** — copy-paste ready, tested in TradingView.
+TR: **55+ hazır Pine Script v6 örneği** — copy-paste hazır, TradingView'da test edilmiş, fakeout filtreli.
+EN: **55+ ready-to-use Pine Script v6 examples** — copy-paste ready, tested in TradingView, fakeout-filtered.
 
 ### 📊 İndikatörler / Indicators (18)
 
@@ -287,12 +505,12 @@ EN: **55+ ready-to-use Pine Script v6 examples** — copy-paste ready, tested in
 | 10 | [`10_stoch_rsi.pine`](examples/indicators/10_stoch_rsi.pine) | Stochastic RSI K/D |
 | 11 | [`11_ichimoku.pine`](examples/indicators/11_ichimoku.pine) | Ichimoku Cloud — all components |
 | 12 | [`12_mtf_ema.pine`](examples/indicators/12_mtf_ema.pine) | Multi-Timeframe EMA D/W/M |
-| 13 | [`13_session_highlight.pine`](examples/indicators/13_session_highlight.pine) | Session highlight (VIOP saatli) |
+| 13 | [`13_session_highlight.pine`](examples/indicators/13_session_highlight.pine) | Session highlight — VIOP 09:30–18:15 |
 | 14 | [`14_rsi_divergence.pine`](examples/indicators/14_rsi_divergence.pine) | RSI Divergence detector |
 | 15 | [`15_ema_ribbon.pine`](examples/indicators/15_ema_ribbon.pine) | EMA Ribbon 8/13/21/34/55/89/144/233 |
 | 16 | [`16_chandelier_exit.pine`](examples/indicators/16_chandelier_exit.pine) | Chandelier Exit trailing stop |
 | 17 | [`17_squeeze_momentum.pine`](examples/indicators/17_squeeze_momentum.pine) | Squeeze Momentum |
-| 18 | [`18_fakeout_filter.pine`](examples/indicators/18_fakeout_filter.pine) | Fakeout Filter — 4-Layer Signal Quality |
+| 18 | [`18_fakeout_filter.pine`](examples/indicators/18_fakeout_filter.pine) | **Fakeout Filter — 4-Layer Signal Quality** |
 
 ### 🎯 Stratejiler / Strategies (13)
 
@@ -308,9 +526,9 @@ EN: **55+ ready-to-use Pine Script v6 examples** — copy-paste ready, tested in
 | 08 | [`08_triple_ema_strategy.pine`](examples/strategies/08_triple_ema_strategy.pine) | Triple EMA 5/13/34 |
 | 09 | [`09_stoch_strategy.pine`](examples/strategies/09_stoch_strategy.pine) | Stochastic + EMA filter |
 | 10 | [`10_adx_trend_strategy.pine`](examples/strategies/10_adx_trend_strategy.pine) | ADX Trend Strength |
-| 11 | [`11_viop_session_strategy.pine`](examples/strategies/11_viop_session_strategy.pine) | VIOP Session — seans bazlı |
+| 11 | [`11_viop_session_strategy.pine`](examples/strategies/11_viop_session_strategy.pine) | VIOP Session — seans bazlı kapanış |
 | 12 | [`12_chandelier_strategy.pine`](examples/strategies/12_chandelier_strategy.pine) | Chandelier Exit Strategy |
-| 13 | [`13_fakeout_confirmed_strategy.pine`](examples/strategies/13_fakeout_confirmed_strategy.pine) | Fakeout-Confirmed — 4 filters, high accuracy |
+| 13 | [`13_fakeout_confirmed_strategy.pine`](examples/strategies/13_fakeout_confirmed_strategy.pine) | **Fakeout-Confirmed — 4 filters, high accuracy** |
 
 ---
 
@@ -348,7 +566,7 @@ Each file includes correct session times, commission and slippage settings.
 | 15 | 🇺🇸 ES | Opening Range Breakout (ORB) | [`15_es_opening_range.pine`](global-markets/15_es_opening_range.pine) |
 | 16 | 🇺🇸 NQ | VWAP Mean Reversion | [`16_nq_vwap_reversion.pine`](global-markets/16_nq_vwap_reversion.pine) |
 | 17 | 🥇 Gold | Triple EMA + ADX Trend | [`17_gc_gold_trend.pine`](global-markets/17_gc_gold_trend.pine) |
-| 18 | 🛢️ CL | ATR Momentum + EIA Filter | [`18_cl_crude_momentum.pine`](global-markets/18_cl_crude_momentum.pine) |
+| 18 | 🛢️ CL | ATR Momentum + EIA Window Filter | [`18_cl_crude_momentum.pine`](global-markets/18_cl_crude_momentum.pine) |
 | 19 | 💱 EURUSD | London Session Breakout | [`19_eurusd_london_breakout.pine`](global-markets/19_eurusd_london_breakout.pine) |
 | 20 | 💱 GBPUSD | Market Structure + EMA Filter | [`20_gbpusd_structure.pine`](global-markets/20_gbpusd_structure.pine) |
 | 21 | 💱 USDJPY | Carry Trade Trend Following | [`21_usdjpy_carry_trend.pine`](global-markets/21_usdjpy_carry_trend.pine) |
@@ -423,7 +641,7 @@ pinescriptv6/
 │   ├── colors_and_display.md    color.new, gradients
 │   ├── methods.md               user-defined methods
 │   ├── objects.md               UDT, type system
-│   └── signal_quality.md        Fakeout filters, volume, MTF, ATR
+│   └── signal_quality.md        Fakeout filters, volume, MTF, ATR, bar confirm
 │
 ├── reference/
 │   ├── variables.md
@@ -447,7 +665,7 @@ pinescriptv6/
 │
 ├── examples/
 │   ├── indicators/   (18 — copy-paste ready, tested in TradingView)
-│   └── strategies/   (13 — copy-paste ready, tested in TradingView)
+│   └── strategies/   (13 — copy-paste ready, fakeout-filtered)
 │
 ├── global-markets/   (22 strategies — ES, NQ, BTC, ETH, Gold, Forex, DAX, Nikkei)
 ├── webhook-templates/ (7 files — Telegram, Discord, JSON, VIOP)
@@ -471,7 +689,9 @@ MIT — [LICENSE](LICENSE) · Copyright © 2025 [Ugur Pala](https://github.com/t
 
 <div align="center">
 
-⭐ TR: İşinize yaradıysa lütfen yıldız verin! / EN: If this saved you time, please star it! ⭐
+⭐ **TR: Bu repo Pine Script v6 + AI kombinasyonunu kullanan herkesin işine yarar. Yıldız vererek destek olun!**
+
+⭐ **EN: This repo helps everyone using Pine Script v6 + AI together. Star it to show support!**
 
 [![Star History Chart](https://api.star-history.com/svg?repos=trugurpala/pinescriptv6&type=Date)](https://star-history.com/#trugurpala/pinescriptv6&Date)
 
