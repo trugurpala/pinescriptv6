@@ -1,0 +1,38 @@
+# Pine Script v6 — Cursor Rules
+# Maintained by Ugur Pala — mail@ugurpala.com
+# github.com/trugurpala/pinescriptv6
+
+## Before writing any Pine Script v6 code
+
+1. Read LESSONS_LEARNED.md — never repeat a known error
+2. Check LLM_MANIFEST.md — find the correct reference file for the task
+3. Read the relevant reference file before writing
+
+## Code Rules
+
+- Every script MUST start with //@version=6
+- Use ta.* functions — do not reimplement manually
+- Use var/varip correctly per the execution model
+- Never invent function names not in the reference docs
+- No v5 syntax (study(), security() at top level, etc.)
+
+## Error Protocol
+
+When you solve a Pine Script v6 error:
+- Update LESSONS_LEARNED.md immediately
+- Format: error message, cause, fix, minimal code example
+
+## Reference Map
+
+| Need | File |
+|------|------|
+| RSI, EMA, crossover, ATR, pivot | reference/functions/ta.md |
+| strategy.entry, exit, position | reference/functions/strategy.md |
+| plot, line, box, label, table | reference/functions/drawing.md |
+| request.security, MTF | reference/functions/request.md |
+| array, map, matrix | reference/functions/collections.md |
+| math, str, input, alert | reference/functions/general.md |
+| open, close, bar_index | reference/variables.md |
+| var, varip, barstate | concepts/execution_model.md |
+| Repainting | concepts/timeframes.md |
+| Errors | concepts/common_errors.md |
