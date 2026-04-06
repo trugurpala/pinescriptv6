@@ -1,0 +1,28 @@
+//@version=6
+// Classic Pivot Points (Daily) — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("Pivot Points [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+bool showLabels = input.bool(true, "Show Labels")
+
+// ── Calculations — Previous day data ─────────────────────────────────────────
+[pHigh, pLow, pClose] = request.security(syminfo.tickerid, "D",
+    [high[1], low[1], close[1]], lookahead=barmerge.lookahead_on)
+
+float pp = (pHigh + pLow + pClose) / 3
+float r1 = 2 * pp - pLow
+float s1 = 2 * pp - pHigh
+float r2 = pp + (pHigh - pLow)
+float s2 = pp - (pHigh - pLow)
+float r3 = pHigh + 2 * (pp - pLow)
+float s3 = pLow  - 2 * (pHigh - pp)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(pp, "PP", color.orange, linewidth=2)
+plot(r1, "R1", color.new(color.red,   40), linewidth=1)
+plot(r2, "R2", color.new(color.red,   20), linewidth=1)
+plot(r3, "R3", color.red,                  linewidth=2)
+plot(s1, "S1", color.new(color.green, 40), linewidth=1)
+plot(s2, "S2", color.new(color.green, 20), linewidth=1)
+plot(s3, "S3", color.green,                linewidth=2)
