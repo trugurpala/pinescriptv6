@@ -1,0 +1,89 @@
+//@version=6
+// USD/JPY — Carry Trade Trend Following Strategy
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: USD/JPY için özel carry trade trend stratejisi.
+//     Tokyo ve Londra seanslarında çalışır.
+//     BOJ müdahalelerine karşı geniş ATR stop kullanır.
+//     Hızlı trend değişimlerinde pozisyon kapatır.
+// EN: Carry trade trend strategy specific to USD/JPY.
+//     Active during Tokyo and London sessions.
+//     Wide ATR stop as protection against BOJ interventions.
+//     Exits on fast trend reversal signals.
+//
+// Sembol / Symbol: FX:USDJPY / OANDA:USDJPY
+// Önerilen TF / Recommended TF: 1H, 4H
+strategy("USD/JPY Carry Trend [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 2,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.005,
+    slippage          = 1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen   = input.int(9,    "Fast EMA",              minval=1)
+int   slowLen   = input.int(21,   "Slow EMA",              minval=1)
+int   trendLen  = input.int(100,  "Trend EMA",             minval=20)
+int   rsiLen    = input.int(14,   "RSI",                   minval=1)
+float rsiMid    = input.float(50, "RSI Mid",               minval=40, maxval=60)
+int   atrLen    = input.int(14,   "ATR",                   minval=1)
+float slMult    = input.float(2.5, "SL Mult (wide/BOJ)",   step=0.1)
+float tpMult    = input.float(3.0, "TP Mult",              step=0.1)
+
+// ── Tokyo + London Seans ──────────────────────────────────────────────────────
+bool tokyo      = not na(time(timeframe.period, "0000-0900", "GMT"))
+bool london     = not na(time(timeframe.period, "0800-1600", "GMT"))
+bool inSession  = tokyo or london
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float fastEma   = ta.ema(close, fastLen)
+float slowEma   = ta.ema(close, slowLen)
+float trendEma  = ta.ema(close, trendLen)
+float rsi       = ta.rsi(close, rsiLen)
+float atrVal    = ta.atr(atrLen)
+
+bool upTrend    = close > trendEma and fastEma > slowEma
+bool downTrend  = close < trendEma and fastEma < slowEma
+
+bool longEntry  = ta.crossover(fastEma, slowEma)
+                    and upTrend and rsi > rsiMid
+                    and inSession and strategy.position_size == 0
+
+bool shortEntry = ta.crossunder(fastEma, slowEma)
+                    and downTrend and rsi < rsiMid
+                    and inSession and strategy.position_size == 0
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if longEntry
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if shortEntry
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// Trend bozulunca kapat / Close on trend break
+if strategy.position_size > 0 and ta.crossunder(fastEma, slowEma)
+    strategy.close("Long",  comment="Trend Break")
+if strategy.position_size < 0 and ta.crossover(fastEma, slowEma)
+    strategy.close("Short", comment="Trend Break")
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(fastEma,  "Fast",  fastEma > slowEma ? color.green : color.red,    linewidth=1)
+plot(slowEma,  "Slow",  fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
+plot(trendEma, "Trend", color.new(color.gray, 30),                      linewidth=2)
+bgcolor(tokyo and london ? color.new(color.purple, 93) :
+        inSession         ? color.new(color.blue,   96) :
+                            color.new(color.gray,   97))
+plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
+
+alertcondition(longEntry,  "USDJPY Long",  "USD/JPY Carry Trend Long")
+alertcondition(shortEntry, "USDJPY Short", "USD/JPY Carry Trend Short")
