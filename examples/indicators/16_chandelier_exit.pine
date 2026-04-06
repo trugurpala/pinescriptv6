@@ -1,0 +1,45 @@
+//@version=6
+// Chandelier Exit — Trend Trailing Stop
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+indicator("Chandelier Exit [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   atrLen  = input.int(22,   "ATR Length",    minval=1)
+float atrMult = input.float(3.0, "ATR Multiplier", step=0.1)
+bool  showDir = input.bool(true, "Show Direction Labels")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float atr      = ta.atr(atrLen)
+float longStop  = ta.highest(high, atrLen) - atrMult * atr
+float shortStop = ta.lowest(low,  atrLen)  + atrMult * atr
+
+var float chandLong  = na
+var float chandShort = na
+var int   direction  = 1
+
+chandLong  := longStop  > nz(chandLong[1],  longStop)  ? longStop  : nz(chandLong[1],  longStop)
+chandShort := shortStop < nz(chandShort[1], shortStop) ? shortStop : nz(chandShort[1], shortStop)
+
+if close > nz(chandShort[1], chandShort)
+    direction := 1
+if close < nz(chandLong[1],  chandLong)
+    direction := -1
+
+bool dirChange  = direction != direction[1]
+bool bullChange = dirChange and direction ==  1
+bool bearChange = dirChange and direction == -1
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(direction == 1  ? chandLong  : na, "Long Stop",  color.green, linewidth=2, style=plot.style_linebr)
+plot(direction == -1 ? chandShort : na, "Short Stop", color.red,   linewidth=2, style=plot.style_linebr)
+
+if showDir
+    if bullChange
+        label.new(bar_index, low,  "●", style=label.style_label_up,
+            color=color.new(color.green,20), textcolor=color.white)
+    if bearChange
+        label.new(bar_index, high, "●", style=label.style_label_down,
+            color=color.new(color.red,20), textcolor=color.white)
+
+alertcondition(bullChange, "CE Bull", "Chandelier Bull — {{ticker}} @ {{close}}")
+alertcondition(bearChange, "CE Bear", "Chandelier Bear — {{ticker}} @ {{close}}")
