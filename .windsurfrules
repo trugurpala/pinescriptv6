@@ -1,55 +1,66 @@
-# Pine Script v6 — Windsurf / Cascade Rules
-# Maintainer: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
+# Pine Script v6 Reference — Windsurf / Cascade Rules
+# Author: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
+# TradingView: https://tr.tradingview.com/u/trugurpala/
+# X: https://x.com/trugurpala
 
----
+## Bu Repo Neden Var? / Why This Repo Exists?
 
-## TR | Protokol
+TR: TradingView Pine Script v6 çıktığında AI editörler v5 yazmaya devam etti.
+    Bu repo Cascade'e doğru v6 referansı ve kalıcı hata hafızası verir.
 
-Cascade, Pine Script v6 kodu yazmadan önce:
-1. `LESSONS_LEARNED.md` oku
-2. `LLM_MANIFEST.md` ile doğru dosyayı bul
-3. O dosyayı oku, sonra yaz
-4. Hata çözülünce `LESSONS_LEARNED.md`'ye ekle
+EN: When Pine Script v6 launched, AI editors kept writing v5 code.
+    This repo gives Cascade correct v6 reference and permanent error memory.
 
-## EN | Protocol
+## Kullandığını Nasıl Anlarsın? / How to Verify It's Working?
 
-Before Cascade writes any Pine Script v6 code:
-1. Read `LESSONS_LEARNED.md`
-2. Use `LLM_MANIFEST.md` to find the correct file
-3. Read that file, then write
-4. On error fix: append to `LESSONS_LEARNED.md`
+TR: Bu kurallar aktifse Cascade şunları yapmalı:
+    ✅ "LESSONS_LEARNED.md okudum" demeli
+    ✅ //@version=6 ile başlamalı
+    ✅ ta.* kullanmalı, v5 syntax yazmamalı
+    ❌ v5 syntax görüyorsan kurallar aktif değil
 
----
+EN: If these rules are active, Cascade should:
+    ✅ Say "I read LESSONS_LEARNED.md"
+    ✅ Start with //@version=6
+    ✅ Use ta.*, never write v5 syntax
+    ❌ If you see v5 syntax, rules are not active
+
+## Protokol / Protocol
+
+Kod yazmadan önce / Before writing code:
+1. LESSONS_LEARNED.md oku / read
+2. LLM_MANIFEST.md ile doğru dosyayı bul / find correct file
+3. O dosyayı oku, sonra yaz / read it, then write
+4. Hata olunca: çöz + LESSONS_LEARNED.md'ye ekle / solve + append
 
 ## v5 → v6 Dönüşüm / Migration
 
 | ❌ v5 | ✅ v6 |
 |-------|-------|
-| `study()` | `indicator()` |
-| `security()` | `request.security()` |
-| `input(14, type=input.integer)` | `input.int(14)` |
-| `array.new_float()` | `array.new<float>()` |
-
----
+| study() | indicator() |
+| security() | request.security() |
+| input(14, type=input.integer) | input.int(14) |
+| array.new_float() | array.new<float>() |
 
 ## Referans / Reference
 
 | İhtiyaç / Need | Dosya / File |
 |----------------|-------------|
-| RSI, EMA, MACD, ATR | `reference/functions/ta.md` |
-| strategy.entry, exit | `reference/functions/strategy.md` |
-| plot, line, label | `reference/functions/drawing.md` |
-| request.security | `reference/functions/request.md` |
-| array, map | `reference/functions/collections.md` |
-| Hatalar / Errors | `concepts/common_errors.md` |
-| **Her zaman önce / Always first** | `LESSONS_LEARNED.md` |
+| RSI, EMA, MACD, ATR | reference/functions/ta.md |
+| strategy.entry, exit | reference/functions/strategy.md |
+| plot, line, label | reference/functions/drawing.md |
+| request.security | reference/functions/request.md |
+| Bilinen hatalar / Errors | concepts/common_errors.md |
+| **Her zaman önce / Always first** | LESSONS_LEARNED.md |
 
----
+## Cascade Chat Örnekleri / Examples
 
-## Cascade Chat Örnekleri / Cascade Chat Examples
+TR | Türkçe:
+  @LESSONS_LEARNED.md EMA cross stratejisi yaz
+  @reference/functions/strategy.md ATR SL/TP nasıl?
+  @concepts/common_errors.md Bu hatanın sebebi ne?
 
-```
-@LESSONS_LEARNED.md Supertrend stratejisi yaz
-@reference/functions/strategy.md ATR SL/TP nasıl?
-@concepts/timeframes.md MTF repainting sorunu
-```
+EN | English:
+  @LESSONS_LEARNED.md write an EMA cross strategy
+  @reference/functions/strategy.md how to write ATR SL/TP?
+  @concepts/common_errors.md what causes this error?
