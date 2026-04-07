@@ -4,94 +4,93 @@ globs: ["**/*.pine", "**/*.tv"]
 alwaysApply: true
 ---
 
-# Pine Script v6 Reference — Cursor Rules
+# Pine Script v6 — Cursor Rules
 # Author: Ugur Pala · mail@ugurpala.com
+# GitHub: github.com/trugurpala/pinescriptv6
 # TradingView: https://tr.tradingview.com/u/trugurpala/
-# X: https://x.com/trugurpala
-# GitHub: https://github.com/trugurpala/pinescriptv6
+# Vitrin: github.com/trugurpala/awesome-pinescript-v6
 
----
+## Proje
+Bu repo trugurpala'nın Pine Script v6 ortamıdır.
+Hedef: Türkiye VİOP/BIST30 + global piyasalar.
+İçerik: 56 Pine · 14 strateji · 18 indikatör · 22 global market · 245 commit
+TradingView: https://tr.tradingview.com/script/SY1XkTBH/ (Fakeout Filter yayında)
 
-## Bu Repo Neden Var? / Why This Repo Exists?
+## Protokol
+1. `@LESSONS_LEARNED.md` oku — 11 bilinen hata
+2. `@LLM_MANIFEST.md` ile doğru referans dosyasını bul
+3. O dosyayı oku, sonra kodu yaz
+4. Hata olunca: çöz + LESSONS_LEARNED.md'ye ekle
 
-TR: TradingView Pine Script v6 çıktığında tüm AI editörler v5 kodu yazmaya devam etti.
-    Cursor v5 syntax öneriyordu. Bu repo Cursor'a doğru v6 referansı ve kalıcı hata hafızası verir.
+## LESSONS_LEARNED Özeti (11 Hata)
 
-EN: When Pine Script v6 launched, all AI editors kept writing v5 code.
-    Cursor was suggesting v5 syntax. This repo gives Cursor correct v6 reference and permanent error memory.
+| # | Hata | Çözüm |
+|---|------|-------|
+| 1 | `ta.stoch()` tuple değil | `float k = ta.stoch(...)` |
+| 2 | `math.avg()` yok | `(a + b) / 2` |
+| 3 | `request.security()` tuple | köşeli parantez |
+| 4 | Futures komisyon | `cash_per_contract` |
+| 5 | EMA + hacim yok = fakeout | hacim filtresi ekle |
+| 6 | Repainting | `[1]` + `lookahead_on` |
+| 7 | `alertcondition()` strategy'de | `alert()` kullan |
+| 8 | `barstate.islast` + label | `barstate.isconfirmed` |
+| 9 | Çok satırlı `and` başta | tek satır |
+| 10 | `calc_on_every_tick=true` | kaldır — backtest bozar |
+| 11 | `barstate.islast` strategy'de | `barstate.isconfirmed` |
 
----
+## v5 → v6 Dönüşüm
 
-## Kullandığını Nasıl Anlarsın? / How to Verify It's Working?
+| ❌ v5 | ✅ v6 |
+|-------|-------|
+| `study()` | `indicator()` |
+| `security()` | `request.security()` |
+| `input(14, type=input.integer)` | `input.int(14)` |
+| `array.new_float()` | `array.new<float>()` |
+| `[k, d] = ta.stoch(...)` | `float k = ta.stoch(...)` |
+| `math.avg(a, b)` | `(a + b) / 2` |
+| `alertcondition()` strategy'de | `alert()` |
+| `barstate.islast` strategy'de | `barstate.isconfirmed` |
+| `calc_on_every_tick = true` | kaldır |
+| Çok satırlı `and` başta | tek satır |
 
-TR: Bu kurallar aktifse Cursor şunları yapmalı:
-    ✅ "LESSONS_LEARNED.md okudum" demeli
-    ✅ //@version=6 ile başlamalı
-    ✅ ta.* kullanmalı, v5 syntax yazmamalı
-    ❌ v5 syntax görüyorsan .cursor/rules/ klasörü yüklenmemiş
+## VİOP Şablonu
 
-EN: If these rules are active, Cursor should:
-    ✅ Say "I read LESSONS_LEARNED.md"
-    ✅ Start with //@version=6
-    ✅ Use ta.*, never write v5 syntax
-    ❌ If you see v5 syntax, .cursor/rules/ folder not loaded
+```pine
+//@version=6
+strategy("VİOP Strategy [trugurpala]",
+    overlay              = true,
+    initial_capital      = 100000,
+    default_qty_type     = strategy.fixed,
+    default_qty_value    = 1,
+    commission_type      = strategy.commission.cash_per_contract,
+    commission_value     = 2.0,
+    slippage             = 2)
+bool inSession = not na(time(timeframe.period, "0930-1815", "UTC+3"))
+if not inSession and inSession[1]
+    strategy.close_all(comment="Seans sonu")
+```
 
----
+## Referans Haritası
 
-## Protokol / Protocol
-
-1. `LESSONS_LEARNED.md` oku / read
-2. `LLM_MANIFEST.md` ile doğru dosyayı bul / find correct file
-3. O dosyayı oku / read it
-4. Kodu yaz — `//@version=6` ile / write starting with //@version=6
-5. Hata olunca: çöz + `LESSONS_LEARNED.md`'ye ekle / solve + append
-
----
-
-## v5 → v6 Dönüşüm / Migration
-
-| ❌ v5 — Kullanma | ✅ v6 — Kullan |
-|-----------------|---------------|
-| `study("name")` | `indicator("name")` |
-| `security(ticker, tf, expr)` | `request.security(ticker, tf, expr)` |
-| `input(14, type=input.integer)` | `input.int(14, "Label")` |
-| `array.new_float(0)` | `array.new<float>(0)` |
-| Manuel EMA hesaplama | `ta.ema(close, len)` |
-
----
-
-## Referans Haritası / Reference Map
-
-| Görev / Task | Dosya / File |
-|--------------|-------------|
-| RSI, EMA, SMA, MACD, ATR, BB, crossover | `@reference/functions/ta.md` |
-| strategy.entry, exit, close, position | `@reference/functions/strategy.md` |
-| plot, plotshape, line, box, label, table | `@reference/functions/drawing.md` |
-| request.security, financial, MTF | `@reference/functions/request.md` |
+| Görev | Dosya |
+|-------|-------|
+| RSI, EMA, MACD, ATR, crossover | `@reference/functions/ta.md` |
+| strategy.entry, exit, position | `@reference/functions/strategy.md` |
+| plot, line, box, label, table | `@reference/functions/drawing.md` |
+| request.security, MTF | `@reference/functions/request.md` |
 | array, map, matrix | `@reference/functions/collections.md` |
 | math, str, input, alert | `@reference/functions/general.md` |
-| Bilinen hatalar / Known errors | `@concepts/common_errors.md` |
-| var, varip, barstate | `@concepts/execution_model.md` |
-| **Her zaman önce / Always first** | `@LESSONS_LEARNED.md` |
+| barstate, var, varip | `@concepts/execution_model.md` |
+| Repainting, HTF | `@concepts/timeframes.md` |
+| Fakeout, sinyal kalitesi | `@concepts/signal_quality.md` |
+| Bilinen hatalar | `@concepts/common_errors.md` |
+| **Her zaman önce** | `@LESSONS_LEARNED.md` |
 
----
-
-## Cursor Chat Örnekleri / Chat Examples
-
-```
-@LESSONS_LEARNED.md EMA cross stratejisi yaz, XU030 için
-@LESSONS_LEARNED.md write an EMA cross strategy for ES futures
-@reference/functions/ta.md RSI divergence indikatörü yaz
-@reference/functions/strategy.md ATR tabanlı SL/TP nasıl?
-@concepts/common_errors.md Bu hatanın sebebi ne?
-```
-
----
-
-## Checklist
-
-- [ ] `LESSONS_LEARNED.md` read / okundu
-- [ ] `//@version=6` present / mevcut
-- [ ] No v5 syntax / v5 syntax yok
-- [ ] Signatures verified / imzalar doğrulandı
-- [ ] `var`/`varip` correct / doğru
+## Kontrol Listesi
+- [ ] LESSONS_LEARNED.md okundu
+- [ ] `//@version=6` mevcut
+- [ ] `alertcondition()` yok → `alert()`
+- [ ] `calc_on_every_tick` yok
+- [ ] `barstate.isconfirmed` (islast değil)
+- [ ] Çok satırlı `and` yok
+- [ ] `request.security()` → `[1]` + `lookahead_on`

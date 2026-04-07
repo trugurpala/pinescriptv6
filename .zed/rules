@@ -1,23 +1,63 @@
 # Pine Script v6 — Zed Rules
 # Author: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
-# TR: Zed editörü için Pine Script v6 kural dosyası
-# EN: Pine Script v6 rules for Zed editor
+# TradingView: https://tr.tradingview.com/u/trugurpala/
+
+## Project
+Owner: Ugur Pala — VİOP/BIST30 futures + global markets
+Repo: github.com/trugurpala/pinescriptv6
+Content: 56 Pine files · 14 strategies · 18 indicators · 22 global markets
 
 ## Protocol
 
 Before writing any Pine Script v6 code:
-1. Read LESSONS_LEARNED.md — known errors and fixes
+1. Read LESSONS_LEARNED.md — 11 known errors
 2. Use LLM_MANIFEST.md to find the correct reference file
 3. Read that file, then write the code
-4. On error: solve it + append to LESSONS_LEARNED.md
+4. On error: solve + append to LESSONS_LEARNED.md
 
-## Non-Negotiable Rules
+## LESSONS_LEARNED Summary (11 Errors)
 
-1. //@version=6 — first line of EVERY script
-2. ta.* functions — never reimplement manually
-3. input.int(), input.float() etc — never bare input()
-4. request.security() — never security()
-5. indicator() — never study()
+| # | Error | Fix |
+|---|-------|-----|
+| 1 | `ta.stoch()` not a tuple | `float k = ta.stoch(...)` |
+| 2 | `math.avg()` doesn't exist | `(a + b) / 2` |
+| 3 | `request.security()` tuple syntax | square brackets required |
+| 4 | Wrong futures commission type | `cash_per_contract` |
+| 5 | EMA cross without volume = fakeout | add volume filter |
+| 6 | Repainting with request.security() | `[1]` + `lookahead_on` |
+| 7 | `alertcondition()` in strategy | use `alert()` in `if` block |
+| 8 | `barstate.islast` in strategy | use `barstate.isconfirmed` |
+| 9 | Multi-line `and` at line start | single line or `and` at end |
+| 10 | `calc_on_every_tick=true` | remove — breaks backtest |
+| 11 | `barstate.islast` in strategy | use `barstate.isconfirmed` |
+
+## v5 → v6
+
+| ❌ v5 | ✅ v6 |
+|-------|-------|
+| `study()` | `indicator()` |
+| `security()` | `request.security()` |
+| `input(14, type=input.integer)` | `input.int(14)` |
+| `array.new_float()` | `array.new<float>()` |
+| `[k, d] = ta.stoch(...)` | `float k = ta.stoch(...)` |
+| `math.avg(a, b)` | `(a + b) / 2` |
+| `alertcondition()` in strategy | `alert()` |
+| `barstate.islast` in strategy | `barstate.isconfirmed` |
+| `calc_on_every_tick = true` | remove |
+| Multi-line `and` at start | single line |
+
+## VIOP Template
+
+```pine
+//@version=6
+strategy("VIOP Strategy [trugurpala]",
+    commission_type  = strategy.commission.cash_per_contract,
+    commission_value = 2.0,
+    slippage         = 2)
+bool inSession = not na(time(timeframe.period, "0930-1815", "UTC+3"))
+if not inSession and inSession[1]
+    strategy.close_all(comment="Session end")
+```
 
 ## Reference Map
 
@@ -27,15 +67,18 @@ Before writing any Pine Script v6 code:
 | Strategies | reference/functions/strategy.md |
 | Drawings (plot, line, label, table) | reference/functions/drawing.md |
 | MTF (request.security) | reference/functions/request.md |
-| Arrays, maps, matrices | reference/functions/collections.md |
+| Arrays, maps | reference/functions/collections.md |
 | Math, string, input, alert | reference/functions/general.md |
-| Errors | concepts/common_errors.md |
+| barstate, var, varip | concepts/execution_model.md |
+| Repainting, HTF | concepts/timeframes.md |
+| Known errors | concepts/common_errors.md |
 | **Always first** | LESSONS_LEARNED.md |
 
 ## Checklist
-
-- [ ] LESSONS_LEARNED.md read
+- [ ] LESSONS_LEARNED.md read (11 errors)
 - [ ] //@version=6 present
-- [ ] No v5 syntax
-- [ ] Function signatures verified against reference
-- [ ] var/varip used correctly
+- [ ] No alertcondition() → alert()
+- [ ] No calc_on_every_tick
+- [ ] barstate.isconfirmed (not islast)
+- [ ] No multi-line and at start
+- [ ] request.security() → [1] + lookahead_on

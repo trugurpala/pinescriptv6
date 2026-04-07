@@ -1,41 +1,134 @@
 ---
 name: pinescript-v6
-description: Pine Script v6 gelistirici skill — dogru v6 kodu yazar, hatalari takip eder.
+description: "Pine Script v6 uzman geliştirici skill'i — doğru v6 kodu yazar, hataları takip eder, LESSONS_LEARNED'i günceller."
 maintainer: Ugur Pala · mail@ugurpala.com
 repo: github.com/trugurpala/pinescriptv6
+tradingview: https://tr.tradingview.com/u/trugurpala/
+triggers:
+  - Pine Script
+  - PineScript
+  - indicator
+  - strategy
+  - TradingView
+  - indikatör
+  - strateji
+  - v6
+  - pine
+  - VIOP
+  - VİOP
+  - BIST30
 ---
 
 # Pine Script v6 — Skill
 
+## Proje Bağlamı / Project Context
+
+Bu skill **trugurpala/pinescriptv6** reposuna aittir.
+- **Sahibi:** Ugur Pala · mail@ugurpala.com
+- **GitHub:** github.com/trugurpala
+- **TradingView:** https://tr.tradingview.com/u/trugurpala/
+- **Vitrin:** github.com/trugurpala/awesome-pinescript-v6
+- **Hedef:** Türkiye VİOP / BIST30 futures + global piyasalar için Pine Script v6
+- **İçerik:** 56 Pine dosyası · 14 strateji · 18 indikatör · 22 global market · 245 commit
+
 ---
 
-## TR | Türkçe
+## Görev
 
-### Görev
 Pine Script v6 ile doğru, optimize edilmiş kod yaz.
-Kod yazmadan önce referansları oku. Hata çözümlerini kaydet.
+Kod yazmadan önce LESSONS_LEARNED.md ve referansları oku.
+Hata çözümlerini hemen LESSONS_LEARNED.md'ye kaydet.
 
-### Protokol
+---
 
-**1. Kod yazmadan önce**
-- `LESSONS_LEARNED.md` oku — bilinen hatalar burada
-- `LLM_MANIFEST.md` ile göreve uygun dosyayı bul ve oku
+## Protokol
 
-**2. Kod kuralları**
-- `//@version=6` — her scriptin ilk satırı
-- `ta.*` kullan, manuel hesaplama yazma
-- `var` / `varip` execution model'e göre doğru kullan
+### 1. Kod Yazmadan Önce
+1. **`LESSONS_LEARNED.md` oku** — 11 bilinen hata var, tekrarlama
+2. **`LLM_MANIFEST.md`** ile göreve uygun referans dosyasını bul ve oku
+
+### 2. Kod Kuralları
+- `//@version=6` — her scriptin ilk satırı, istisnasız
+- `ta.*` kullan — manuel hesaplama yazma
+- `var` / `varip` — execution model'e göre doğru kullan
 - Referansta olmayan fonksiyon adı uydurma
 
-**3. Hata olduğunda**
+### 3. Hata Olduğunda
 - Hatayı çöz
-- `LESSONS_LEARNED.md` dosyasına hemen ekle (mesaj / sebep / çözüm / örnek)
+- `LESSONS_LEARNED.md`'ye hemen ekle: başlık + hata + sebep + çözüm + kod örneği
 
-### Referans Haritası
+---
+
+## LESSONS_LEARNED Özeti (11 Hata — Detay için dosyayı oku)
+
+| # | Hata | Çözüm |
+|---|------|-------|
+| 1 | `ta.stoch()` tuple döndürüyor sanmak | `float k = ta.stoch(...)` |
+| 2 | `math.avg(a, b)` kullanmak | `(a + b) / 2` |
+| 3 | `request.security()` tuple syntax yanlış | Köşeli parantez zorunlu |
+| 4 | Futures komisyon tipi yanlış | `strategy.commission.cash_per_contract` |
+| 5 | EMA cross + hacim filtresi yok | Fakeout önlemek için şart |
+| 6 | `request.security()` repainting | `[1]` + `lookahead_on` kullan |
+| 7 | `alertcondition()` strategy'de | `alert()` kullan, `if` bloğu içinde |
+| 8 | `barstate.islast` + label strategy'de | `barstate.isconfirmed` kullan |
+| 9 | Çok satırlı `and` başta | Tek satır veya `and` satır sonunda |
+| 10 | `calc_on_every_tick=true` | Kaldır — backtest bozar, uyarı verir |
+| 11 | `barstate.islast` strategy'de | `barstate.isconfirmed` kullan |
+
+---
+
+## v5 → v6 Dönüşüm Tablosu
+
+| ❌ v5 — YAZMA | ✅ v6 — YAZ |
+|--------------|------------|
+| `study("name")` | `indicator("name")` |
+| `security(ticker, tf, expr)` | `request.security(ticker, tf, expr)` |
+| `input(14, type=input.integer)` | `input.int(14, "Label")` |
+| `array.new_float(0)` | `array.new<float>(0)` |
+| `[k, d] = ta.stoch(...)` | `float k = ta.stoch(...)` |
+| `math.avg(a, b)` | `(a + b) / 2` |
+| `alertcondition()` strategy'de | `if signal\n    alert(...)` |
+| `barstate.islast` strategy'de | `barstate.isconfirmed` |
+| `calc_on_every_tick = true` | kaldır |
+| Çok satırlı `and` başta | tek satır |
+
+---
+
+## VİOP / BIST30 Şablonu
+
+VİOP stratejisi yazarken bu template'i kullan:
+
+```pine
+//@version=6
+strategy("VİOP Strategy [trugurpala]",
+    overlay              = true,
+    initial_capital      = 100000,
+    default_qty_type     = strategy.fixed,
+    default_qty_value    = 1,
+    commission_type      = strategy.commission.cash_per_contract,
+    commission_value     = 2.0,
+    slippage             = 2)
+
+// Seans: 09:30-18:15 UTC+3
+bool inSession = not na(time(timeframe.period, "0930-1815", "UTC+3"))
+
+// Seans kapanışında kapat
+if not inSession and inSession[1]
+    strategy.close_all(comment="Seans sonu")
+```
+
+- **Sembol:** `BIST:XU030D1!` veya `F_XU030`
+- **Seans:** 09:30–18:15 UTC+3
+- **Komisyon:** 2 TL/kontrat (cash_per_contract)
+- **Önerilen TF:** 5dk, 15dk, 1sa
+
+---
+
+## Referans Haritası
 
 | İhtiyaç | Dosya |
 |---------|-------|
-| RSI, EMA, MACD, crossover, ATR, pivot | `reference/functions/ta.md` |
+| RSI, EMA, MACD, ATR, crossover, pivot | `reference/functions/ta.md` |
 | strategy.entry, exit, close, position | `reference/functions/strategy.md` |
 | plot, line, box, label, table | `reference/functions/drawing.md` |
 | request.security, MTF | `reference/functions/request.md` |
@@ -45,74 +138,24 @@ Kod yazmadan önce referansları oku. Hata çözümlerini kaydet.
 | color.red, shape.*, style.* | `reference/constants.md` |
 | int, float, series, simple | `reference/types.md` |
 | if, for, var, varip, switch | `reference/keywords.md` |
-| @version, @param, @returns | `reference/annotations.md` |
 | barstate, var, history, realtime | `concepts/execution_model.md` |
-| Repainting, HTF | `concepts/timeframes.md` |
+| Repainting, HTF, MTF | `concepts/timeframes.md` |
 | color.new, gradient | `concepts/colors_and_display.md` |
+| Fakeout, sinyal kalitesi | `concepts/signal_quality.md` |
 | Bilinen hatalar | `concepts/common_errors.md` |
-| Pine Logs, debug | `writing_scripts/debugging.md` |
-| Optimizasyon | `writing_scripts/profiling_and_optimization.md` |
-| Limitler | `writing_scripts/limitations.md` |
-
-### Kontrol Listesi
-- [ ] LESSONS_LEARNED.md okundu
-- [ ] `//@version=6` mevcut
-- [ ] Fonksiyon imzaları referansla doğrulandı
-- [ ] v5 syntax yok
-- [ ] `var`/`varip` doğru
-- [ ] request.security varsa repainting kontrolü yapıldı
+| **Her zaman önce** | `LESSONS_LEARNED.md` |
 
 ---
 
-## EN | English
+## Kontrol Listesi
 
-### Task
-Write correct, optimized Pine Script v6 code.
-Read references before writing. Record error fixes.
-
-### Protocol
-
-**1. Before writing code**
-- Read `LESSONS_LEARNED.md` — known errors are there
-- Use `LLM_MANIFEST.md` to find and read the correct reference file
-
-**2. Code rules**
-- `//@version=6` — first line of every script
-- Use `ta.*` — never reimplement manually
-- Use `var` / `varip` correctly per the execution model
-- Never invent function names not in the reference docs
-
-**3. On error**
-- Solve it
-- Immediately append to `LESSONS_LEARNED.md` (message / cause / fix / example)
-
-### Reference Map
-
-| Need | File |
-|------|------|
-| RSI, EMA, MACD, crossover, ATR, pivot | `reference/functions/ta.md` |
-| strategy.entry, exit, close, position | `reference/functions/strategy.md` |
-| plot, line, box, label, table | `reference/functions/drawing.md` |
-| request.security, MTF | `reference/functions/request.md` |
-| array, map, matrix | `reference/functions/collections.md` |
-| math, str, input, alert | `reference/functions/general.md` |
-| open, close, bar_index, syminfo | `reference/variables.md` |
-| color.red, shape.*, style.* | `reference/constants.md` |
-| int, float, series, simple | `reference/types.md` |
-| if, for, var, varip, switch | `reference/keywords.md` |
-| @version, @param, @returns | `reference/annotations.md` |
-| barstate, var, history, realtime | `concepts/execution_model.md` |
-| Repainting, HTF | `concepts/timeframes.md` |
-| color.new, gradient | `concepts/colors_and_display.md` |
-| Known errors | `concepts/common_errors.md` |
-| Pine Logs, debug | `writing_scripts/debugging.md` |
-| Optimization | `writing_scripts/profiling_and_optimization.md` |
-| Limits | `writing_scripts/limitations.md` |
-
-### Checklist
-- [ ] LESSONS_LEARNED.md read
-- [ ] `//@version=6` present
-- [ ] Function signatures verified against reference
-- [ ] No v5 syntax
-- [ ] `var`/`varip` correct
-- [ ] Repainting checked if request.security used
+- [ ] `LESSONS_LEARNED.md` okundu (11 hata)
+- [ ] `//@version=6` — ilk satır
+- [ ] `alertcondition()` yok → `alert()` kullanıldı
+- [ ] `calc_on_every_tick` yok
+- [ ] `barstate.isconfirmed` (islast değil)
+- [ ] Çok satırlı `and` yok — tek satır
+- [ ] `request.security()` → `[1]` + `lookahead_on`
+- [ ] `ta.*` kullanıldı — manuel hesaplama yok
+- [ ] `study()` yok → `indicator()`
+- [ ] `security()` yok → `request.security()`
