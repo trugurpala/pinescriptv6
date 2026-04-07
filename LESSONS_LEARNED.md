@@ -220,3 +220,21 @@ strategy("Test", calc_on_every_tick=true)
 strategy("Test", overlay=true)
 // barstate.islast tablo için sorunsuz çalışır
 ```
+
+---
+
+### barstate.islast Strategy'de Uyarı Verir → barstate.isconfirmed Kullan
+- **Uyarı / Warning:** `Strategies without "calc_on_every_tick = true" only calculate on confirmed chart bars. In this case, "barstate.islast" may not initially return "true" on realtime bars`
+- **Sebep / Cause:** `barstate.islast` realtime (açık) barda ilk tick'te `true` dönmeyebilir. Strategy bar kapanışında hesapladığı için uyarı verir.
+- **Çözüm / Fix:** Table/label güncellemesi için `barstate.isconfirmed` kullan — sadece kapanmış barlarda `true` döner, uyarı vermez.
+
+```pine
+//@version=6
+// ❌ Strategy'de uyarı verir
+// if barstate.islast
+//     table.cell(...)
+
+// ✅ Uyarısız — sadece kapanmış barlarda güncellenir
+if barstate.isconfirmed
+    table.cell(...)
+```

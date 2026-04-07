@@ -128,7 +128,7 @@ var table ft = table.new(
     frame_color  = color.new(color.gray, 50),
     frame_width  = 2)
 
-if barstate.islast
+if barstate.isconfirmed
     // Başlık
     table.cell(ft, 0, 0, "◈ FİLTRE",
         bgcolor=color.new(color.navy, 20), text_color=color.white,
