@@ -10,7 +10,7 @@
 // LESSONS_LEARNED kontrol listesi:
 // ✅ alertcondition() yok → alert() kullanıldı
 // ✅ calc_on_every_tick yok → backtest güvenilir
-// ✅ barstate.islast + table → referans pattern (drawing.md)
+// ✅ barstate.isconfirmed + table → uyarısız, kapanmış barda güncellenir
 // ✅ Çok satırlı "and" yok → tek satır
 // ✅ request.security() → [1] + lookahead_on (repainting yok)
 
@@ -120,7 +120,7 @@ plotshape(shortEntry, "Short", shape.triangledown,  location.abovebar, color.red
 plotshape(rawLong  and not longEntry,  "Raw Long (filtered)",  shape.circle, location.belowbar, color.new(color.green, 70), size=size.tiny)
 plotshape(rawShort and not shortEntry, "Raw Short (filtered)", shape.circle, location.abovebar, color.new(color.red,   70), size=size.tiny)
 
-// ── Filtre Tablosu — drawing.md referans pattern: var table + barstate.islast ─
+// ── Filtre Tablosu — barstate.isconfirmed, 0 warning ────────────────────────
 var table ft = table.new(
     position.top_right, 2, 6,
     bgcolor      = color.new(color.black, 70),
