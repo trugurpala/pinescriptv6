@@ -55,9 +55,9 @@ LESSONS_LEARNED.md        — Hata hafızası / Error memory (AI auto-updates)
 LLM_MANIFEST.md           — Sorgu yönlendirme / Query routing
 reference/                — v6 API referansı / API reference
 concepts/                 — Temel kavramlar / Core concepts
-examples/indicators/      — 17 indikatör / indicators
-examples/strategies/      — 12 strateji / strategies
-global-markets/           — ES, NQ, GC, CL, EURUSD, BTC... (12 enstrüman)
+examples/indicators/      — 18 indikatör / indicators
+examples/strategies/      — 14 strateji / strategies
+global-markets/           — 22 global market (ES, NQ, Gold, BTC, ETH, DAX, Nikkei...)
 webhook-templates/        — Telegram, Discord, JSON
 v5-to-v6-migration/       — v5 → v6 geçiş rehberi / migration guide
 ```
@@ -69,3 +69,19 @@ v5-to-v6-migration/       — v5 → v6 geçiş rehberi / migration guide
 >
 > EN: TradingView official Pine Script v6 documentation is the primary reference.
 > TradingView is not affiliated with this project.
+
+---
+
+## LESSONS_LEARNED Özeti (11 Hata)
+
+1. `ta.stoch()` → tuple değil
+2. `math.avg()` → yok
+3. `request.security()` tuple syntax
+4. Futures komisyon → `cash_per_contract`
+5. EMA + hacim filtresi
+6. `request.security()` → `[1]` + `lookahead_on`
+7. `alertcondition()` → strategy'de `alert()` kullan
+8. `barstate.islast` + label → sorunlu
+9. Çok satırlı `and` başta → hata
+10. `calc_on_every_tick=true` → backtest bozar
+11. `barstate.islast` → `barstate.isconfirmed` kullan
