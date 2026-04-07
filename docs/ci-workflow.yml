@@ -1,0 +1,56 @@
+# Bu dosyayı .github/workflows/ci.yml olarak kopyala
+# Copy this file to .github/workflows/ci.yml
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pine-v6-check:
+    name: Pine Script v6 Version Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check all .pine files have //@version=6
+        run: |
+          echo "Checking Pine Script version tags..."
+          FAIL=0
+          for f in $(find examples global-markets webhook-templates -name "*.pine" 2>/dev/null); do
+            if ! head -3 "$f" | grep -q "//@version=6"; then
+              echo "❌ Missing //@version=6: $f"
+              FAIL=1
+            else
+              echo "✅ $f"
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then
+            exit 1
+          fi
+          echo "All Pine Script files have //@version=6 ✅"
+
+  markdown-lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: "README.md CONTRIBUTING.md LESSONS_LEARNED.md"
+        continue-on-error: true
+
+  link-check:
+    name: Link Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress --exclude "tradingview.com" --timeout 30 README.md
+          fail: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
