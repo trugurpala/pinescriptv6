@@ -1,0 +1,65 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Pine Script v6 for AI Editors</title>
+<rect width="1280" height="640" fill="#0d1117"/>
+<rect x="0" y="0" width="6" height="640" fill="#2962FF"/>
+<rect x="40" y="44" width="220" height="32" rx="6" fill="#161b22" stroke="#2962FF" stroke-width="1.5"/>
+<text x="150" y="65" text-anchor="middle" font-family="monospace" font-size="13" fill="#2962FF" font-weight="600">trugurpala/pinescriptv6</text>
+<text x="40" y="155" font-family="-apple-system,sans-serif" font-size="64" font-weight="700" fill="#ffffff">Pine Script v6</text>
+<text x="40" y="220" font-family="-apple-system,sans-serif" font-size="64" font-weight="700" fill="#2962FF">for AI Editors</text>
+<text x="40" y="268" font-family="-apple-system,sans-serif" font-size="22" fill="#8b949e">Error memory · 9 editor configs · 55+ examples · VIOP/BIST30</text>
+<line x1="40" y1="298" x2="600" y2="298" stroke="#21262d" stroke-width="1"/>
+<text x="40" y="336" font-family="monospace" font-size="14" fill="#8b949e">LESSONS_LEARNED</text>
+<text x="40" y="360" font-family="monospace" font-size="20" fill="#ffffff" font-weight="600">6 hata kayıtlı</text>
+<text x="240" y="336" font-family="monospace" font-size="14" fill="#8b949e">AI EDITORS</text>
+<text x="240" y="360" font-family="monospace" font-size="20" fill="#ffffff" font-weight="600">9 config</text>
+<text x="400" y="336" font-family="monospace" font-size="14" fill="#8b949e">EXAMPLES</text>
+<text x="400" y="360" font-family="monospace" font-size="20" fill="#ffffff" font-weight="600">55+</text>
+<text x="520" y="336" font-family="monospace" font-size="14" fill="#8b949e">MARKETS</text>
+<text x="520" y="360" font-family="monospace" font-size="20" fill="#ffffff" font-weight="600">ES NQ BTC DAX</text>
+<rect x="40" y="390" width="120" height="28" rx="14" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+<text x="100" y="409" text-anchor="middle" font-family="monospace" font-size="12" fill="#7ee787">MIT License</text>
+<rect x="172" y="390" width="90" height="28" rx="14" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+<text x="217" y="409" text-anchor="middle" font-family="monospace" font-size="12" fill="#58a6ff">Pine v6</text>
+<rect x="274" y="390" width="110" height="28" rx="14" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+<text x="329" y="409" text-anchor="middle" font-family="monospace" font-size="12" fill="#d2a8ff">AI Ready</text>
+<rect x="396" y="390" width="130" height="28" rx="14" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+<text x="461" y="409" text-anchor="middle" font-family="monospace" font-size="12" fill="#ffa657">VIOP / BIST30</text>
+<text x="40" y="460" font-family="monospace" font-size="13" fill="#484f58">Cursor · GitHub Copilot · Windsurf · Zed · Cline · Claude · +3 more</text>
+<text x="40" y="506" font-family="monospace" font-size="15" fill="#2962FF">github.com/trugurpala/pinescriptv6</text>
+<rect x="680" y="40" width="560" height="560" rx="12" fill="#161b22" stroke="#21262d" stroke-width="1"/>
+<circle cx="712" cy="70" r="7" fill="#ff5f57"/>
+<circle cx="734" cy="70" r="7" fill="#febc2e"/>
+<circle cx="756" cy="70" r="7" fill="#28c840"/>
+<text x="900" y="75" text-anchor="middle" font-family="monospace" font-size="12" fill="#484f58">LESSONS_LEARNED.md · v6 patterns</text>
+<line x1="680" y1="90" x2="1240" y2="90" stroke="#21262d" stroke-width="1"/>
+<text x="710" y="122" font-family="monospace" font-size="13" fill="#484f58">// ❌ AI yazdı — TradingView'da HATA</text>
+<text x="710" y="146" font-family="monospace" font-size="13" fill="#ff7b72">study("My Script")   // v6'da YOK</text>
+<text x="710" y="170" font-family="monospace" font-size="13" fill="#ff7b72">[k, d] = ta.stoch(...)  // tuple YOK</text>
+<text x="710" y="194" font-family="monospace" font-size="13" fill="#ff7b72">math.avg(a, b)  // fonksiyon YOK</text>
+<line x1="710" y1="216" x2="1220" y2="216" stroke="#21262d" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="710" y="242" font-family="monospace" font-size="13" fill="#484f58">// ✅ LESSONS_LEARNED sonrası — doğru v6</text>
+<text x="710" y="266" font-family="monospace" font-size="13" fill="#7ee787">indicator("My Script")</text>
+<text x="710" y="290" font-family="monospace" font-size="13" fill="#7ee787">float k = ta.stoch(high, low, close, 14)</text>
+<text x="710" y="314" font-family="monospace" font-size="13" fill="#7ee787">(a + b) / 2</text>
+<text x="710" y="338" font-family="monospace" font-size="13" fill="#7ee787">request.security(sym, "60", ema[1], lookahead_on)</text>
+<line x1="710" y1="360" x2="1220" y2="360" stroke="#21262d" stroke-width="1"/>
+<text x="710" y="390" font-family="monospace" font-size="12" fill="#484f58">AI editors: </text>
+<text x="790" y="390" font-family="monospace" font-size="12" fill="#58a6ff">Cursor  </text>
+<text x="846" y="390" font-family="monospace" font-size="12" fill="#d2a8ff">Copilot  </text>
+<text x="916" y="390" font-family="monospace" font-size="12" fill="#7ee787">Windsurf  </text>
+<text x="1002" y="390" font-family="monospace" font-size="12" fill="#ffa657">Zed  </text>
+<text x="1042" y="390" font-family="monospace" font-size="12" fill="#ff7b72">Cline  </text>
+<text x="1090" y="390" font-family="monospace" font-size="12" fill="#79c0ff">Claude</text>
+<line x1="710" y1="410" x2="1220" y2="410" stroke="#21262d" stroke-width="1"/>
+<text x="710" y="440" font-family="monospace" font-size="12" fill="#484f58">Markets: </text>
+<text x="790" y="440" font-family="monospace" font-size="12" fill="#ffa657">VIOP/BIST30  </text>
+<text x="910" y="440" font-family="monospace" font-size="12" fill="#58a6ff">ES · NQ  </text>
+<text x="984" y="440" font-family="monospace" font-size="12" fill="#d2a8ff">BTC · ETH  </text>
+<text x="1076" y="440" font-family="monospace" font-size="12" fill="#7ee787">Gold · DAX</text>
+<line x1="710" y1="460" x2="1220" y2="460" stroke="#21262d" stroke-width="1"/>
+<text x="710" y="490" font-family="monospace" font-size="12" fill="#484f58">TradingView Published:</text>
+<text x="710" y="510" font-family="monospace" font-size="12" fill="#7ee787">✅ Fakeout Filter — 4-Layer Signal Quality</text>
+<text x="710" y="530" font-family="monospace" font-size="11" fill="#484f58">   tr.tradingview.com/script/SY1XkTBH/</text>
+<line x1="710" y1="550" x2="1220" y2="550" stroke="#21262d" stroke-width="1"/>
+<text x="710" y="576" font-family="monospace" font-size="12" fill="#2962FF">x.com/trugurpala  ·  MIT License  ·  Open Source</text>
+</svg>
