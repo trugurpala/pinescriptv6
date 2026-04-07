@@ -1,171 +1,124 @@
 //@version=6
-// Fakeout-Confirmed EMA Strategy — All 4 Filters Active
+// Fakeout-Confirmed Strategy — 4 Filter Layers
 // Author: Ugur Pala · github.com/trugurpala/pinescriptv6
 // TradingView: https://tr.tradingview.com/u/trugurpala/
 //
-// TR: Tüm 4 fakeout filtresi aktif olan, yüksek kaliteli sinyaller arayan strateji.
-//     Sinyal sayısı azalır ama doğruluk oranı artar.
-//     Referans: concepts/signal_quality.md
+// TR: Tüm 4 fakeout filtresi aktif, yüksek kaliteli sinyal stratejisi.
+// EN: High-quality signal strategy with all 4 fakeout filters active.
 //
-// EN: Strategy seeking high-quality signals with all 4 fakeout filters active.
-//     Fewer signals, but higher accuracy.
-//     Reference: concepts/signal_quality.md
-//
-// Önerilen / Recommended:
-//   Sembol: CME_MINI:ES1!, CME_MINI:NQ1!, BINANCE:BTCUSDT, OANDA:XAUUSD
-//   TF: 15M, 1H, 4H
+// Önerilen: CME_MINI:ES1!, NQ1!, BINANCE:BTCUSDT, OANDA:XAUUSD
+// TF: 15M, 1H, 4H
+
 strategy("Fakeout-Confirmed Strategy [trugurpala]",
-    overlay           = true,
-    initial_capital   = 10000,
-    default_qty_type  = strategy.percent_of_equity,
-    default_qty_value = 5,
-    commission_type   = strategy.commission.percent,
-    commission_value  = 0.1,
-    slippage          = 2,
+    overlay              = true,
+    initial_capital      = 10000,
+    default_qty_type     = strategy.percent_of_equity,
+    default_qty_value    = 5,
+    commission_type      = strategy.commission.percent,
+    commission_value     = 0.1,
+    slippage             = 2,
     calc_on_every_tick   = true)
 
-// ── Inputs — Ana Strateji ─────────────────────────────────────────────────────
-int   fastLen   = input.int(9,   "Fast EMA",    minval=1,  group="Strategy")
-int   slowLen   = input.int(21,  "Slow EMA",    minval=1,  group="Strategy")
-int   atrLen    = input.int(14,  "ATR",         minval=1,  group="Strategy")
-float slMult    = input.float(2.0, "SL Mult",   step=0.1,  group="Strategy")
-float tpMult    = input.float(3.0, "TP Mult",   step=0.1,  group="Strategy")
-bool  longOnly  = input.bool(false, "Long Only", group="Strategy")
+// ── Inputs — Strateji ─────────────────────────────────────────────────────────
+int   fastLen  = input.int(9,    "Fast EMA",    minval=1,  group="Strateji / Strategy")
+int   slowLen  = input.int(21,   "Slow EMA",    minval=1,  group="Strateji / Strategy")
+int   atrLen   = input.int(14,   "ATR",         minval=1,  group="Strateji / Strategy")
+float slMult   = input.float(2.0, "SL (ATR×)",  step=0.1,  group="Strateji / Strategy")
+float tpMult   = input.float(3.0, "TP (ATR×)",  step=0.1,  group="Strateji / Strategy")
+bool  longOnly = input.bool(false, "Long Only",            group="Strateji / Strategy")
 
-// ── Inputs — Filtre 1: Hacim / Volume Filter ──────────────────────────────────
-bool  useVol    = input.bool(true, "Enable Volume Filter", group="Filter 1: Volume")
-int   volLen    = input.int(20,  "Volume MA",    minval=5,  group="Filter 1: Volume")
-float volMult   = input.float(1.5, "Volume Mult",step=0.1,  group="Filter 1: Volume",
-    tooltip="Hacim ortalamanın kaç katı / Volume multiple of average")
+// ── Inputs — F1: Hacim ───────────────────────────────────────────────────────
+bool  useVol   = input.bool(true,  "Hacim Filtresi / Volume Filter", group="F1: Hacim / Volume")
+int   volLen   = input.int(20,    "Volume MA",   minval=5,  group="F1: Hacim / Volume")
+float volMult  = input.float(1.5,  "Volume Mult", step=0.1,  group="F1: Hacim / Volume")
 
-// ── Inputs — Filtre 2: Bar Onayı / Bar Confirmation ──────────────────────────
-bool  useBar    = input.bool(true, "Enable Bar Confirmation", group="Filter 2: Bar")
-int   barConf   = input.int(1, "Bars to Confirm", minval=1, maxval=5, group="Filter 2: Bar",
-    tooltip="Kaç bar sinyal yönünde kapanmalı / Bars to close in signal direction")
+// ── Inputs — F2: Bar Onayı ───────────────────────────────────────────────────
+bool  useBar   = input.bool(true,  "Bar Onayı / Bar Confirmation",   group="F2: Bar")
+int   barConf  = input.int(1,     "Kaç Bar / Bars to Confirm", minval=1, maxval=5, group="F2: Bar")
 
-// ── Inputs — Filtre 3: HTF Trend ──────────────────────────────────────────────
-bool  useHTF    = input.bool(true, "Enable HTF Filter", group="Filter 3: HTF")
-string htfTF    = input.string("60", "HTF Timeframe",
-    options=["15","30","60","240","D"], group="Filter 3: HTF")
-int   htfLen    = input.int(50, "HTF EMA", minval=10, group="Filter 3: HTF",
-    tooltip="Üst TF trend EMA'sı / Upper TF trend EMA")
+// ── Inputs — F3: HTF Trend ───────────────────────────────────────────────────
+bool  useHTF   = input.bool(true,  "HTF Filtresi / HTF Filter",      group="F3: HTF")
+string htfTF   = input.string("60", "HTF TF", options=["15","30","60","240","D"], group="F3: HTF")
+int   htfLen   = input.int(50,    "HTF EMA", minval=10,              group="F3: HTF")
 
-// ── Inputs — Filtre 4: ATR Gürültü / ATR Noise ────────────────────────────────
-bool  useATR    = input.bool(true, "Enable ATR Noise Filter", group="Filter 4: ATR")
-float atrNoise  = input.float(0.3, "Min Move (ATR mult)", step=0.05, group="Filter 4: ATR",
-    tooltip="Minimum bar hareketi ATR katı / Min bar move as ATR multiple")
+// ── Inputs — F4: ATR Gürültü ─────────────────────────────────────────────────
+bool  useATR   = input.bool(true,  "ATR Gürültü / ATR Noise Filter", group="F4: ATR")
+float atrNoise = input.float(0.3,  "Min Hareket / Min Move (ATR×)",  step=0.05, group="F4: ATR")
 
-// ── Hesaplamalar / Calculations ───────────────────────────────────────────────
-float fastEma   = ta.ema(close, fastLen)
-float slowEma   = ta.ema(close, slowLen)
-float atrVal    = ta.atr(atrLen)
-float volAvg    = ta.sma(volume, volLen)
+// ── Hesaplamalar ──────────────────────────────────────────────────────────────
+float fastEma  = ta.ema(close, fastLen)
+float slowEma  = ta.ema(close, slowLen)
+float atrVal   = ta.atr(atrLen)
+float volAvg   = ta.sma(volume, volLen)
+float htfEma   = request.security(syminfo.tickerid, htfTF, ta.ema(close, htfLen)[1], lookahead=barmerge.lookahead_on)
 
-// HTF — repainting yok / no repainting
-float htfEma    = request.security(syminfo.tickerid, htfTF,
-    ta.ema(close, htfLen)[1], lookahead=barmerge.lookahead_on)
+// ── 4 Filtre ─────────────────────────────────────────────────────────────────
+bool f1_vol    = not useVol or volume > volAvg * volMult
+bool f2_htfL   = not useHTF or close > htfEma
+bool f2_htfS   = not useHTF or close < htfEma
+bool f4_noise  = not useATR or math.abs(close - close[1]) > atrVal * atrNoise
 
-// ── 4 Filtre Değerlendirmesi / Filter Evaluation ──────────────────────────────
-bool f1_vol     = not useVol  or volume > volAvg * volMult
-bool f2_htfL    = not useHTF  or close > htfEma      // long için / for long
-bool f2_htfS    = not useHTF  or close < htfEma      // short için / for short
-bool f4_noise   = not useATR  or math.abs(close - close[1]) > atrVal * atrNoise
+// ── Ham Sinyaller ─────────────────────────────────────────────────────────────
+bool rawLong   = ta.crossover(fastEma, slowEma)
+bool rawShort  = ta.crossunder(fastEma, slowEma)
 
-// ── Ham Sinyal / Raw Signal ───────────────────────────────────────────────────
-bool rawLong    = ta.crossover(fastEma,  slowEma)
-bool rawShort   = ta.crossunder(fastEma, slowEma)
-
-// ── Bar Onayı / Bar Confirmation ─────────────────────────────────────────────
-var int   barCountL = -1
-var int   barCountS = -1
-var float entryPrL  = na    // onay için beklenen fiyat / price to hold for confirm
-var float entryPrS  = na
+// ── Bar Onayı ─────────────────────────────────────────────────────────────────
+var int barCountL = -1
+var int barCountS = -1
 
 if rawLong
     barCountL := 0
-    entryPrL  := close
-
 if rawShort
     barCountS := 0
-    entryPrS  := close
-
 if barCountL >= 0 and barCountL < barConf
     barCountL += 1
 if barCountS >= 0 and barCountS < barConf
     barCountS += 1
 
-// Bar onayı tamamlandı mı? Fiyat hâlâ ema üzerinde mi?
-bool barConfL   = not useBar or (barCountL == barConf and close > slowEma)
-bool barConfS   = not useBar or (barCountS == barConf and close < slowEma)
+bool barConfL  = not useBar or (barCountL == barConf and close > slowEma)
+bool barConfS  = not useBar or (barCountS == barConf and close < slowEma)
 
-// ── Final Sinyal / Final Signal ───────────────────────────────────────────────
+// ── Final Sinyaller — TEK SATIR, çok satırlı "and" YOK ───────────────────────
 bool longEntry  = (useBar ? barConfL : rawLong) and f1_vol and f2_htfL and f4_noise
-
 bool shortEntry = (useBar ? barConfS : rawShort) and f1_vol and f2_htfS and f4_noise and not longOnly
 
-// ── Entries ──────────────────────────────────────────────────────────────────
+// ── Girişler ──────────────────────────────────────────────────────────────────
 if longEntry and strategy.position_size == 0
     strategy.entry("Long", strategy.long)
-    strategy.exit("Long Exit", "Long",
-        stop  = close - slMult * atrVal,
-        limit = close + tpMult * atrVal,
-        comment_loss = "SL Hit",
-        comment_profit = "TP Hit")
+    strategy.exit("Long Exit", "Long", stop=close - slMult * atrVal, limit=close + tpMult * atrVal, comment_loss="SL", comment_profit="TP")
 
 if shortEntry and strategy.position_size == 0
     strategy.entry("Short", strategy.short)
-    strategy.exit("Short Exit", "Short",
-        stop  = close + slMult * atrVal,
-        limit = close - tpMult * atrVal,
-        comment_loss = "SL Hit",
-        comment_profit = "TP Hit")
+    strategy.exit("Short Exit", "Short", stop=close + slMult * atrVal, limit=close - tpMult * atrVal, comment_loss="SL", comment_profit="TP")
 
-// ── Visuals ──────────────────────────────────────────────────────────────────
-plot(fastEma, "Fast EMA", fastEma > slowEma ? color.green : color.red,    linewidth=1)
+// ── Alertler — alert() kullan, alertcondition() değil ────────────────────────
+if longEntry
+    alert("FC LONG — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortEntry
+    alert("FC SHORT — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+
+// ── Görseller ────────────────────────────────────────────────────────────────
+plot(fastEma, "Fast EMA", fastEma > slowEma ? color.green : color.red, linewidth=1)
 plot(slowEma, "Slow EMA", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
-plot(htfEma,  "HTF EMA",  color.new(color.gray, 30),                      linewidth=1,
-    style=plot.style_line)
+plot(htfEma,  "HTF EMA",  color.new(color.gray, 40), linewidth=1)
 
-// Sinyal işaretleri
-plotshape(longEntry,  "Long Entry",  shape.triangleup,
-    location.belowbar, color.green, size=size.normal)
-plotshape(shortEntry, "Short Entry", shape.triangledown,
-    location.abovebar, color.red,   size=size.normal)
+plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(shortEntry, "Short", shape.triangledown,  location.abovebar, color.red,   size=size.normal)
+plotshape(rawLong  and not longEntry,  "Raw Long (filtered)",  shape.circle, location.belowbar, color.new(color.green, 70), size=size.tiny)
+plotshape(rawShort and not shortEntry, "Raw Short (filtered)", shape.circle, location.abovebar, color.new(color.red,   70), size=size.tiny)
 
-// Raw sinyal (filtresiz, karşılaştırma için)
-plotshape(rawLong  and not longEntry,  "Raw Long (filtered out)",
-    shape.circle, location.belowbar, color.new(color.green,70), size=size.tiny)
-plotshape(rawShort and not shortEntry, "Raw Short (filtered out)",
-    shape.circle, location.abovebar, color.new(color.red,  70), size=size.tiny)
-
-// Filtre durumu tablosu
+// ── Filtre Tablosu — barstate.islast güvenli (calc_on_every_tick=true) ────────
 var table ft = table.new(position.top_right, 2, 6, border_width=1)
 if barstate.islast
-    table.cell(ft, 0, 0, "Filter",      bgcolor=color.new(color.gray,85), text_size=size.small)
-    table.cell(ft, 1, 0, "Active",      bgcolor=color.new(color.gray,85), text_size=size.small)
-    table.cell(ft, 0, 1, "F1 Volume",   bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 1, 1, useVol  ? (f1_vol  ? "✓" : "✗") : "OFF",
-        text_color = useVol ? (f1_vol  ? color.green : color.red) : color.gray,
-        bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 0, 2, "F2 HTF",      bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 1, 2, useHTF  ? (f2_htfL ? "✓" : "✗") : "OFF",
-        text_color = useHTF ? (f2_htfL ? color.green : color.red) : color.gray,
-        bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 0, 3, "F3 Bar",      bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 1, 3, useBar  ? (barConfL ? "✓" : "✗") : "OFF",
-        text_color = useBar ? (barConfL ? color.green : color.red) : color.gray,
-        bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 0, 4, "F4 ATR",      bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 1, 4, useATR  ? (f4_noise ? "✓" : "✗") : "OFF",
-        text_color = useATR ? (f4_noise ? color.green : color.red) : color.gray,
-        bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 0, 5, "SIGNAL",      bgcolor=color.new(color.gray,85), text_size=size.tiny)
-    table.cell(ft, 1, 5, longEntry ? "LONG" : shortEntry ? "SHORT" : "—",
-        text_color = longEntry ? color.green : shortEntry ? color.red : color.gray,
-        bgcolor=color.new(color.gray,85), text_size=size.tiny)
-
-// TR: alert() strategy içinde kullan, alertcondition() değil
-if longEntry
-    alert("Fakeout Confirmed LONG — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
-if shortEntry
-    alert("Fakeout Confirmed SHORT — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+    table.cell(ft, 0, 0, "Filtre",    bgcolor=color.new(color.gray,85), text_size=size.small)
+    table.cell(ft, 1, 0, "Durum",     bgcolor=color.new(color.gray,85), text_size=size.small)
+    table.cell(ft, 0, 1, "F1 Hacim",  bgcolor=color.new(color.gray,90), text_size=size.tiny)
+    table.cell(ft, 1, 1, useVol  ? (f1_vol  ? "✓" : "✗") : "OFF", text_color=useVol  ? (f1_vol  ? color.green : color.red) : color.gray, bgcolor=color.new(color.gray,90), text_size=size.tiny)
+    table.cell(ft, 0, 2, "F2 HTF",    bgcolor=color.new(color.gray,90), text_size=size.tiny)
+    table.cell(ft, 1, 2, useHTF  ? (f2_htfL ? "✓" : "✗") : "OFF", text_color=useHTF  ? (f2_htfL ? color.green : color.red) : color.gray, bgcolor=color.new(color.gray,90), text_size=size.tiny)
+    table.cell(ft, 0, 3, "F3 Bar",    bgcolor=color.new(color.gray,90), text_size=size.tiny)
+    table.cell(ft, 1, 3, useBar  ? (barConfL ? "✓" : "✗") : "OFF", text_color=useBar  ? (barConfL ? color.green : color.red) : color.gray, bgcolor=color.new(color.gray,90), text_size=size.tiny)
+    table.cell(ft, 0, 4, "F4 ATR",    bgcolor=color.new(color.gray,90), text_size=size.tiny)
+    table.cell(ft, 1, 4, useATR  ? (f4_noise ? "✓" : "✗") : "OFF", text_color=useATR  ? (f4_noise ? color.green : color.red) : color.gray, bgcolor=color.new(color.gray,90), text_size=size.tiny)
+    table.cell(ft, 0, 5, "SİNYAL",    bgcolor=color.new(color.gray,85), text_size=size.tiny)
+    table.cell(ft, 1, 5, longEntry ? "LONG" : shortEntry ? "SHORT" : "—", text_color=longEntry ? color.green : shortEntry ? color.red : color.gray, bgcolor=color.new(color.gray,85), text_size=size.tiny)
