@@ -1,56 +1,105 @@
 //@version=6
 // VİOP Session Strategy — BIST30 Futures Seans Bazlı
-// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: VİOP (Türkiye vadeli işlem piyasası) için seans bazlı strateji.
+//     09:30-18:15 UTC+3 seans saatleri içinde işlem yapar.
+//     Seans kapanışında tüm pozisyonlar otomatik kapatılır.
+//     ATR tabanlı SL/TP, EMA cross sinyali.
+//
+// EN: Session-based strategy for VIOP (Turkish futures market).
+//     Only trades within market hours: 09:30-18:15 UTC+3.
+//     All positions auto-closed at session end.
+//     ATR-based SL/TP, EMA cross signal.
+//
+// Sembol / Symbol: BIST:XU030D1! veya F_XU030 (VİOP)
+// Önerilen TF / Recommended TF: 5M, 15M, 1H
+
 strategy("VİOP Session Strategy [trugurpala]",
     overlay           = true,
-    initial_capital   = 10000,
-    default_qty_type  = strategy.percent_of_equity,
-    default_qty_value = 10,
-    commission_type   = strategy.commission.percent,
-    commission_value  = 0.03,
+    initial_capital   = 100000,
+    default_qty_type  = strategy.fixed,
+    default_qty_value = 1,
+    commission_type   = strategy.commission.cash_per_contract,
+    commission_value  = 2.0,
     slippage          = 2)
 
 // ── Inputs ───────────────────────────────────────────────────────────────────
-int   fastLen  = input.int(9,    "Fast EMA",   minval=1)
-int   slowLen  = input.int(21,   "Slow EMA",   minval=1)
-int   atrLen   = input.int(14,   "ATR",        minval=1)
-float slMult   = input.float(2.0, "SL Mult",   step=0.1)
-float tpMult   = input.float(3.0, "TP Mult",   step=0.1)
-bool  longOnly = input.bool(false, "Long Only")
+int   fastLen  = input.int(9,    "Fast EMA",        minval=1,   group="Sinyal / Signal")
+int   slowLen  = input.int(21,   "Slow EMA",        minval=1,   group="Sinyal / Signal")
+int   atrLen   = input.int(14,   "ATR Length",      minval=1,   group="Risk")
+float slMult   = input.float(2.0, "SL (ATR ×)",     step=0.1,   group="Risk",
+    tooltip="TR: ATR çarpanı — stop loss mesafesi\nEN: ATR multiplier — stop loss distance")
+float tpMult   = input.float(3.0, "TP (ATR ×)",     step=0.1,   group="Risk",
+    tooltip="TR: ATR çarpanı — take profit mesafesi\nEN: ATR multiplier — take profit distance")
+bool  longOnly = input.bool(false, "Sadece Long / Long Only", group="Sinyal / Signal",
+    tooltip="TR: Sadece long pozisyon aç\nEN: Only open long positions")
 
-// ── VİOP Seans Filtresi: 09:30 - 18:15 UTC+3 ─────────────────────────────────
+// ── VİOP Seans Filtresi — 09:30-18:15 UTC+3 ──────────────────────────────────
+// TR: Seans saatleri dışında sinyal üretilmez
+// EN: No signals generated outside session hours
 bool inSession = not na(time(timeframe.period, "0930-1815", "UTC+3"))
-bool sesOpen   = inSession and not inSession[1]   // Seans açılışı
 
-// ── Gün kapanışta tüm pozisyonları kapat ─────────────────────────────────────
-bool sesClose  = not inSession and inSession[1]   // Seans kapanışı
+// TR: Seans kapanışında tüm pozisyonları kapat
+// EN: Close all positions at session end
+bool sesClose = not inSession and inSession[1]
 if sesClose
-    strategy.close_all(comment="Seans sonu / End of session")
+    strategy.close_all(comment="Seans sonu / Session end")
 
-// ── Calculations ─────────────────────────────────────────────────────────────
+// ── Hesaplamalar / Calculations ───────────────────────────────────────────────
 float fastEma = ta.ema(close, fastLen)
 float slowEma = ta.ema(close, slowLen)
 float atrVal  = ta.atr(atrLen)
+bool  bullish = fastEma > slowEma
 
+// TR: Sinyal — seans içinde EMA kesişimi
+// EN: Signal — EMA crossover within session
 bool bullCross = ta.crossover(fastEma,  slowEma) and inSession
 bool bearCross = ta.crossunder(fastEma, slowEma) and inSession
 
-// ── Entries ──────────────────────────────────────────────────────────────────
+// ── Girişler / Entries ────────────────────────────────────────────────────────
 if bullCross
-    strategy.entry("Long", strategy.long)
-    strategy.exit("Long Exit", "Long",
+    strategy.entry("Long", strategy.long, comment="EMA ↑")
+    strategy.exit("Long SL/TP", "Long",
         stop  = close - slMult * atrVal,
-        limit = close + tpMult * atrVal)
+        limit = close + tpMult * atrVal,
+        comment_loss="SL", comment_profit="TP")
 
 if bearCross and not longOnly
-    strategy.entry("Short", strategy.short)
-    strategy.exit("Short Exit", "Short",
+    strategy.entry("Short", strategy.short, comment="EMA ↓")
+    strategy.exit("Short SL/TP", "Short",
         stop  = close + slMult * atrVal,
-        limit = close - tpMult * atrVal)
+        limit = close - tpMult * atrVal,
+        comment_loss="SL", comment_profit="TP")
 
-// ── Visuals ──────────────────────────────────────────────────────────────────
-bgcolor(inSession  ? color.new(color.blue,  96) : color.new(color.gray, 97))
-plot(fastEma, "Fast", fastEma > slowEma ? color.green : color.red,    linewidth=2)
-plot(slowEma, "Slow", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
-plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
-plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
+// ── Görseller / Visuals ───────────────────────────────────────────────────────
+// TR: Seans içi mavi arka plan, dışı gri
+// EN: Blue background inside session, gray outside
+bgcolor(inSession ? color.new(color.blue, 96) : color.new(color.gray, 97),
+    title="Seans / Session BG")
+
+plot(fastEma, "Fast EMA", bullish ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow EMA", bullish ? color.lime  : color.orange, linewidth=2)
+
+plotshape(bullCross, "Long Signal",  shape.triangleup,
+    location.belowbar, color.new(color.green, 0), size=size.normal)
+plotshape(bearCross, "Short Signal", shape.triangledown,
+    location.abovebar, color.new(color.red,   0), size=size.normal)
+
+// TR: Seans durumu etiketi
+// EN: Session status label
+var label sessionLabel = na
+if barstate.islast
+    label.delete(sessionLabel)
+    sessionLabel := label.new(bar_index, high,
+        inSession ? "✅ Seans İçi" : "⛔ Seans Dışı",
+        color     = inSession ? color.new(color.green,20) : color.new(color.gray,40),
+        textcolor = color.white,
+        style     = label.style_label_left,
+        size      = size.small)
+
+// ── Alertler / Alerts ─────────────────────────────────────────────────────────
+alertcondition(bullCross,  "VİOP Long",  "VİOP Session Long — {{ticker}} {{close}}")
+alertcondition(bearCross,  "VİOP Short", "VİOP Session Short — {{ticker}} {{close}}")
+alertcondition(sesClose,   "Seans Sonu", "VİOP Session Closed — tüm pozisyonlar kapatıldı")
