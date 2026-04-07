@@ -1,177 +1,209 @@
-# Pine Script v6 — AI Geliştirici Rehberi
+# CLAUDE.md — Proje Hafızası / Project Memory
 > Maintainer: Ugur Pala · mail@ugurpala.com
 > TradingView: https://tr.tradingview.com/u/trugurpala/
 > X (Twitter): https://x.com/trugurpala
-> GitHub: https://github.com/trugurpala/pinescriptv6
+> GitHub: github.com/trugurpala | github.com/trugurpala/pinescriptv6
+> Repo 2: github.com/trugurpala/awesome-pinescript-v6
 
 ---
 
-## Bu Projenin Varoluş Nedeni / Why This Exists
+## KİM / WHO
 
-TR: TradingView Pine Script v6 çıktığında tüm AI editörler v5 kodu yazmaya devam etti.
-Cursor v5 syntax öneriyordu. Copilot `study()` yazıyordu. Claude hata yapıyor, aynı hatayı
-tekrarlıyordu. Bu repo bu sorunu çözmek için kuruldu:
-
-1. **AI'ın hafızası yok** — her oturumda sıfırdan başlıyor, aynı hataları yapıyor
-2. **v6 referansı dağınık** — TradingView dökümantasyonu büyük, AI context'e sığmıyor
-3. **Hiçbir repo tüm AI editörleri desteklemiyor** — Claude, Cursor, Windsurf, Copilot, Cline...
-
-Bu repo şunu yapıyor: **AI'a kalıcı hafıza ve doğru referans veriyor.**
-
-EN: When TradingView Pine Script v6 launched, all AI editors kept writing v5 code.
-This repo gives AI permanent memory and correct reference.
+**Ugur Pala** — Algo trader, Pine Script v6 geliştirici.
+Türkiye VİOP (BIST30/XU030 index futures) piyasasına odaklı.
+Python, data pipeline, web dashboard geliştirme deneyimi var.
+Hedef: TradingView alert → otomatik emir gönderimi (webhook tabanlı).
 
 ---
 
-## Repo İçeriği / Repo Contents (Güncel / Current)
+## PROJE NEDİR / WHAT IS THIS PROJECT
+
+Bu repo iki amaca hizmet eder:
+
+1. **AI Hafızası** — Claude, Cursor, Copilot, Windsurf gibi AI editörler Pine Script v6 çıktığında
+   hâlâ v5 kodu yazıyordu. Bu repo onlara doğru referans ve kalıcı hata hafızası verir.
+
+2. **VİOP Algo Trading** — Türkiye vadeli işlem piyasası (VIOP) için Pine Script v6 stratejileri,
+   backtest şablonları ve webhook alert sistemi.
+
+---
+
+## İKİ REPO / TWO REPOS
+
+### 1. trugurpala/pinescriptv6 (Ana Repo)
+- **245 commit**, MIT License
+- 56 Pine Script dosyası, 61 Markdown dosyası
+- AI editor konfigürasyonları: 9 adet (Cursor, Copilot, Windsurf, Zed, Cline, Claude, vb.)
+- GitHub Community Standards: %100
+
+### 2. trugurpala/awesome-pinescript-v6 (Vitrin Repo)
+- CC0 License, Discussions açık
+- Rakip analizi dahil kuratoryal liste
+- Community Health: %100
+
+---
+
+## VİOP TEKNIK DETAYLAR / VIOP SPECS
+
+Bunları her strateji yazarken kullan:
+
+```pine
+// VİOP F_XU030 — Borsa İstanbul index futures
+strategy("...",
+    commission_type  = strategy.commission.cash_per_contract,
+    commission_value = 2.0,        // TL per contract per side
+    slippage         = 2,
+    initial_capital  = 100000,
+    default_qty_type = strategy.fixed,
+    default_qty_value = 1)
+
+// Seans filtresi — zorunlu
+bool inSession = not na(time(timeframe.period, "0930-1815", "UTC+3"))
+
+// Seans kapanışında kapat
+if not inSession and inSession[1]
+    strategy.close_all(comment="Seans sonu")
+```
+
+- **Sembol:** `BIST:XU030D1!` veya `F_XU030`
+- **Seans:** 09:30–18:15 UTC+3
+- **Uzlaşma:** Nakdi (cash settlement)
+- **Vergi:** Index kontratlarında %0 stopaj
+- **Lot:** endeks/1000 × 100
+- **Komisyon:** 0.03% veya 2 TL/kontrat (cash_per_contract)
+- **Önerilen TF:** 5dk, 15dk, 1sa
+
+---
+
+## REPO İÇERİĞİ / REPO CONTENTS
 
 ```
-examples/indicators/     — 18 indikatör (EMA, RSI, MACD, BB, Supertrend, VWAP, Ichimoku...)
-examples/strategies/     — 14 strateji (EMA, MTF, VIOP Session, Fakeout Confirmed, MTF VİOP)
-global-markets/          — 22 global market (ES, NQ, Gold, Crude, BTC, ETH, DAX, Nikkei...)
-webhook-templates/       — 7 şablon (Telegram, Discord, JSON, VIOP alerts)
-v5-to-v6-migration/      — 10 rehber (study, security, input, type system...)
-concepts/                — 7 kavram (execution model, MTF, signal quality...)
-reference/functions/     — 6 referans (ta, strategy, request, drawing, collections, general)
-LESSONS_LEARNED.md       — 11 kayıtlı hata ve çözüm
+examples/indicators/     18 dosya  — EMA, RSI, MACD, BB, Supertrend, VWAP,
+                                      Ichimoku, MTF, Fakeout Filter...
+examples/strategies/     14 dosya  — 01-10 temel, 11 VIOP Session,
+                                      12 Chandelier, 13 Fakeout Confirmed,
+                                      14 MTF VIOP (5dk trend + 1dk entry)
+global-markets/          22 dosya  — ES, NQ, Gold, Crude, EUR/USD, GBP/USD,
+                                      USD/JPY, BTC, ETH, DAX, Nikkei...
+webhook-templates/        7 dosya  — Telegram, Discord, JSON, VIOP alerts
+v5-to-v6-migration/      10 dosya  — study, security, input, type system...
+concepts/                 7 dosya  — execution model, MTF, signal quality...
+reference/functions/      6 dosya  — ta, strategy, request, drawing,
+                                      collections, general
+LESSONS_LEARNED.md       240 satır — 11 kayıtlı hata
+tradingview-publish/      4 dosya  — yayın açıklamaları ve URL'ler
 ```
 
-**Toplam:** 56 Pine Script dosyası · 61 Markdown dosyası · 245 commit
+---
+
+## TRADİNGVİEW YAYINLARI / TRADINGVIEW PUBLISHED
+
+| # | Script | Durum | URL |
+|---|--------|-------|-----|
+| 1 | Fakeout Filter — 4-Layer Signal Quality | ✅ Yayında | https://tr.tradingview.com/script/SY1XkTBH/ |
+| 2 | VIOP Session Strategy | ⏳ Hazır, bekliyor | `examples/strategies/11_viop_session_strategy.pine` |
+| 3 | Fakeout Confirmed Strategy | ⏳ Hazır, bekliyor | `examples/strategies/13_fakeout_confirmed_strategy.pine` |
 
 ---
 
-## TradingView Yayınlanan Scriptler / Published Scripts
+## SIRADAM / NEXT STEPS
 
-| Script | URL |
-|--------|-----|
-| Fakeout Filter — 4-Layer Signal Quality | https://tr.tradingview.com/script/SY1XkTBH/ |
-| VIOP Session Strategy | ⏳ Hazır, yayın bekliyor |
-| Fakeout Confirmed Strategy | ⏳ Hazır, yayın bekliyor |
+Öncelik sırasıyla:
 
----
+1. **TradingView Script 2 publish** — VIOP Session Strategy
+   - Description: `tradingview-publish/02_viop_session_description.md`
+   - Tags: `viop, bist30, turkey, session, strategy, atr, ema, pinescriptv6`
 
-## Protokol / Protocol (Her Pine Script Oturumundan Önce / Before Every Session)
+2. **TradingView Script 3 publish** — Fakeout Confirmed Strategy
+   - Description: `tradingview-publish/03_fakeout_confirmed_strategy_description.md`
+   - Tags: `pinescriptv6, fakeout, strategy, volume, htf, atr, filter, signal`
 
-**ADIM 1 — Önce oku / Read first:**
-1. `LESSONS_LEARNED.md` — 11 kayıtlı hata, TEKRARLAMA
-2. `LLM_MANIFEST.md` — göreve uygun referans dosyasını bul
-3. İlgili referans dosyasını oku
+3. **URL güncelleme** — Publish sonrası:
+   - `pinescriptv6` README
+   - `awesome-pinescript-v6` README (9 adet ⏳ → ✅)
+   - `tradingview-publish/` dosyaları
 
-**ADIM 2 — Kodu yaz / Write code:**
-4. `//@version=6` ile başla — istisnasız
-5. Kontrol listesini uygula (aşağıda)
-
-**ADIM 3 — Hata oluşursa / On error:**
-6. Çöz
-7. `LESSONS_LEARNED.md`'ye ekle — format: başlık + hata + sebep + çözüm + kod
+4. **X/Twitter kampanyası** — "AI v5 yazıyordu, çözdüm" thread
+5. **Reddit** — r/algotrading + r/TradingView post
+6. **Webhook → otomasyon** — TradingView alert → otomatik emir gönderimi
 
 ---
 
-## Kod Kuralları / Code Rules
+## LESSONS_LEARNED ÖZETİ / ERROR MEMORY (11 Hata)
+
+Detay için `LESSONS_LEARNED.md` oku. Hızlı referans:
+
+| # | Hata | Çözüm |
+|---|------|-------|
+| 1 | `ta.stoch()` tuple döndürmez | `float k = ta.stoch(...)` |
+| 2 | `math.avg()` yok | `(a + b) / 2` |
+| 3 | `request.security()` tuple syntax | köşeli parantez `[a, b]` |
+| 4 | Futures komisyon | `strategy.commission.cash_per_contract` |
+| 5 | EMA cross + hacim yok = fakeout | hacim filtresi ekle |
+| 6 | Repainting | `[1]` + `lookahead_on` |
+| 7 | `alertcondition()` strategy'de çalışmaz | `alert()` kullan |
+| 8 | `barstate.islast` + label strategy'de | `barstate.isconfirmed` kullan |
+| 9 | Çok satırlı `and` başta | tek satır veya `and` satır sonunda |
+| 10 | `calc_on_every_tick=true` | kaldır — backtest bozar |
+| 11 | `barstate.islast` strategy'de uyarı | `barstate.isconfirmed` kullan |
+
+---
+
+## KOD KURALLARI / CODE RULES
 
 ```pine
 //@version=6   // Her scriptin ilk satırı — istisnasız
 ```
 
-| ❌ v5 — YAZMA / NEVER | ✅ v6 — YAZ / ALWAYS |
-|----------------------|---------------------|
+| ❌ YAZMA | ✅ YAZ |
+|---------|--------|
 | `study("name")` | `indicator("name")` |
 | `security(ticker, tf, expr)` | `request.security(ticker, tf, expr)` |
-| `input(14, type=input.integer)` | `input.int(14, "Label")` |
-| `array.new_float(0)` | `array.new<float>(0)` |
 | `[k, d] = ta.stoch(...)` | `float k = ta.stoch(...)` |
 | `math.avg(a, b)` | `(a + b) / 2` |
-| `alertcondition()` in strategy | `alert()` in `if` block |
-| `barstate.islast` in strategy | `barstate.isconfirmed` |
-| `calc_on_every_tick = true` | kaldır — backtest bozar |
-| Çok satırlı `and` başta | tek satır veya `and` satır sonunda |
+| `alertcondition()` strategy'de | `alert()` if bloğu içinde |
+| `barstate.islast` strategy'de | `barstate.isconfirmed` |
+| `calc_on_every_tick = true` | kaldır |
+| Çok satırlı `and` başta | tek satır |
 
 ---
 
-## LESSONS_LEARNED Özeti / Error Memory Summary
+## PROTOKOL / PROTOCOL
 
-Detaylar için `LESSONS_LEARNED.md` oku. Kısa liste:
+**Pine Script yazmadan önce MUTLAKA:**
+1. `LESSONS_LEARNED.md` oku — 11 hata var, tekrarlama
+2. `LLM_MANIFEST.md` ile doğru referans dosyasını bul
+3. O referans dosyasını oku
+4. Kodu yaz — `//@version=6` ile başla
+5. Hata olursa: çöz + `LESSONS_LEARNED.md`'ye ekle
 
-1. `ta.stoch()` → tuple değil, sadece K döner
-2. `math.avg()` → yok, `(a+b)/2` kullan
-3. `request.security()` tuple → köşeli parantez
-4. Futures komisyon → `strategy.commission.cash_per_contract`
-5. EMA cross + hacim filtresi → fakeout önler
-6. `request.security()` → `[1]` + `lookahead_on` = repainting yok
-7. `alertcondition()` → strategy'de çalışmaz, `alert()` kullan
-8. `barstate.islast` + label → strategy'de sorunlu
-9. Çok satırlı `and` başta → `Mismatched input` hatası
-10. `calc_on_every_tick=true` → backtest bozar, uyarı verir
-11. `barstate.islast` → strategy'de `barstate.isconfirmed` kullan
+**Kontrol listesi:**
+- [ ] `//@version=6` var
+- [ ] `LESSONS_LEARNED.md` okundu
+- [ ] `alertcondition()` yok
+- [ ] `calc_on_every_tick` yok
+- [ ] `barstate.isconfirmed` (islast değil)
+- [ ] Çok satırlı `and` yok
+- [ ] `request.security` → `[1]` + `lookahead_on`
 
 ---
 
-## Referans Haritası / Reference Map
+## REFERANS HARİTASI / REFERENCE MAP
 
-| İhtiyaç / Need | Dosya / File |
-|----------------|-------------|
+| İhtiyaç | Dosya |
+|---------|-------|
 | RSI, EMA, MACD, ATR, crossover | `reference/functions/ta.md` |
 | strategy.entry, exit, position | `reference/functions/strategy.md` |
 | plot, line, box, label, table | `reference/functions/drawing.md` |
 | request.security, MTF | `reference/functions/request.md` |
 | array, map, matrix | `reference/functions/collections.md` |
 | math, str, input, alert | `reference/functions/general.md` |
-| Sinyal kalitesi / Fakeout | `concepts/signal_quality.md` |
-| Bilinen hatalar / Known errors | `concepts/common_errors.md` |
 | var, varip, barstate | `concepts/execution_model.md` |
-| MTF, repainting, timeframes | `concepts/timeframes.md` |
-| **Her zaman önce / Always first** | `LESSONS_LEARNED.md` |
+| MTF, repainting | `concepts/timeframes.md` |
+| Fakeout, sinyal kalitesi | `concepts/signal_quality.md` |
+| **Her zaman önce** | `LESSONS_LEARNED.md` |
 
 ---
 
-## Kontrol Listesi / Checklist (Her koddan önce / Before every code)
-
-- [ ] `LESSONS_LEARNED.md` okundu
-- [ ] `//@version=6` mevcut
-- [ ] v5 syntax yok (`study`, `security`, `math.avg`, tuple stoch)
-- [ ] `alertcondition()` yok → `alert()` kullanıldı
-- [ ] `calc_on_every_tick` yok
-- [ ] `barstate.isconfirmed` (islast değil)
-- [ ] Çok satırlı `and` yok — tek satır
-- [ ] `request.security` → `[1]` + `lookahead_on`
-- [ ] `var`/`varip` doğru kullanıldı
-
----
-
-## Cowork Notları / Cowork Notes
-
-Bu repo Anthropic Claude Cowork ile kullanım için optimize edilmiştir.
-
-**Cowork'a bu klasörü verdiğinde Claude şunları yapabilir:**
-- Yeni Pine Script v6 stratejisi / indikatörü yaz
-- LESSONS_LEARNED.md'yi güncelle
-- GitHub'a commit + push yap
-- awesome-pinescript-v6 README'yi güncelle
-- tradingview-publish/ için description hazırla
-
-**Önerilen ilk görev:**
-```
-"LESSONS_LEARNED.md ve CLAUDE.md dosyalarını oku.
-Sonra [görev tanımı] yap."
-```
-
-**Güvenlik:** Hassas bilgi yok. Git token'ları bu repoda saklanmıyor.
-
----
-
-## Kullandığını Nasıl Anlarsın? / How Do You Know It's Working?
-
-✅ Her Pine Script'ten önce `LESSONS_LEARNED.md` okuduğunu söylüyor
-✅ `//@version=6` ile başlıyor — her zaman
-✅ `ta.*` kullanıyor — `security()` veya `study()` yazmıyor
-✅ Hata alınca: `LESSONS_LEARNED.md`'ye ekliyor
-
-❌ AI v5 syntax yazıyorsa → repo bağlı değil
-❌ AI `study()` yazıyorsa → kurallar aktif değil
-❌ AI aynı hatayı tekrarlıyorsa → `LESSONS_LEARNED.md` okunmuyor
-
----
-
-> TradingView Pine Script v6 resmi dokümantasyonu temel referans materyalidir.
-> TradingView bu projeyle hiçbir resmi bağlantısı bulunmamaktadır.
-> Last updated: Nisan 2026
+> Son güncelleme: Nisan 2026
+> TradingView bu projeyle resmi bağlantısı yoktur.
