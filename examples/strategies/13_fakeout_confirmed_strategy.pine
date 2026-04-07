@@ -108,17 +108,52 @@ plotshape(rawLong  and not longEntry,  "Raw Long (filtered)",  shape.circle, loc
 plotshape(rawShort and not shortEntry, "Raw Short (filtered)", shape.circle, location.abovebar, color.new(color.red,   70), size=size.tiny)
 
 // ── Filtre Tablosu — barstate.islast güvenli (calc_on_every_tick=true) ────────
-var table ft = table.new(position.top_right, 2, 6, border_width=1)
+// ── Filtre Tablosu — büyük, okunaklı ─────────────────────────────────────────
+var table ft = table.new(position.top_right, 2, 6, border_width=2,
+     frame_color=color.new(color.gray,50), frame_width=2)
 if barstate.islast
-    table.cell(ft, 0, 0, "Filtre",    bgcolor=color.new(color.gray,85), text_size=size.small)
-    table.cell(ft, 1, 0, "Durum",     bgcolor=color.new(color.gray,85), text_size=size.small)
-    table.cell(ft, 0, 1, "F1 Hacim",  bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 1, 1, useVol  ? (f1_vol  ? "✓" : "✗") : "OFF", text_color=useVol  ? (f1_vol  ? color.green : color.red) : color.gray, bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 0, 2, "F2 HTF",    bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 1, 2, useHTF  ? (f2_htfL ? "✓" : "✗") : "OFF", text_color=useHTF  ? (f2_htfL ? color.green : color.red) : color.gray, bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 0, 3, "F3 Bar",    bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 1, 3, useBar  ? (barConfL ? "✓" : "✗") : "OFF", text_color=useBar  ? (barConfL ? color.green : color.red) : color.gray, bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 0, 4, "F4 ATR",    bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 1, 4, useATR  ? (f4_noise ? "✓" : "✗") : "OFF", text_color=useATR  ? (f4_noise ? color.green : color.red) : color.gray, bgcolor=color.new(color.gray,90), text_size=size.tiny)
-    table.cell(ft, 0, 5, "SİNYAL",    bgcolor=color.new(color.gray,85), text_size=size.tiny)
-    table.cell(ft, 1, 5, longEntry ? "LONG" : shortEntry ? "SHORT" : "—", text_color=longEntry ? color.green : shortEntry ? color.red : color.gray, bgcolor=color.new(color.gray,85), text_size=size.tiny)
+    // Başlık satırı
+    table.cell(ft, 0, 0, "◈ FİLTRE",
+        bgcolor=color.new(color.navy,20), text_color=color.white,
+        text_size=size.normal, text_halign=text.align_left, width=10)
+    table.cell(ft, 1, 0, "DURUM",
+        bgcolor=color.new(color.navy,20), text_color=color.white,
+        text_size=size.normal, text_halign=text.align_center, width=7)
+    // F1 Hacim
+    table.cell(ft, 0, 1, "F1  Hacim",
+        bgcolor=color.new(color.gray,80), text_color=color.white,
+        text_size=size.normal, text_halign=text.align_left)
+    table.cell(ft, 1, 1, useVol ? (f1_vol ? "  ✓" : "  ✗") : " OFF",
+        text_color=useVol ? (f1_vol ? color.lime : color.red) : color.gray,
+        bgcolor=color.new(color.gray,80), text_size=size.large)
+    // F2 HTF
+    table.cell(ft, 0, 2, "F2  HTF Trend",
+        bgcolor=color.new(color.gray,82), text_color=color.white,
+        text_size=size.normal, text_halign=text.align_left)
+    table.cell(ft, 1, 2, useHTF ? (f2_htfL ? "  ✓" : "  ✗") : " OFF",
+        text_color=useHTF ? (f2_htfL ? color.lime : color.red) : color.gray,
+        bgcolor=color.new(color.gray,82), text_size=size.large)
+    // F3 Bar
+    table.cell(ft, 0, 3, "F3  Bar Onayı",
+        bgcolor=color.new(color.gray,80), text_color=color.white,
+        text_size=size.normal, text_halign=text.align_left)
+    table.cell(ft, 1, 3, useBar ? (barConfL ? "  ✓" : "  ✗") : " OFF",
+        text_color=useBar ? (barConfL ? color.lime : color.red) : color.gray,
+        bgcolor=color.new(color.gray,80), text_size=size.large)
+    // F4 ATR
+    table.cell(ft, 0, 4, "F4  ATR Gürültü",
+        bgcolor=color.new(color.gray,82), text_color=color.white,
+        text_size=size.normal, text_halign=text.align_left)
+    table.cell(ft, 1, 4, useATR ? (f4_noise ? "  ✓" : "  ✗") : " OFF",
+        text_color=useATR ? (f4_noise ? color.lime : color.red) : color.gray,
+        bgcolor=color.new(color.gray,82), text_size=size.large)
+    // Sinyal satırı — en önemli
+    string sigText = longEntry ? "▲  LONG" : shortEntry ? "▼  SHORT" : "—  BEKLE"
+    color  sigBg   = longEntry ? color.new(color.green,30) : shortEntry ? color.new(color.red,30) : color.new(color.gray,60)
+    color  sigFg   = longEntry ? color.lime : shortEntry ? color.red : color.silver
+    table.cell(ft, 0, 5, "◉  SİNYAL",
+        bgcolor=sigBg, text_color=color.white,
+        text_size=size.large, text_halign=text.align_left)
+    table.cell(ft, 1, 5, sigText,
+        text_color=sigFg, bgcolor=sigBg,
+        text_size=size.large, text_halign=text.align_center)
