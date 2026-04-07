@@ -203,3 +203,20 @@ bool longEntry = condition1 and condition2
 bool longEntry = condition1 and
                  condition2
 ```
+
+---
+
+### calc_on_every_tick=true Backtest'i Bozar
+- **Uyarı / Warning:** `"Standart olmayan çizelgelerde backtesting yapmak gerçekçi olmayan sonuçlar üretir"`
+- **Sebep / Cause:** `calc_on_every_tick=true` strategy'yi her realtime tick'te çalıştırır. Geçmiş barlarda tick verisi olmadığından backtest sonuçları gerçekçi olmaz. TradingView bu yüzden uyarı verir.
+- **Çözüm / Fix:** `calc_on_every_tick=false` (default) kullan. `barstate.islast` tablo/label için sorun değil — her bar kapanışında güncellenir, yeterlidir.
+
+```pine
+//@version=6
+// ❌ Yanlış / Wrong — backtest'i bozar
+strategy("Test", calc_on_every_tick=true)
+
+// ✅ Doğru / Correct — default, backtest güvenilir
+strategy("Test", overlay=true)
+// barstate.islast tablo için sorunsuz çalışır
+```

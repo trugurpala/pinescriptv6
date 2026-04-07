@@ -19,7 +19,7 @@
 // LESSONS_LEARNED uygulanan düzeltmeler:
 //   - alertcondition() → alert() (strategy içinde çalışmaz)
 //   - barstate.islast label kaldırıldı → bgcolor ile seans gösterimi
-//   - calc_on_every_tick=true eklendi (realtime seans kapanışı için)
+//   - calc_on_every_tick kaldırıldı (default false — backtest güvenilir)
 
 strategy("VİOP Session Strategy [trugurpala]",
     overlay              = true,
@@ -28,8 +28,7 @@ strategy("VİOP Session Strategy [trugurpala]",
     default_qty_value    = 1,
     commission_type      = strategy.commission.cash_per_contract,
     commission_value     = 2.0,
-    slippage             = 2,
-    calc_on_every_tick   = true)
+    slippage             = 2)
 
 // ── Inputs ───────────────────────────────────────────────────────────────────
 int   fastLen  = input.int(9,    "Fast EMA",        minval=1,   group="Sinyal / Signal")

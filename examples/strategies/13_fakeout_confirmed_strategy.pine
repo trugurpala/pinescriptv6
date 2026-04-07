@@ -16,8 +16,7 @@ strategy("Fakeout-Confirmed Strategy [trugurpala]",
     default_qty_value    = 5,
     commission_type      = strategy.commission.percent,
     commission_value     = 0.1,
-    slippage             = 2,
-    calc_on_every_tick   = true)
+    slippage             = 2)
 
 // ── Inputs — Strateji ─────────────────────────────────────────────────────────
 int   fastLen  = input.int(9,    "Fast EMA",    minval=1,  group="Strateji / Strategy")
