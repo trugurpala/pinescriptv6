@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+title: "Pine Script v6 for AI Editors"
+message: >-
+  If you use this resource in your research or work,
+  please cite it using the following metadata.
+type: software
+authors:
+  - family-names: Pala
+    given-names: Ugur
+    email: mail@ugurpala.com
+repository-code: "https://github.com/trugurpala/pinescriptv6"
+url: "https://tr.tradingview.com/u/trugurpala/"
+abstract: >-
+  Pine Script v6 development environment for AI editors.
+  LESSONS_LEARNED error memory system, 9 editor configurations
+  (Cursor, Copilot, Windsurf, Zed, Cline, Claude...),
+  55+ working examples, global markets (ES, NQ, BTC, DAX),
+  VIOP/BIST30 Turkey, fakeout filters, webhook templates.
+keywords:
+  - pine-script-v6
+  - tradingview
+  - algorithmic-trading
+  - ai-editor
+  - cursor
+  - github-copilot
+  - windsurf
+  - viop
+  - bist30
+  - lessons-learned
+license: MIT
+date-released: "2025-01-01"
