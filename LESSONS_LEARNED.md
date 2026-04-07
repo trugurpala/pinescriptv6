@@ -144,3 +144,41 @@ float htf = request.security(syminfo.tickerid, "60", ta.ema(close,50))
 float htf = request.security(syminfo.tickerid, "60",
     ta.ema(close, 50)[1], lookahead=barmerge.lookahead_on)
 ```
+
+---
+
+### alertcondition() Strategy İçinde Çalışmaz
+- **Hata / Warning:** `"alertcondition()" has no effect inside strategies`
+- **Sebep / Cause:** `alertcondition()` sadece indicator'larda çalışır. Strategy'lerde `alert()` kullanılmalı.
+- **Çözüm / Fix:** Strategy içinde `alert()` fonksiyonunu `if` bloğu içinde kullan.
+
+```pine
+//@version=6
+// ❌ Yanlış / Wrong — strategy içinde
+// alertcondition(bullCross, "Long", "Long signal")
+
+// ✅ Doğru / Correct — strategy içinde
+if bullCross
+    alert("VİOP Long — " + syminfo.ticker + " @ " + str.tostring(close), alert.freq_once_per_bar)
+```
+
+---
+
+### barstate.islast + label.new Strategy'de Güvenilmez
+- **Hata / Warning:** `Strategies without "calc_on_every_tick = true" only calculate on confirmed chart bars. In this case, "barstate.islast" may not initially return "true" on realtime bars`
+- **Sebep / Cause:** Strategy varsayılan olarak her bar kapanışında hesaplar. `barstate.islast` realtime bar'da çalışmaz.
+- **Çözüm / Fix:** Ya `calc_on_every_tick=true` ekle, ya da label'ı kaldır / indicator'a taşı. Genellikle label'ı kaldırmak en temiz çözüm.
+
+```pine
+//@version=6
+// ❌ Strategy'de sorunlu
+// strategy("Test", calc_on_every_tick=false)  // default
+// if barstate.islast
+//     label.new(...)
+
+// ✅ Seçenek 1: calc_on_every_tick ekle
+strategy("Test", overlay=true, calc_on_every_tick=true)
+
+// ✅ Seçenek 2: Label'ı kaldır, sadece bgcolor/plot kullan
+bgcolor(inSession ? color.new(color.blue, 96) : na)
+```
