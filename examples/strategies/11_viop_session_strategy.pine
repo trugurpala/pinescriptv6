@@ -15,15 +15,21 @@
 //
 // Sembol / Symbol: BIST:XU030D1! veya F_XU030 (VİOP)
 // Önerilen TF / Recommended TF: 5M, 15M, 1H
+//
+// LESSONS_LEARNED uygulanan düzeltmeler:
+//   - alertcondition() → alert() (strategy içinde çalışmaz)
+//   - barstate.islast label kaldırıldı → bgcolor ile seans gösterimi
+//   - calc_on_every_tick=true eklendi (realtime seans kapanışı için)
 
 strategy("VİOP Session Strategy [trugurpala]",
-    overlay           = true,
-    initial_capital   = 100000,
-    default_qty_type  = strategy.fixed,
-    default_qty_value = 1,
-    commission_type   = strategy.commission.cash_per_contract,
-    commission_value  = 2.0,
-    slippage          = 2)
+    overlay              = true,
+    initial_capital      = 100000,
+    default_qty_type     = strategy.fixed,
+    default_qty_value    = 1,
+    commission_type      = strategy.commission.cash_per_contract,
+    commission_value     = 2.0,
+    slippage             = 2,
+    calc_on_every_tick   = true)
 
 // ── Inputs ───────────────────────────────────────────────────────────────────
 int   fastLen  = input.int(9,    "Fast EMA",        minval=1,   group="Sinyal / Signal")
@@ -73,6 +79,19 @@ if bearCross and not longOnly
         limit = close - tpMult * atrVal,
         comment_loss="SL", comment_profit="TP")
 
+// ── Alertler / Alerts ─────────────────────────────────────────────────────────
+// TR: alert() strategy içinde çalışır, alertcondition() çalışmaz
+// EN: alert() works inside strategies, alertcondition() does not
+if bullCross
+    alert("VİOP Long — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"),
+        alert.freq_once_per_bar)
+if bearCross
+    alert("VİOP Short — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"),
+        alert.freq_once_per_bar)
+if sesClose
+    alert("VİOP Seans Sonu — pozisyonlar kapatıldı / session closed",
+        alert.freq_once_per_bar)
+
 // ── Görseller / Visuals ───────────────────────────────────────────────────────
 // TR: Seans içi mavi arka plan, dışı gri
 // EN: Blue background inside session, gray outside
@@ -87,19 +106,7 @@ plotshape(bullCross, "Long Signal",  shape.triangleup,
 plotshape(bearCross, "Short Signal", shape.triangledown,
     location.abovebar, color.new(color.red,   0), size=size.normal)
 
-// TR: Seans durumu etiketi
-// EN: Session status label
-var label sessionLabel = na
-if barstate.islast
-    label.delete(sessionLabel)
-    sessionLabel := label.new(bar_index, high,
-        inSession ? "✅ Seans İçi" : "⛔ Seans Dışı",
-        color     = inSession ? color.new(color.green,20) : color.new(color.gray,40),
-        textcolor = color.white,
-        style     = label.style_label_left,
-        size      = size.small)
-
-// ── Alertler / Alerts ─────────────────────────────────────────────────────────
-alertcondition(bullCross,  "VİOP Long",  "VİOP Session Long — {{ticker}} {{close}}")
-alertcondition(bearCross,  "VİOP Short", "VİOP Session Short — {{ticker}} {{close}}")
-alertcondition(sesClose,   "Seans Sonu", "VİOP Session Closed — tüm pozisyonlar kapatıldı")
+// TR: Seans durumu — plot ile göster (label yerine, uyarısız)
+// EN: Session status — shown via plot (no warning, unlike label)
+plotchar(inSession, "Seans / Session", "●",
+    location.top, color.new(color.blue, 40), size=size.tiny)

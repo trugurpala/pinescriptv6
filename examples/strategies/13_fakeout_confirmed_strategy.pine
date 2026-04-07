@@ -21,7 +21,8 @@ strategy("Fakeout-Confirmed Strategy [trugurpala]",
     default_qty_value = 5,
     commission_type   = strategy.commission.percent,
     commission_value  = 0.1,
-    slippage          = 2)
+    slippage          = 2,
+    calc_on_every_tick   = true)
 
 // ── Inputs — Ana Strateji ─────────────────────────────────────────────────────
 int   fastLen   = input.int(9,   "Fast EMA",    minval=1,  group="Strategy")
@@ -166,5 +167,8 @@ if barstate.islast
         text_color = longEntry ? color.green : shortEntry ? color.red : color.gray,
         bgcolor=color.new(color.gray,85), text_size=size.tiny)
 
-alertcondition(longEntry,  "FC Long",  "Fakeout Confirmed LONG — {{ticker}} @ {{close}}")
-alertcondition(shortEntry, "FC Short", "Fakeout Confirmed SHORT — {{ticker}} @ {{close}}")
+// TR: alert() strategy içinde kullan, alertcondition() değil
+if longEntry
+    alert("Fakeout Confirmed LONG — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortEntry
+    alert("Fakeout Confirmed SHORT — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
