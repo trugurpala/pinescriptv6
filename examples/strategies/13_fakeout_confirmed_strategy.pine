@@ -99,12 +99,9 @@ bool barConfL   = not useBar or (barCountL == barConf and close > slowEma)
 bool barConfS   = not useBar or (barCountS == barConf and close < slowEma)
 
 // ── Final Sinyal / Final Signal ───────────────────────────────────────────────
-bool longEntry  = (useBar ? barConfL : rawLong)
-                    and f1_vol and f2_htfL and f4_noise
+bool longEntry  = (useBar ? barConfL : rawLong) and f1_vol and f2_htfL and f4_noise
 
-bool shortEntry = (useBar ? barConfS : rawShort)
-                    and f1_vol and f2_htfS and f4_noise
-                    and not longOnly
+bool shortEntry = (useBar ? barConfS : rawShort) and f1_vol and f2_htfS and f4_noise and not longOnly
 
 // ── Entries ──────────────────────────────────────────────────────────────────
 if longEntry and strategy.position_size == 0

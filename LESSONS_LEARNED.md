@@ -182,3 +182,24 @@ strategy("Test", overlay=true, calc_on_every_tick=true)
 // ✅ Seçenek 2: Label'ı kaldır, sadece bgcolor/plot kullan
 bgcolor(inSession ? color.new(color.blue, 96) : na)
 ```
+
+---
+
+### Çok Satırlı Boolean — "and" Satır Başında Olamaz
+- **Hata / Error:** `Mismatched input "and" expecting set "end of line without line continuation"`
+- **Sebep / Cause:** Pine Script v6'da çok satırlı ifadelerde `and`/`or` operatörü bir sonraki satırın **başında** olamaz. Önceki satırın **sonunda** olmalı veya tüm ifade tek satırda yazılmalı.
+- **Çözüm / Fix:** Ya tek satırda yaz, ya da operatörü önceki satırın sonuna taşı.
+
+```pine
+//@version=6
+// ❌ Yanlış / Wrong
+bool longEntry = (condition1)
+                    and condition2    // HATA: "and" satır başında
+
+// ✅ Doğru 1 / Correct 1 — tek satır
+bool longEntry = condition1 and condition2
+
+// ✅ Doğru 2 / Correct 2 — operatör satır sonunda
+bool longEntry = condition1 and
+                 condition2
+```
