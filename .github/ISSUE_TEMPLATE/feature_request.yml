@@ -1,0 +1,27 @@
+name: "✨ Öneri / Feature Request"
+description: "Yeni örnek veya iyileştirme / New example or improvement"
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: "Önerin / Your suggestion"
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: "Kategori / Category"
+      options:
+        - "Yeni indikatör / New indicator"
+        - "Yeni strateji / New strategy"
+        - "Yeni global market"
+        - "VIOP/BIST30"
+        - "LESSONS_LEARNED"
+        - "AI editor config"
+        - "Webhook"
+        - "Documentation"
+        - "Other"
+    validations:
+      required: true

@@ -1,0 +1,27 @@
+name: "🧠 Yeni LESSONS_LEARNED"
+description: "Pine Script v6'da keşfettiğin yeni hata/çözüm"
+title: "[LESSONS] "
+labels: ["lessons-learned"]
+assignees: ["trugurpala"]
+body:
+  - type: input
+    id: error-name
+    attributes:
+      label: "Hata Adı / Error Name"
+    validations:
+      required: true
+  - type: textarea
+    id: tv-error
+    attributes:
+      label: "TradingView Hata Mesajı (tam metin)"
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: "Çözüm / Fix + Kod örneği"
+      render: pine
+      placeholder: "//@version=6\n// ❌ Yanlış\n\n// ✅ Doğru"
+    validations:
+      required: true
