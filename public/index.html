@@ -5,386 +5,1039 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pine Script v6 — AI Reference with Error Memory</title>
     <meta name="description" content="AI editörler için Pine Script v6 referansı ve hata hafızası. 56 Pine Script dosyası, 9 AI editör desteği, 11 kayıtlı hata çözümü.">
+    <meta property="og:title" content="Pine Script v6 — AI Reference with Error Memory">
+    <meta property="og:description" content="Your AI editor now writes Pine Script v6 correctly — and never forgets its mistakes.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --border: #334155;
-            --text: #e2e8f0;
-            --muted: #94a3b8;
+            --bg: #050a18;
+            --bg2: #0a1128;
+            --surface: #111a35;
+            --surface2: #162040;
+            --border: #1e2d52;
+            --text: #e8edf5;
+            --muted: #8893a7;
             --accent: #3b82f6;
-            --green: #22c55e;
+            --accent2: #60a5fa;
+            --green: #10b981;
+            --green2: #34d399;
+            --red: #ef4444;
             --purple: #8b5cf6;
-            --yellow: #eab308;
+            --yellow: #f59e0b;
+            --cyan: #06b6d4;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.7;
+            overflow-x: hidden;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(5, 10, 24, 0.8);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .navbar.scrolled {
+            border-bottom-color: var(--border);
+            background: rgba(5, 10, 24, 0.95);
+        }
+        .nav-logo {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-logo .v6 {
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-btn {
+            background: var(--accent);
+            color: #fff !important;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .nav-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(59,130,246,0.4);
+        }
+
+        @media (max-width: 640px) {
+            .nav-links a:not(.nav-btn) { display: none; }
+        }
+
+        /* Container */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
 
         /* Hero */
         .hero {
-            text-align: center;
-            padding: 4rem 0 3rem;
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-        .hero h1 span { color: var(--accent); }
-        .hero p {
-            color: var(--muted);
-            font-size: 1.15rem;
-            max-width: 600px;
-            margin: 0.75rem auto 0;
-        }
-        .badges {
+            min-height: 100vh;
             display: flex;
-            gap: 0.5rem;
+            flex-direction: column;
             justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 6rem 2rem 4rem;
         }
-        .badge {
-            display: inline-block;
-            padding: 0.3rem 0.75rem;
-            border-radius: 6px;
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(59,130,246,0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 60%, rgba(139,92,246,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 80%, rgba(6,182,212,0.06) 0%, transparent 50%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+        @keyframes heroGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-2%, -1%) scale(1.05); }
+        }
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 50px;
             font-size: 0.8rem;
             font-weight: 600;
-            color: #fff;
+            color: var(--accent2);
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.6s ease-out;
         }
-        .badge-blue { background: var(--accent); }
-        .badge-purple { background: var(--purple); }
-        .badge-green { background: var(--green); color: #000; }
-        .badge-yellow { background: var(--yellow); color: #000; }
-
-        /* Author */
-        .author {
-            text-align: center;
-            padding: 1rem 0 2rem;
-            color: var(--muted);
-            font-size: 0.95rem;
+        .hero-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite;
         }
-        .author a {
-            color: var(--accent);
-            text-decoration: none;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
-        .author a:hover { text-decoration: underline; }
-
-        /* Sections */
-        section { padding: 2rem 0; }
-        section h2 {
-            font-size: 1.5rem;
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
             margin-bottom: 1.25rem;
-            padding-bottom: 0.5rem;
+            animation: fadeUp 0.6s ease-out 0.1s both;
+        }
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--accent), var(--cyan), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero .subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--muted);
+            max-width: 650px;
+            margin: 0 auto 2rem;
+            animation: fadeUp 0.6s ease-out 0.2s both;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.6s ease-out 0.3s both;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #2563eb);
+            color: #fff;
+            box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(59,130,246,0.5);
+        }
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: var(--surface2);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Terminal */
+        .terminal-section {
+            padding: 2rem 0 5rem;
+            position: relative;
+            z-index: 1;
+        }
+        .terminal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.75rem 1rem;
+            background: var(--bg2);
             border-bottom: 1px solid var(--border);
         }
-
-        /* Problem / Solution */
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
         }
-        @media (max-width: 640px) {
-            .comparison { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 1.75rem; }
-        }
-        .code-block {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
-            white-space: pre;
-            line-height: 1.5;
-        }
-        .code-block.bad { border-color: #ef4444; }
-        .code-block.good { border-color: var(--green); }
-        .code-label {
+        .terminal-dot.red { background: #ef4444; }
+        .terminal-dot.yellow { background: #f59e0b; }
+        .terminal-dot.green { background: #10b981; }
+        .terminal-title {
+            flex: 1;
+            text-align: center;
             font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
         }
-        .code-label.bad { color: #ef4444; }
-        .code-label.good { color: var(--green); }
+        .terminal-body {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            min-height: 200px;
+        }
+        .terminal-body .comment { color: #6b7280; }
+        .terminal-body .keyword { color: var(--purple); }
+        .terminal-body .function { color: var(--cyan); }
+        .terminal-body .string { color: var(--green2); }
+        .terminal-body .number { color: var(--yellow); }
+        .terminal-body .error { color: var(--red); text-decoration: line-through; opacity: 0.6; }
+        .terminal-body .correct { color: var(--green2); }
+        .terminal-line {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        .terminal-line.visible {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.3s ease-out;
+        }
+        .cursor-blink {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--accent);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Sections */
+        section { padding: 5rem 0; }
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-header h2 {
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+        }
+        .section-header p {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 550px;
+            margin: 0 auto;
+        }
 
         /* Stats */
-        .stats {
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
         .stat-card {
+            background: linear-gradient(135deg, var(--surface), var(--surface2));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Comparison (v5 vs v6) */
+        .comparison-wrapper {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: stretch;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .comparison-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .comparison-arrow { transform: rotate(90deg); }
+        }
+        .comparison-card {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .comparison-card.bad { border-color: rgba(239,68,68,0.3); }
+        .comparison-card.good { border-color: rgba(16,185,129,0.3); }
+        .comparison-label {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .comparison-card.bad .comparison-label {
+            background: rgba(239,68,68,0.1);
+            color: var(--red);
+        }
+        .comparison-card.good .comparison-label {
+            background: rgba(16,185,129,0.1);
+            color: var(--green);
+        }
+        .comparison-code {
+            padding: 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.7;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .comparison-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--muted);
+        }
+
+        /* Migration Table */
+        .migration-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .migration-table th {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--bg2);
+        }
+        .migration-table th:first-child { color: var(--red); }
+        .migration-table th:last-child { color: var(--green); }
+        .migration-table td {
+            padding: 0.85rem 1.25rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        .migration-table tr {
+            transition: background 0.2s;
+        }
+        .migration-table tbody tr:hover {
+            background: rgba(59,130,246,0.05);
+        }
+        .migration-table code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+        }
+        .migration-table td:first-child code {
+            background: rgba(239,68,68,0.1);
+            color: var(--red);
+        }
+        .migration-table td:last-child code {
+            background: rgba(16,185,129,0.1);
+            color: var(--green2);
+        }
+
+        /* Editor Grid */
+        .editors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+        .editor-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.25rem;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
             text-align: center;
+            transition: all 0.3s;
+            cursor: default;
         }
-        .stat-card .number {
-            font-size: 2rem;
+        .editor-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 30px rgba(59,130,246,0.15);
+        }
+        .editor-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .editor-file {
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 0.35rem;
+        }
+
+        /* Content / Folders */
+        .folders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        .folder-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        .folder-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .folder-path {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--accent2);
+            margin-bottom: 0.5rem;
+        }
+        .folder-count {
+            font-size: 1.5rem;
             font-weight: 800;
-            color: var(--accent);
+            color: var(--text);
         }
-        .stat-card .label {
+        .folder-desc {
             color: var(--muted);
             font-size: 0.85rem;
             margin-top: 0.25rem;
         }
 
-        /* Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--surface);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            margin-bottom: 1rem;
+        /* Published Scripts */
+        .scripts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
         }
-        th, td {
-            padding: 0.65rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
-        th {
-            background: rgba(59,130,246,0.1);
-            font-weight: 600;
-            color: var(--accent);
-        }
-        tr:last-child td { border-bottom: none; }
-        td code {
-            background: rgba(59,130,246,0.15);
-            padding: 0.15rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-family: 'SF Mono', 'Fira Code', monospace;
-        }
-
-        /* Editor list */
-        .editors {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 0.75rem;
-        }
-        .editor-card {
+        .script-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.9rem;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+        .script-card:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+        .script-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .script-desc {
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-top: 0.2rem;
+        }
+        .script-badge {
+            flex-shrink: 0;
+            padding: 0.35rem 0.85rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .script-badge.live {
+            background: rgba(16,185,129,0.15);
+            color: var(--green);
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+        .script-badge.ready {
+            background: rgba(245,158,11,0.15);
+            color: var(--yellow);
+            border: 1px solid rgba(245,158,11,0.3);
         }
 
         /* CTA */
-        .cta {
+        .cta-section {
+            padding: 6rem 0;
             text-align: center;
-            padding: 3rem 0;
+            position: relative;
         }
-        .cta a {
-            display: inline-block;
-            background: var(--accent);
-            color: #fff;
-            padding: 0.85rem 2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.05rem;
-            transition: background 0.2s;
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(59,130,246,0.08) 0%, transparent 70%);
         }
-        .cta a:hover { background: #2563eb; }
-        .cta p {
-            margin-top: 0.75rem;
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        .cta-section h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+        .cta-section p {
             color: var(--muted);
-            font-size: 0.9rem;
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto 2rem;
         }
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .cta-code {
+            margin-top: 2.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--muted);
+            background: var(--surface);
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .cta-code .cmd { color: var(--green2); }
 
         /* Footer */
         footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: var(--muted);
-            font-size: 0.8rem;
             border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            text-align: center;
         }
-        footer a { color: var(--accent); text-decoration: none; }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--text); }
+        .footer-copy {
+            color: var(--muted);
+            font-size: 0.75rem;
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            max-width: 400px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="nav-logo">
+        PineScript <span class="v6">v6</span>
+    </a>
+    <div class="nav-links">
+        <a href="#stats">Stats</a>
+        <a href="#migration">Migration</a>
+        <a href="#editors">Editors</a>
+        <a href="https://github.com/trugurpala/pinescriptv6" target="_blank" class="nav-btn">GitHub</a>
+    </div>
+</nav>
 
-    <!-- Hero -->
-    <div class="hero">
-        <h1>Pine Script <span>v6</span></h1>
-        <p>AI editörler için Pine Script v6 referansı ve hata hafızası.<br>
-        Your AI editor now writes Pine Script v6 correctly — and never forgets its mistakes.</p>
-        <div class="badges">
-            <span class="badge badge-blue">Pine Script v6</span>
-            <span class="badge badge-purple">9 AI Editor</span>
-            <span class="badge badge-green">56+ Examples</span>
-            <span class="badge badge-yellow">MIT License</span>
+<!-- Hero -->
+<div class="hero">
+    <div class="hero-bg">
+        <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+        <div class="hero-eyebrow">
+            <span class="dot"></span>
+            Open Source &middot; MIT License
+        </div>
+        <h1>
+            Stop AI from writing<br>
+            <span class="gradient">broken Pine Script</span>
+        </h1>
+        <p class="subtitle">
+            AI editörler v5 yazıyordu. Bu repo v6 referansı ve kalıcı hata hafızası ile
+            tüm AI editörlerin doğru Pine Script v6 yazmasını sağlar.
+        </p>
+        <div class="hero-actions">
+            <a href="https://github.com/trugurpala/pinescriptv6" target="_blank" class="btn btn-primary">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                Clone Repo
+            </a>
+            <a href="#migration" class="btn btn-secondary">
+                v5 vs v6
+            </a>
         </div>
     </div>
-
-    <!-- Author -->
-    <div class="author">
-        <a href="https://github.com/trugurpala" target="_blank">Ugur Pala</a> &middot;
-        <a href="https://tr.tradingview.com/u/trugurpala/" target="_blank">TradingView</a> &middot;
-        <a href="https://x.com/trugurpala" target="_blank">X / Twitter</a>
-    </div>
-
-    <!-- Problem -->
-    <section>
-        <h2>Problem & Solution</h2>
-        <div class="comparison">
-            <div>
-                <div class="code-label bad">v5 — AI writes this (broken)</div>
-                <div class="code-block bad">//@version=6
-study("My Indicator", overlay=true)
-htf = security(syminfo.tickerid, "D", close)
-len = input(14, type=input.integer)
-[k, d] = ta.stoch(close, high, low, 14)</div>
-            </div>
-            <div>
-                <div class="code-label good">v6 — With this repo (works)</div>
-                <div class="code-block good">//@version=6
-indicator("My Indicator", overlay=true)
-htf = request.security(syminfo.tickerid, "D", close[1])
-int len = input.int(14, "Length")
-float k = ta.stoch(close, high, low, 14)</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats -->
-    <section>
-        <h2>Repo Stats</h2>
-        <div class="stats">
-            <div class="stat-card">
-                <div class="number">56</div>
-                <div class="label">.pine files</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">9</div>
-                <div class="label">AI Editors</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">11</div>
-                <div class="label">Solved Errors</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">22</div>
-                <div class="label">Global Markets</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- v5 vs v6 Table -->
-    <section>
-        <h2>v5 &rarr; v6 Migration</h2>
-        <table>
-            <thead>
-                <tr><th>v5 (don't write)</th><th>v6 (write this)</th></tr>
-            </thead>
-            <tbody>
-                <tr><td><code>study("name")</code></td><td><code>indicator("name")</code></td></tr>
-                <tr><td><code>security(ticker, tf, expr)</code></td><td><code>request.security(ticker, tf, expr)</code></td></tr>
-                <tr><td><code>input(14, type=input.integer)</code></td><td><code>input.int(14, "Label")</code></td></tr>
-                <tr><td><code>[k, d] = ta.stoch(...)</code></td><td><code>float k = ta.stoch(...)</code></td></tr>
-                <tr><td><code>math.avg(a, b)</code></td><td><code>(a + b) / 2</code></td></tr>
-                <tr><td><code>alertcondition()</code> in strategy</td><td><code>alert()</code> inside <code>if</code></td></tr>
-                <tr><td><code>barstate.islast</code></td><td><code>barstate.isconfirmed</code></td></tr>
-            </tbody>
-        </table>
-    </section>
-
-    <!-- Editors -->
-    <section>
-        <h2>Supported AI Editors</h2>
-        <div class="editors">
-            <div class="editor-card">Claude</div>
-            <div class="editor-card">Cursor</div>
-            <div class="editor-card">Windsurf</div>
-            <div class="editor-card">GitHub Copilot</div>
-            <div class="editor-card">Cline</div>
-            <div class="editor-card">Roo</div>
-            <div class="editor-card">Aider</div>
-            <div class="editor-card">Zed</div>
-            <div class="editor-card">Any LLM</div>
-        </div>
-    </section>
-
-    <!-- Content -->
-    <section>
-        <h2>What's Inside</h2>
-        <table>
-            <thead>
-                <tr><th>Folder</th><th>Count</th><th>Content</th></tr>
-            </thead>
-            <tbody>
-                <tr><td><code>examples/indicators/</code></td><td>18</td><td>EMA, RSI, MACD, BB, Supertrend, VWAP, Ichimoku, MTF...</td></tr>
-                <tr><td><code>examples/strategies/</code></td><td>14</td><td>EMA cross, RSI, Supertrend, MTF, VIOP Session, Fakeout...</td></tr>
-                <tr><td><code>global-markets/</code></td><td>22</td><td>ES, NQ, Gold, Crude, EUR/USD, BTC, ETH, DAX, Nikkei...</td></tr>
-                <tr><td><code>webhook-templates/</code></td><td>7</td><td>Telegram, Discord, JSON, VIOP alerts</td></tr>
-                <tr><td><code>v5-to-v6-migration/</code></td><td>10</td><td>Complete migration guide with examples</td></tr>
-                <tr><td><code>reference/</code></td><td>6</td><td>ta.*, strategy.*, request.*, drawing.*, collections.*</td></tr>
-            </tbody>
-        </table>
-    </section>
-
-    <!-- Published Scripts -->
-    <section>
-        <h2>Published on TradingView</h2>
-        <table>
-            <thead>
-                <tr><th>Script</th><th>Status</th></tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="https://tr.tradingview.com/script/SY1XkTBH/" target="_blank" style="color:var(--accent)">Fakeout Filter — 4-Layer Signal Quality</a></td>
-                    <td><span class="badge badge-green" style="font-size:0.75rem">Published</span></td>
-                </tr>
-                <tr>
-                    <td>VIOP Session Strategy</td>
-                    <td><span class="badge badge-yellow" style="font-size:0.75rem">Ready</span></td>
-                </tr>
-                <tr>
-                    <td>Fakeout Confirmed Strategy</td>
-                    <td><span class="badge badge-yellow" style="font-size:0.75rem">Ready</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <!-- CTA -->
-    <div class="cta">
-        <a href="https://github.com/trugurpala/pinescriptv6" target="_blank">GitHub Repo</a>
-        <p>Clone the repo, connect to your AI editor, and start writing correct Pine Script v6.</p>
-    </div>
-
 </div>
 
+<!-- Terminal Demo -->
+<div class="container terminal-section">
+    <div class="terminal reveal">
+        <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">pine-script-v6-demo.pine</span>
+        </div>
+        <div class="terminal-body" id="terminal">
+            <div class="terminal-line" data-delay="0"><span class="comment">// AI without this repo:</span></div>
+            <div class="terminal-line" data-delay="200"><span class="error">study("My Indicator", overlay=true)</span>  <span class="comment">// v5</span></div>
+            <div class="terminal-line" data-delay="400"><span class="error">htf = security(syminfo.tickerid, "D", close)</span>  <span class="comment">// v5</span></div>
+            <div class="terminal-line" data-delay="600"><span class="error">[k, d] = ta.stoch(close, high, low, 14)</span>  <span class="comment">// wrong</span></div>
+            <div class="terminal-line" data-delay="1000">&nbsp;</div>
+            <div class="terminal-line" data-delay="1200"><span class="comment">// AI with this repo:</span></div>
+            <div class="terminal-line" data-delay="1400"><span class="correct"><span class="keyword">//@version=6</span></span></div>
+            <div class="terminal-line" data-delay="1600"><span class="correct"><span class="function">indicator</span>(<span class="string">"My Indicator"</span>, overlay=<span class="keyword">true</span>)</span></div>
+            <div class="terminal-line" data-delay="1800"><span class="correct">htf = <span class="function">request.security</span>(syminfo.tickerid, <span class="string">"D"</span>, close[<span class="number">1</span>])</span></div>
+            <div class="terminal-line" data-delay="2000"><span class="correct"><span class="keyword">float</span> k = <span class="function">ta.stoch</span>(close, high, low, <span class="number">14</span>)</span><span class="cursor-blink"></span></div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats -->
+<section id="stats">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>Built for scale</h2>
+            <p>Kapsamlı referans, gerçek örnekler, ve sürekli güncellenen hata hafızası</p>
+        </div>
+        <div class="stats-grid reveal">
+            <div class="stat-card">
+                <div class="stat-icon">&#x1F4C4;</div>
+                <div class="stat-number">56</div>
+                <div class="stat-label">.pine Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">&#x1F916;</div>
+                <div class="stat-number">9</div>
+                <div class="stat-label">AI Editors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">&#x1F41B;</div>
+                <div class="stat-number">11</div>
+                <div class="stat-label">Solved Errors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">&#x1F310;</div>
+                <div class="stat-number">22</div>
+                <div class="stat-label">Global Markets</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Migration Table -->
+<section id="migration">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>v5 &rarr; v6 Migration</h2>
+            <p>AI editörlerin en sık yaptığı hatalar ve doğru v6 karşılıkları</p>
+        </div>
+        <div class="reveal">
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>v5 &mdash; Don't write</th>
+                        <th>v6 &mdash; Write this</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>study("name")</code></td><td><code>indicator("name")</code></td></tr>
+                    <tr><td><code>security(ticker, tf, expr)</code></td><td><code>request.security(ticker, tf, expr)</code></td></tr>
+                    <tr><td><code>input(14, type=input.integer)</code></td><td><code>input.int(14, "Label")</code></td></tr>
+                    <tr><td><code>[k, d] = ta.stoch(...)</code></td><td><code>float k = ta.stoch(...)</code></td></tr>
+                    <tr><td><code>math.avg(a, b)</code></td><td><code>(a + b) / 2</code></td></tr>
+                    <tr><td><code>alertcondition()</code> in strategy</td><td><code>alert()</code> inside <code>if</code></td></tr>
+                    <tr><td><code>barstate.islast</code></td><td><code>barstate.isconfirmed</code></td></tr>
+                    <tr><td><code>array.new_float(0)</code></td><td><code>array.new&lt;float&gt;(0)</code></td></tr>
+                    <tr><td><code>calc_on_every_tick=true</code></td><td>Remove it</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Editors -->
+<section id="editors">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>Works with every AI editor</h2>
+            <p>Repo'yu clone'la, editörüne bağla. Her editör için config dosyası hazır.</p>
+        </div>
+        <div class="editors-grid reveal">
+            <div class="editor-card">
+                <div class="editor-name">Claude</div>
+                <div class="editor-file">CLAUDE.md</div>
+            </div>
+            <div class="editor-card">
+                <div class="editor-name">Cursor</div>
+                <div class="editor-file">.cursorrules</div>
+            </div>
+            <div class="editor-card">
+                <div class="editor-name">Windsurf</div>
+                <div class="editor-file">.windsurfrules</div>
+            </div>
+            <div class="editor-card">
+                <div class="editor-name">GitHub Copilot</div>
+                <div class="editor-file">.github/copilot-*</div>
+            </div>
+            <div class="editor-card">
+                <div class="editor-name">Cline</div>
+                <div class="editor-file">.clinerules</div>
+            </div>
+            <div class="editor-card">
+                <div class="editor-name">Roo</div>
+                <div class="editor-file">.clinerules</div>
+            </div>
+            <div class="editor-card">
+                <div class="editor-name">Aider</div>
+                <div class="editor-file">AGENTS.md</div>
+            </div>
+            <div class="editor-card">
+                <div class="editor-name">Zed</div>
+                <div class="editor-file">.zed/</div>
+            </div>
+            <div class="editor-card">
+                <div class="editor-name">Any LLM</div>
+                <div class="editor-file">LLM_MANIFEST.md</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- What's Inside -->
+<section id="content">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>What's inside</h2>
+            <p>Indicators, strategies, global markets, webhook templates, ve daha fazlası</p>
+        </div>
+        <div class="folders-grid reveal">
+            <div class="folder-card">
+                <div class="folder-path">examples/indicators/</div>
+                <div class="folder-count">18 files</div>
+                <div class="folder-desc">EMA, RSI, MACD, BB, Supertrend, VWAP, Ichimoku, MTF, Fakeout Filter</div>
+            </div>
+            <div class="folder-card">
+                <div class="folder-path">examples/strategies/</div>
+                <div class="folder-count">14 files</div>
+                <div class="folder-desc">EMA cross, RSI, Supertrend, MTF, VIOP Session, Fakeout Confirmed</div>
+            </div>
+            <div class="folder-card">
+                <div class="folder-path">global-markets/</div>
+                <div class="folder-count">22 files</div>
+                <div class="folder-desc">ES, NQ, Gold, Crude, EUR/USD, BTC, ETH, DAX, Nikkei, London Breakout</div>
+            </div>
+            <div class="folder-card">
+                <div class="folder-path">webhook-templates/</div>
+                <div class="folder-count">7 files</div>
+                <div class="folder-desc">Telegram, Discord, JSON, VIOP alerts</div>
+            </div>
+            <div class="folder-card">
+                <div class="folder-path">v5-to-v6-migration/</div>
+                <div class="folder-count">10 guides</div>
+                <div class="folder-desc">Complete migration guide with before/after examples</div>
+            </div>
+            <div class="folder-card">
+                <div class="folder-path">reference/</div>
+                <div class="folder-count">6 docs</div>
+                <div class="folder-desc">ta.*, strategy.*, request.*, drawing.*, collections.*</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Published Scripts -->
+<section id="scripts">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>TradingView Scripts</h2>
+            <p>Bu repo'dan doğan yayınlanmış ve yayına hazır scriptler</p>
+        </div>
+        <div class="scripts-list reveal">
+            <a href="https://tr.tradingview.com/script/SY1XkTBH/" target="_blank" class="script-card" style="text-decoration:none; color:inherit;">
+                <div>
+                    <div class="script-name">Fakeout Filter &mdash; 4-Layer Signal Quality</div>
+                    <div class="script-desc">Volume + HTF + Bar Confirmation + ATR filter system</div>
+                </div>
+                <span class="script-badge live">Published</span>
+            </a>
+            <div class="script-card">
+                <div>
+                    <div class="script-name">VIOP Session Strategy</div>
+                    <div class="script-desc">BIST:XU030D1! &middot; 09:30-18:15 UTC+3 session filter</div>
+                </div>
+                <span class="script-badge ready">Ready</span>
+            </div>
+            <div class="script-card">
+                <div>
+                    <div class="script-name">Fakeout Confirmed Strategy</div>
+                    <div class="script-desc">ES, NQ, BTC, XAUUSD &middot; 4-layer confirmed entry</div>
+                </div>
+                <span class="script-badge ready">Ready</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+    <div class="cta-content container">
+        <h2>Ready to fix your AI?</h2>
+        <p>Clone the repo, connect to your editor, and start writing correct Pine Script v6.</p>
+        <div class="cta-buttons">
+            <a href="https://github.com/trugurpala/pinescriptv6" target="_blank" class="btn btn-primary">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                Get Started
+            </a>
+            <a href="https://tr.tradingview.com/u/trugurpala/" target="_blank" class="btn btn-secondary">
+                TradingView Profile
+            </a>
+        </div>
+        <div class="cta-code">
+            <span class="cmd">git clone</span> https://github.com/trugurpala/pinescriptv6.git
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
 <footer>
     <div class="container">
-        <p>Built by <a href="https://github.com/trugurpala" target="_blank">Ugur Pala</a> &middot;
-        TradingView is not affiliated with this project.</p>
+        <div class="footer-links">
+            <a href="https://github.com/trugurpala" target="_blank">GitHub</a>
+            <a href="https://tr.tradingview.com/u/trugurpala/" target="_blank">TradingView</a>
+            <a href="https://x.com/trugurpala" target="_blank">X / Twitter</a>
+            <a href="mailto:mail@ugurpala.com">Contact</a>
+        </div>
+        <div class="footer-copy">
+            Built by Ugur Pala &middot; TradingView is not affiliated with this project.
+        </div>
     </div>
 </footer>
+
+<script>
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Scroll reveal
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+revealElements.forEach(el => revealObserver.observe(el));
+
+// Terminal animation
+const terminalObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const lines = entry.target.querySelectorAll('.terminal-line');
+            lines.forEach(line => {
+                const delay = parseInt(line.dataset.delay) || 0;
+                setTimeout(() => line.classList.add('visible'), delay);
+            });
+            terminalObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.3 });
+const terminal = document.getElementById('terminal');
+if (terminal) terminalObserver.observe(terminal);
+</script>
 
 </body>
 </html>
