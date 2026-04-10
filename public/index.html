@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pine Script v6 — AI Reference with Error Memory</title>
+    <meta name="description" content="AI editörler için Pine Script v6 referansı ve hata hafızası. 56 Pine Script dosyası, 9 AI editör desteği, 11 kayıtlı hata çözümü.">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --border: #334155;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --green: #22c55e;
+            --purple: #8b5cf6;
+            --yellow: #eab308;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 4rem 0 3rem;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .hero h1 span { color: var(--accent); }
+        .hero p {
+            color: var(--muted);
+            font-size: 1.15rem;
+            max-width: 600px;
+            margin: 0.75rem auto 0;
+        }
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .badge-blue { background: var(--accent); }
+        .badge-purple { background: var(--purple); }
+        .badge-green { background: var(--green); color: #000; }
+        .badge-yellow { background: var(--yellow); color: #000; }
+
+        /* Author */
+        .author {
+            text-align: center;
+            padding: 1rem 0 2rem;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        .author a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .author a:hover { text-decoration: underline; }
+
+        /* Sections */
+        section { padding: 2rem 0; }
+        section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Problem / Solution */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 640px) {
+            .comparison { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.75rem; }
+        }
+        .code-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.5;
+        }
+        .code-block.bad { border-color: #ef4444; }
+        .code-block.good { border-color: var(--green); }
+        .code-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+        .code-label.bad { color: #ef4444; }
+        .code-label.good { color: var(--green); }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .stat-card .label {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+        th, td {
+            padding: 0.65rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        th {
+            background: rgba(59,130,246,0.1);
+            font-weight: 600;
+            color: var(--accent);
+        }
+        tr:last-child td { border-bottom: none; }
+        td code {
+            background: rgba(59,130,246,0.15);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+
+        /* Editor list */
+        .editors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+        .editor-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        .cta a {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 0.85rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: background 0.2s;
+        }
+        .cta a:hover { background: #2563eb; }
+        .cta p {
+            margin-top: 0.75rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>Pine Script <span>v6</span></h1>
+        <p>AI editörler için Pine Script v6 referansı ve hata hafızası.<br>
+        Your AI editor now writes Pine Script v6 correctly — and never forgets its mistakes.</p>
+        <div class="badges">
+            <span class="badge badge-blue">Pine Script v6</span>
+            <span class="badge badge-purple">9 AI Editor</span>
+            <span class="badge badge-green">56+ Examples</span>
+            <span class="badge badge-yellow">MIT License</span>
+        </div>
+    </div>
+
+    <!-- Author -->
+    <div class="author">
+        <a href="https://github.com/trugurpala" target="_blank">Ugur Pala</a> &middot;
+        <a href="https://tr.tradingview.com/u/trugurpala/" target="_blank">TradingView</a> &middot;
+        <a href="https://x.com/trugurpala" target="_blank">X / Twitter</a>
+    </div>
+
+    <!-- Problem -->
+    <section>
+        <h2>Problem & Solution</h2>
+        <div class="comparison">
+            <div>
+                <div class="code-label bad">v5 — AI writes this (broken)</div>
+                <div class="code-block bad">//@version=6
+study("My Indicator", overlay=true)
+htf = security(syminfo.tickerid, "D", close)
+len = input(14, type=input.integer)
+[k, d] = ta.stoch(close, high, low, 14)</div>
+            </div>
+            <div>
+                <div class="code-label good">v6 — With this repo (works)</div>
+                <div class="code-block good">//@version=6
+indicator("My Indicator", overlay=true)
+htf = request.security(syminfo.tickerid, "D", close[1])
+int len = input.int(14, "Length")
+float k = ta.stoch(close, high, low, 14)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section>
+        <h2>Repo Stats</h2>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number">56</div>
+                <div class="label">.pine files</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">9</div>
+                <div class="label">AI Editors</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">11</div>
+                <div class="label">Solved Errors</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">22</div>
+                <div class="label">Global Markets</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- v5 vs v6 Table -->
+    <section>
+        <h2>v5 &rarr; v6 Migration</h2>
+        <table>
+            <thead>
+                <tr><th>v5 (don't write)</th><th>v6 (write this)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>study("name")</code></td><td><code>indicator("name")</code></td></tr>
+                <tr><td><code>security(ticker, tf, expr)</code></td><td><code>request.security(ticker, tf, expr)</code></td></tr>
+                <tr><td><code>input(14, type=input.integer)</code></td><td><code>input.int(14, "Label")</code></td></tr>
+                <tr><td><code>[k, d] = ta.stoch(...)</code></td><td><code>float k = ta.stoch(...)</code></td></tr>
+                <tr><td><code>math.avg(a, b)</code></td><td><code>(a + b) / 2</code></td></tr>
+                <tr><td><code>alertcondition()</code> in strategy</td><td><code>alert()</code> inside <code>if</code></td></tr>
+                <tr><td><code>barstate.islast</code></td><td><code>barstate.isconfirmed</code></td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Editors -->
+    <section>
+        <h2>Supported AI Editors</h2>
+        <div class="editors">
+            <div class="editor-card">Claude</div>
+            <div class="editor-card">Cursor</div>
+            <div class="editor-card">Windsurf</div>
+            <div class="editor-card">GitHub Copilot</div>
+            <div class="editor-card">Cline</div>
+            <div class="editor-card">Roo</div>
+            <div class="editor-card">Aider</div>
+            <div class="editor-card">Zed</div>
+            <div class="editor-card">Any LLM</div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section>
+        <h2>What's Inside</h2>
+        <table>
+            <thead>
+                <tr><th>Folder</th><th>Count</th><th>Content</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>examples/indicators/</code></td><td>18</td><td>EMA, RSI, MACD, BB, Supertrend, VWAP, Ichimoku, MTF...</td></tr>
+                <tr><td><code>examples/strategies/</code></td><td>14</td><td>EMA cross, RSI, Supertrend, MTF, VIOP Session, Fakeout...</td></tr>
+                <tr><td><code>global-markets/</code></td><td>22</td><td>ES, NQ, Gold, Crude, EUR/USD, BTC, ETH, DAX, Nikkei...</td></tr>
+                <tr><td><code>webhook-templates/</code></td><td>7</td><td>Telegram, Discord, JSON, VIOP alerts</td></tr>
+                <tr><td><code>v5-to-v6-migration/</code></td><td>10</td><td>Complete migration guide with examples</td></tr>
+                <tr><td><code>reference/</code></td><td>6</td><td>ta.*, strategy.*, request.*, drawing.*, collections.*</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Published Scripts -->
+    <section>
+        <h2>Published on TradingView</h2>
+        <table>
+            <thead>
+                <tr><th>Script</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="https://tr.tradingview.com/script/SY1XkTBH/" target="_blank" style="color:var(--accent)">Fakeout Filter — 4-Layer Signal Quality</a></td>
+                    <td><span class="badge badge-green" style="font-size:0.75rem">Published</span></td>
+                </tr>
+                <tr>
+                    <td>VIOP Session Strategy</td>
+                    <td><span class="badge badge-yellow" style="font-size:0.75rem">Ready</span></td>
+                </tr>
+                <tr>
+                    <td>Fakeout Confirmed Strategy</td>
+                    <td><span class="badge badge-yellow" style="font-size:0.75rem">Ready</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta">
+        <a href="https://github.com/trugurpala/pinescriptv6" target="_blank">GitHub Repo</a>
+        <p>Clone the repo, connect to your AI editor, and start writing correct Pine Script v6.</p>
+    </div>
+
+</div>
+
+<footer>
+    <div class="container">
+        <p>Built by <a href="https://github.com/trugurpala" target="_blank">Ugur Pala</a> &middot;
+        TradingView is not affiliated with this project.</p>
+    </div>
+</footer>
+
+</body>
+</html>
