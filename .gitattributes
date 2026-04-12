@@ -1,0 +1,10 @@
+# Pine Script files
+*.pine linguist-language=Pine
+*.pinescript linguist-language=Pine
+*.psc linguist-language=Pine
+
+# Documentation files
+*.md linguist-detectable=true
+
+# Override shell for CI/workflow files if needed (optional)
+# .github/workflows/*.yml linguist-vendored=true
