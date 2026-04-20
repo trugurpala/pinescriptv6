@@ -79,5 +79,8 @@ bgcolor(not inRTH ? color.new(color.gray, 96) : na, title="Outside RTH")
 plotshape(longBreak,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
 plotshape(shortBreak, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
 
-alertcondition(longBreak,  "ES ORB Long",  "ES ORB Breakout Long — {{close}}")
-alertcondition(shortBreak, "ES ORB Short", "ES ORB Breakout Short — {{close}}")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if longBreak
+    alert("ES ORB Breakout Long — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortBreak
+    alert("ES ORB Breakout Short — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)

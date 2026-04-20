@@ -80,5 +80,8 @@ bgcolor(inLondon  ? color.new(color.yellow, 96) : na, title="London")
 plotshape(longBreak,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
 plotshape(shortBreak, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
 
-alertcondition(longBreak,  "EURUSD Long",  "EURUSD London Breakout Long")
-alertcondition(shortBreak, "EURUSD Short", "EURUSD London Breakout Short")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if longBreak
+    alert("EURUSD London Breakout Long — " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
+if shortBreak
+    alert("EURUSD London Breakout Short — " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)

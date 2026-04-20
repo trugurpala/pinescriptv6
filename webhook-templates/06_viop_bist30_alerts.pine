@@ -55,14 +55,11 @@ if bearCross and not longOnly
     // Alert mesajı:
     // {"market":"VIOP","symbol":"F_XU030","action":"sell","price":{{close}},"lot":{{strategy.order.contracts}},"time":"{{timenow}}"}
 
-// ── Alert Conditions ─────────────────────────────────────────────────────────
-alertcondition(bullCross,
-    "VİOP Long Signal",
-    "🟢 VIOP LONG | {{ticker}} | {{close}} | {{timenow}}")
-
-alertcondition(bearCross,
-    "VİOP Short Signal",
-    "🔴 VIOP SHORT | {{ticker}} | {{close}} | {{timenow}}")
+// ── Alerts (alert() — strategy içinde çalışır, alertcondition() değil) ───────
+if bullCross
+    alert("🟢 VIOP LONG | " + syminfo.ticker + " | " + str.tostring(close, "#.##") + " | " + str.tostring(time), alert.freq_once_per_bar)
+if bearCross
+    alert("🔴 VIOP SHORT | " + syminfo.ticker + " | " + str.tostring(close, "#.##") + " | " + str.tostring(time), alert.freq_once_per_bar)
 
 // ── Visuals ──────────────────────────────────────────────────────────────────
 bgcolor(inSession ? na : color.new(color.gray, 95), title="Session")

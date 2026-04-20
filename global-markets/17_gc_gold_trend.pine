@@ -79,5 +79,8 @@ bgcolor(bullAlign ? color.new(color.green, 95) : bearAlign ? color.new(color.red
 plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
 plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
 
-alertcondition(longEntry,  "Gold Long",  "Gold Triple EMA Long — {{close}}")
-alertcondition(shortEntry, "Gold Short", "Gold Triple EMA Short — {{close}}")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if longEntry
+    alert("Gold Triple EMA Long — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortEntry
+    alert("Gold Triple EMA Short — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)

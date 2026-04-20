@@ -87,5 +87,8 @@ bgcolor(not inXetra    ? color.new(color.gray,  96) : na, title="Off Hours")
 plotshape(longSignal,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
 plotshape(shortSignal, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
 
-alertcondition(longSignal,  "DAX Gap Long",  "DAX Gap Down Fade Long")
-alertcondition(shortSignal, "DAX Gap Short", "DAX Gap Up Fade Short")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if longSignal
+    alert("DAX Gap Down Fade Long — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortSignal
+    alert("DAX Gap Up Fade Short — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)

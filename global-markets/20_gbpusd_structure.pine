@@ -82,5 +82,8 @@ plotshape(bullBreak, "Long",  shape.triangleup,   location.belowbar, color.green
 plotshape(bearBreak, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
 bgcolor(not inSession ? color.new(color.gray, 96) : na)
 
-alertcondition(bullBreak, "GBPUSD Long",  "GBP/USD Structure Break Long")
-alertcondition(bearBreak, "GBPUSD Short", "GBP/USD Structure Break Short")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if bullBreak
+    alert("GBP/USD Structure Break Long — " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
+if bearBreak
+    alert("GBP/USD Structure Break Short — " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
