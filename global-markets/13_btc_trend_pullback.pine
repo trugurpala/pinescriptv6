@@ -64,5 +64,8 @@ bgcolor(downTrend ? color.new(color.red,   96) : na)
 plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
 plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
 
-alertcondition(longEntry,  "BTC Long",  "BTC Long Entry — {{close}}")
-alertcondition(shortEntry, "BTC Short", "BTC Short Entry — {{close}}")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if longEntry
+    alert("BTC Long Entry — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortEntry
+    alert("BTC Short Entry — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)

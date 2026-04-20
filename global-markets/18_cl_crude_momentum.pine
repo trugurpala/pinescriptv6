@@ -72,5 +72,8 @@ bgcolor(not inSession ? color.new(color.gray, 96) : na, title="Off Hours")
 plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
 plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
 
-alertcondition(bullCross, "CL Long",  "CL Crude Oil Long — {{close}}")
-alertcondition(bearCross, "CL Short", "CL Crude Oil Short — {{close}}")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if bullCross
+    alert("CL Crude Oil Long — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if bearCross
+    alert("CL Crude Oil Short — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)

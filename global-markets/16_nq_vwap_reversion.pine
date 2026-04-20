@@ -85,5 +85,8 @@ bgcolor(not inRTH ? color.new(color.gray, 96) : na)
 plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
 plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
 
-alertcondition(longEntry,  "NQ VWAP Long",  "NQ VWAP Reversion Long — {{close}}")
-alertcondition(shortEntry, "NQ VWAP Short", "NQ VWAP Reversion Short — {{close}}")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if longEntry
+    alert("NQ VWAP Reversion Long — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortEntry
+    alert("NQ VWAP Reversion Short — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)

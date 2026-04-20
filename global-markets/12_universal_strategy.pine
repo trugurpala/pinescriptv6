@@ -37,7 +37,7 @@ bool bullCross  = ta.crossover(fastEma, slowEma) and trendUp
 bool bearCross  = ta.crossunder(fastEma, slowEma) and trendDown
 
 // ── Debug: Enstrüman Bilgisi / Instrument Info ────────────────────────────────
-if barstate.islast
+if barstate.isconfirmed and barstate.islastconfirmedhistory
     label.new(bar_index, high,
         syminfo.exchange + ":" + syminfo.ticker + "\n" +
         "Type: " + syminfo.type + "\n" +

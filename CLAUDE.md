@@ -33,7 +33,7 @@ Bu repo şunu çözmek için kuruldu:
 | `global-markets/` | 22 | ES, NQ, Gold, Crude, EUR/USD, BTC, ETH, DAX, Nikkei, London Breakout... |
 | `webhook-templates/` | 7 | Telegram, Discord, JSON, VİOP alerts |
 
-**Toplam:** 56 `.pine` dosyası · 61 `.md` dosyası · 245 commit
+**Toplam:** 56 `.pine` dosyası · 61 `.md` dosyası · 50 commit
 
 ### Referans & Dokümantasyon
 ```

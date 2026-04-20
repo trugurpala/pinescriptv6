@@ -61,5 +61,8 @@ plot(trendEma,    "Trend EMA",  color.new(color.orange,20), linewidth=2)
 plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
 plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)
 
-alertcondition(longEntry,  "ETH Long",  "ETH Breakout Long — {{close}}")
-alertcondition(shortEntry, "ETH Short", "ETH Breakout Short — {{close}}")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if longEntry
+    alert("ETH Breakout Long — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortEntry
+    alert("ETH Breakout Short — " + str.tostring(close, "#.##"), alert.freq_once_per_bar)

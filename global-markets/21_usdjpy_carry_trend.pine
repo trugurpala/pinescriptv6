@@ -85,5 +85,8 @@ bgcolor(tokyo and london ? color.new(color.purple, 93) :
 plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
 plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)
 
-alertcondition(longEntry,  "USDJPY Long",  "USD/JPY Carry Trend Long")
-alertcondition(shortEntry, "USDJPY Short", "USD/JPY Carry Trend Short")
+// ── Alerts (alert() — strategy içinde çalışır) ───────────────────────────────
+if longEntry
+    alert("USD/JPY Carry Trend Long — " + str.tostring(close, "#.###"), alert.freq_once_per_bar)
+if shortEntry
+    alert("USD/JPY Carry Trend Short — " + str.tostring(close, "#.###"), alert.freq_once_per_bar)
