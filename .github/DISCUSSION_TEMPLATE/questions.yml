@@ -1,0 +1,33 @@
+title: "[Soru / Question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ❓ Soru / Question
+        TR: Pine Script v6 hakkında sorularını buraya yaz.
+        EN: Ask your Pine Script v6 questions here.
+  - type: textarea
+    id: question
+    attributes:
+      label: "Sorun / Your Question"
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: "Kod (varsa / if any)"
+      render: pine
+      placeholder: "//@version=6\n..."
+  - type: input
+    id: tv-error
+    attributes:
+      label: "TradingView Hata Mesajı (varsa / if any)"
+      placeholder: "Cannot call 'ta.stoch' with these arguments"
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Kontrol / Checklist"
+      options:
+        - label: "LESSONS_LEARNED.md'yi kontrol ettim / Checked LESSONS_LEARNED.md"
+        - label: "//@version=6 kullandım / Used //@version=6"
