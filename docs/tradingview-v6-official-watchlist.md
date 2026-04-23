@@ -1,6 +1,6 @@
 # TradingView Pine Script v6 Official Watchlist
 
-> Last checked: 2026-04-22
+> Last checked: 2026-04-23
 > Source: TradingView Pine Script official release notes and v6 migration guide.
 
 This file tracks official Pine Script v6 changes that should be reflected in this
@@ -50,6 +50,17 @@ repository's references, migration notes, examples, and LESSONS_LEARNED memory.
   - Add to drawing/visual reference docs.
 - Risk level: documentation safe.
 
+## 2025-08: Longer Strings and Pine Editor UX
+
+- Official change: maximum string length increased from 4,096 to 40,960 encoded
+  characters.
+- Official change: Pine Editor moved toward a side-panel workflow with visual
+  word wrap support.
+- Repo action:
+  - Add the string length limit to string/reference guidance.
+  - Mention editor word wrap as UX-only; it does not change source structure.
+- Risk level: documentation safe.
+
 ## 2025-07: Active Inputs and Continuous Futures
 
 - Official change: all `input*()` functions gained an `active` parameter.
@@ -59,6 +70,27 @@ repository's references, migration notes, examples, and LESSONS_LEARNED memory.
   - Add `syminfo.current_contract` to `reference/variables.md`.
   - Consider VIOP/global futures guidance where continuous contracts matter.
 - Risk level: documentation safe; strategy behavior changes need approval.
+
+## 2025-06: Library `export const`
+
+- Official change: libraries can export user-defined constant variables declared
+  with `export const` for supported primitive types.
+- Repo action:
+  - Add to `concepts/methods.md`, library guidance, or a future library reference
+    section if the repo adds reusable Pine libraries.
+- Risk level: documentation safe.
+
+## 2025-05: `time_close` on Non-Time-Based Charts
+
+- Official change: `time_close` and `time_close()` have improved behavior on tick
+  charts and price-based charts such as Renko, line break, Kagi, point & figure,
+  and range charts. On open realtime bars for non-time-based charts, the value is
+  `na` until the bar closes.
+- Repo action:
+  - Add to time/timeframe guidance.
+  - Warn strategy authors not to rely on realtime `time_close` values on
+    non-time-based charts.
+- Risk level: documentation safe; strategy behavior changes require approval.
 
 ## 2025-02: `bid` and `ask`
 
