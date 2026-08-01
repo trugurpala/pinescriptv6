@@ -12,6 +12,8 @@ welcome when their confidence matches their evidence.
 4. Add a failing regression test before validator or renderer behavior changes.
 5. Run the renderer instead of hand-editing generated instruction files.
 6. Report Pine examples honestly: local static success is `structural-only`.
+7. Use `docs/tradingview-manual-verification.md` before claiming
+   `tradingview-verified` evidence.
 
 Community material can suggest research, but an active distributed rule needs
 official or hash-bound manual evidence. Sanitize compiler errors; do not submit

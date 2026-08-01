@@ -62,6 +62,17 @@ class RepositoryTests(unittest.TestCase):
         self.assertIn("python tools/psak.py check", workflow)
         self.assertNotIn("python tools/psak.py links", workflow)
 
+    def test_source_link_workflow_is_advisory_network_gate(self):
+        workflow = (ROOT / ".github/workflows/source-links.yml").read_text(encoding="utf-8")
+        quality = (ROOT / ".github/workflows/quality.yml").read_text(encoding="utf-8")
+
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("schedule:", workflow)
+        self.assertIn("python tools/psak.py links", workflow)
+        self.assertNotIn("python -m unittest discover -s tests -v", workflow)
+        self.assertNotIn("python tools/psak.py check", workflow)
+        self.assertNotIn("python tools/psak.py links", quality)
+
 
 if __name__ == "__main__":
     unittest.main()

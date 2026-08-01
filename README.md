@@ -144,6 +144,8 @@ The repository tracks 56 Pine v6 files. `examples/manifest.json` records them as
 
 That status does not establish compilation, runtime behavior, profitability, non-repainting behavior, data access, or live-trading suitability. Check `examples/manifest.json` and any matching `verification/tradingview.json` record before making a stronger claim.
 
+To promote an example beyond `structural-only`, follow [TradingView manual verification](docs/tradingview-manual-verification.md).
+
 ## Supported AI tools
 
 | Tool | Project surface |
@@ -171,6 +173,8 @@ python tools/psak.py links
 
 `check` runs offline and combines catalog, example, critical-file, and generated-drift checks. Link checking stays separate because network availability does not prove repository correctness. GitHub runs the same offline gates in `.github/workflows/quality.yml`.
 
+The advisory `source-links` workflow can be run manually or on its weekly schedule to check official source URLs without making network availability a required PR gate.
+
 ## Security and privacy
 
 Do not place webhook secrets, exchange credentials, private Pine code, customer data, or personal information in examples, issues, or pull requests. Webhook examples use placeholders. Live use still needs authentication, payload validation, replay protection, rate limits, and trading-risk controls.
@@ -192,6 +196,7 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 ## Project documentation
 
 - [How source and evidence are tracked](docs/provenance.md)
+- [TradingView manual verification](docs/tradingview-manual-verification.md)
 - [Public writing principles](docs/writing-style.md)
 - [Pine v6 release coverage](knowledge/releases/2025-2026.md)
 - [Portable Agent Skill](SKILL.md)

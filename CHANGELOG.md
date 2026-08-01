@@ -4,7 +4,12 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 
 ## [Unreleased]
 
-No public changes yet.
+- Hardened catalog rule body validation so rule explanation paths must stay
+  inside the repository.
+- Added TradingView manual verification guidance for promoting examples beyond
+  `structural-only` evidence.
+- Added an advisory source-link workflow for scheduled or manual official URL
+  freshness checks.
 
 ## [1.0.0] — 2026-08-01
 

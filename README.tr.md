@@ -144,6 +144,8 @@ Depo, Git tarafından izlenen 56 Pine v6 dosyası içerir. `examples/manifest.js
 
 Bu kayıt; derlemeyi, çalışma davranışını, kârlılığı, yeniden çizim yapmamayı, veri erişimini veya canlı işlem uygunluğunu kanıtlamaz. Daha güçlü bir cümle kurmadan önce `examples/manifest.json` ile varsa eşleşen `verification/tradingview.json` kaydını denetle.
 
+Bir örneği `structural-only` durumunun ötesine taşımak için [TradingView elle doğrulama rehberini](docs/tradingview-manual-verification.md) izle.
+
 ## Desteklenen yapay zekâ araçları
 
 | Araç | Projedeki talimat yüzeyi |
@@ -171,6 +173,8 @@ python tools/psak.py links
 
 `check`; katalog, örnek, kritik dosya ve üretilmiş dosya farklarını ağ kullanmadan denetler. Ağ erişimi depo doğruluğunu kanıtlamadığı için bağlantı denetimi ayrıdır. GitHub, aynı çevrim dışı kontrolleri `.github/workflows/quality.yml` ile çalıştırır.
 
+Danışma amaçlı `source-links` workflow'u elle veya haftalık zamanlamayla resmî kaynak adreslerini denetler; ağ erişimini zorunlu PR kapısına dönüştürmez.
+
 ## Güvenlik ve gizlilik
 
 Alarm gizli anahtarını, borsa kimlik bilgilerini, özel Pine kodunu, müşteri verisini veya kişisel bilgiyi örneklere, issue kayıtlarına ya da pull request’lere koyma. Alarm örnekleri yer tutucu kullanır. Canlı kullanım ayrıca kimlik doğrulama, veri doğrulama, tekrar gönderim koruması, hız sınırı ve işlem riski denetimi ister.
@@ -192,6 +196,7 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 ## Proje belgeleri
 
 - [Kaynak ve kanıt nasıl izleniyor?](docs/provenance.md)
+- [TradingView elle doğrulama rehberi](docs/tradingview-manual-verification.md)
 - [Kamusal yazım ilkeleri](docs/writing-style.md)
 - [Pine v6 sürüm kapsamı](knowledge/releases/2025-2026.md)
 - [Taşınabilir ajan becerisi](SKILL.md)

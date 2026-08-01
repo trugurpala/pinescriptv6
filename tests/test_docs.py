@@ -24,6 +24,7 @@ REQUIRED_LINKS = (
     "CHANGELOG.md",
     "SKILL.md",
     "docs/provenance.md",
+    "docs/tradingview-manual-verification.md",
 )
 
 PUBLIC_HISTORY_DOCS = (
@@ -178,6 +179,21 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("## [Unreleased]", changelog)
         self.assertIn("Pine Script Agent Kit", citation)
         self.assertIn("https://github.com/trugurpala/pinescriptv6", citation)
+
+    def test_manual_tradingview_verification_guide_is_linked_without_overclaiming(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+        contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        guide = (ROOT / "docs/tradingview-manual-verification.md").read_text(encoding="utf-8")
+
+        for content in (english, turkish, contributing):
+            self.assertIn("docs/tradingview-manual-verification.md", content)
+
+        self.assertIn("structural-only", guide)
+        self.assertIn("tradingview-verified", guide)
+        self.assertIn("verification/tradingview.json", guide)
+        self.assertIn("examples/manifest.json", guide)
+        self.assertIn("Do not record", guide)
 
     def test_legacy_custom_gpt_docs_are_safe_bridges(self):
         paths = (

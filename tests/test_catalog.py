@@ -72,6 +72,28 @@ class CatalogTests(unittest.TestCase):
             self.assertIn("unknown-source", codes)
             self.assertIn("evidence-source-mismatch", codes)
 
+    def test_rule_body_path_must_stay_inside_repository(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            outside = root.parent / "outside-rule.md"
+            outside.write_text("# Outside\n", encoding="utf-8")
+            source_index = {"tv-reference-v6": "official-reference"}
+
+            for body in (
+                "../outside-rule.md",
+                str(outside),
+                "knowledge\\rules\\rule.md",
+            ):
+                rule = self._valid_rule(body=body)
+
+                issues = validate_catalog(
+                    root,
+                    {"schema_version": 1, "rules": [rule]},
+                    source_index,
+                )
+
+                self.assertIn("invalid-rule-body", {issue.code for issue in issues})
+
     def test_active_unverified_rule_is_not_distributable(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)

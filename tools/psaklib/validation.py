@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 from typing import Any
 
@@ -76,6 +76,16 @@ def _valid_date(value: object) -> bool:
         return date.fromisoformat(value).isoformat() == value
     except ValueError:
         return False
+
+
+def _valid_repo_relative_path(root: Path, value: object) -> bool:
+    if not isinstance(value, str) or not value.strip() or "\\" in value:
+        return False
+    relative = PurePosixPath(value)
+    if relative.is_absolute() or ".." in relative.parts:
+        return False
+    resolved = (root / Path(*relative.parts)).resolve()
+    return resolved.is_relative_to(root.resolve())
 
 
 def validate_sources(
@@ -192,7 +202,9 @@ def validate_catalog(
         if not list_values["sources"]:
             issues.append(Issue("missing-rule-source", path, "rule must reference a source"))
         body = rule.get("body")
-        if not isinstance(body, str) or not (root / body).is_file():
+        if not _valid_repo_relative_path(root, body):
+            issues.append(Issue("invalid-rule-body", path, "body path must stay inside the repository"))
+        elif not (root / str(body)).is_file():
             issues.append(Issue("missing-rule-body", path, f"missing rule body: {body}"))
         evidence = rule.get("evidence")
         if evidence not in EVIDENCE_LEVELS:
