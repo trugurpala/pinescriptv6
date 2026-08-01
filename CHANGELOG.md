@@ -4,7 +4,10 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 
 ## [Unreleased]
 
-No public changes yet.
+- Added a validated public decision register for ADOPT, ADAPT, REFERENCE, and
+  REJECT governance choices.
+- Documented the decision policy and refreshed the Pine v6 official watchlist as
+  a source-freshness review surface.
 
 ## [1.0.0] — 2026-08-01
 

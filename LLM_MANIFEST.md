@@ -6,6 +6,8 @@ The canonical machine-readable routing data is now:
 - `knowledge/catalog.json` — scoped rules and evidence;
 - `examples/manifest.json` — Pine file status and hashes;
 - `verification/tradingview.json` — manual hash-bound records;
+- `governance/decisions.json` — project decisions using ADOPT, ADAPT,
+  REFERENCE, and REJECT;
 - `agents/protocol.md` — tool-neutral behavior.
 
 Generated tool instructions live in `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`,

@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "decisions": [
+    {
+      "id": "PSAK-GOV-001",
+      "title": "Adopt a public decision register",
+      "disposition": "adopt",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Keep project-shaping choices in a small machine-readable register.",
+      "rationale": "The kit teaches agents to separate evidence from claims, so the repository should do the same for its own governance choices.",
+      "user_impact": "Contributors can see why a behavior exists before proposing a new rule or adapter.",
+      "source_refs": ["README.md", "docs/provenance.md"],
+      "implementation_refs": ["governance/decisions.json", "tools/psaklib/validation.py", "tests/test_validation.py"]
+    },
+    {
+      "id": "PSAK-GOV-002",
+      "title": "Adopt evidence-first agent behavior",
+      "disposition": "adopt",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Generated agents must cite source IDs, preserve scope, and label local checks as structural-only.",
+      "rationale": "Pine semantics change over time and often depend on chart context, account access, symbol data, and realtime behavior.",
+      "user_impact": "A vibe coder gets a useful answer without hidden overclaims about compilation or trading safety.",
+      "source_refs": ["agents/protocol.md", "knowledge/catalog.json", "knowledge/sources.json"],
+      "implementation_refs": ["AGENTS.md", "CLAUDE.md", "GEMINI.md", "generated/custom-gpt/INSTRUCTIONS.md"]
+    },
+    {
+      "id": "PSAK-GOV-003",
+      "title": "Adapt release-note tracking into freshness review",
+      "disposition": "adapt",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Use the Pine v6 official watchlist as a source-freshness review surface, not a stale task dump.",
+      "rationale": "Some official changes are already represented by scoped rules, while others are only context until the project adds a matching surface.",
+      "user_impact": "Readers can distinguish covered behavior from future review items without inheriting old internal work notes.",
+      "source_refs": ["knowledge/releases/2025-2026.md", "knowledge/sources.json#tv-release-notes"],
+      "implementation_refs": ["docs/tradingview-v6-official-watchlist.md", "README.md", "README.tr.md"]
+    },
+    {
+      "id": "PSAK-GOV-004",
+      "title": "Reference manual TradingView checks only by hash",
+      "disposition": "reference",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Treat manual Pine Editor checks as stronger evidence only when a current file hash matches a dated record.",
+      "rationale": "A Pine file can change while keeping the same name, so filename-based verification would be misleading.",
+      "user_impact": "Users know exactly when an example has been manually checked and when it still needs TradingView.",
+      "source_refs": ["verification/tradingview.json", "examples/manifest.json"],
+      "implementation_refs": ["tools/psaklib/examples.py", "docs/provenance.md", "README.md", "README.tr.md"]
+    },
+    {
+      "id": "PSAK-GOV-005",
+      "title": "Reject offline compilation claims",
+      "disposition": "reject",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Do not call local repository validation a Pine compile, non-repaint proof, security review, or profitability test.",
+      "rationale": "The project does not ship TradingView's compiler, market data, brokerage context, or chart runtime.",
+      "user_impact": "The public README stays honest and avoids giving traders false confidence.",
+      "source_refs": ["README.md", "README.tr.md", "verification/tradingview.json"],
+      "implementation_refs": ["tests/test_docs.py", "AGENTS.md", "CLAUDE.md"]
+    },
+    {
+      "id": "PSAK-GOV-006",
+      "title": "Adapt public docs for people before internals",
+      "disposition": "adapt",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Lead public documentation with user tasks, expected answer behavior, and evidence limits before repository internals.",
+      "rationale": "The kit serves traders and AI coding users first; internal file maps are useful only after the reader knows what problem is solved.",
+      "user_impact": "A new user can start with a Pine task instead of decoding repository architecture.",
+      "source_refs": ["docs/writing-style.md", "README.md", "README.tr.md"],
+      "implementation_refs": ["README.md", "README.tr.md", "tests/test_docs.py"]
+    },
+    {
+      "id": "PSAK-GOV-007",
+      "title": "Adopt bilingual parity for public surfaces",
+      "disposition": "adopt",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Keep English and Turkish README surfaces aligned in status, commands, warnings, and key links.",
+      "rationale": "The project is community infrastructure and should not make one audience carry weaker safety language.",
+      "user_impact": "Turkish and English readers receive the same operational truth.",
+      "source_refs": ["README.md", "README.tr.md", "docs/writing-style.md"],
+      "implementation_refs": ["README.md", "README.tr.md", "tests/test_docs.py"]
+    },
+    {
+      "id": "PSAK-GOV-008",
+      "title": "Reference Verified Signal without adding runtime weight",
+      "disposition": "reference",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Use the visual system as public design guidance while keeping repository validation dependency-free.",
+      "rationale": "Visual polish helps trust, but the core kit must remain usable with Git and Python standard library checks.",
+      "user_impact": "The GitHub page can look deliberate without making validation harder to run.",
+      "source_refs": ["docs/design/verified-signal-philosophy.md", "assets/social-preview.png"],
+      "implementation_refs": ["README.md", "README.tr.md", "docs/design/verified-signal-philosophy.md"]
+    },
+    {
+      "id": "PSAK-GOV-009",
+      "title": "Reject mandatory OpenAI or agent SDK runtime dependencies",
+      "disposition": "reject",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Do not require an API key, paid model account, or agent framework to consume the knowledge pack.",
+      "rationale": "The kit is a portable public knowledge surface, not a hosted agent service.",
+      "user_impact": "Community users can clone, inspect, and validate the project without signing into another platform.",
+      "source_refs": ["README.md", "SKILL.md", "LLM_MANIFEST.md"],
+      "implementation_refs": ["README.md", "README.tr.md", "LLM_MANIFEST.md"]
+    },
+    {
+      "id": "PSAK-GOV-010",
+      "title": "Adapt adapters from one protocol",
+      "disposition": "adapt",
+      "status": "active",
+      "decided_on": "2026-08-01",
+      "summary": "Generate tool-specific instructions from the same protocol and catalog instead of maintaining independent claims.",
+      "rationale": "Adapter drift would let one AI tool receive stronger or older Pine guidance than another.",
+      "user_impact": "Supported tools behave consistently and contributors know where a factual change belongs.",
+      "source_refs": ["agents/protocol.md", "knowledge/catalog.json", "LLM_MANIFEST.md"],
+      "implementation_refs": ["tools/psaklib/rendering.py", "AGENTS.md", "CLAUDE.md", "GEMINI.md", "generated/custom-gpt/INSTRUCTIONS.md"]
+    }
+  ]
+}

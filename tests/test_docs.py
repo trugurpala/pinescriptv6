@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 import re
 import struct
 import unittest
@@ -24,6 +25,7 @@ REQUIRED_LINKS = (
     "CHANGELOG.md",
     "SKILL.md",
     "docs/provenance.md",
+    "docs/decision-policy.md",
 )
 
 PUBLIC_HISTORY_DOCS = (
@@ -153,6 +155,27 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("Doğal Türkçe", style)
 
         self.assertFalse((ROOT / ".divan").exists())
+
+    def test_public_decision_register_is_documented_and_balanced(self):
+        decisions = json.loads(
+            (ROOT / "governance/decisions.json").read_text(encoding="utf-8")
+        )
+        records = decisions["decisions"]
+
+        self.assertGreaterEqual(len(records), 10)
+        self.assertEqual(
+            {record["disposition"] for record in records},
+            {"adopt", "adapt", "reference", "reject"},
+        )
+
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+        policy = (ROOT / "docs/decision-policy.md").read_text(encoding="utf-8")
+
+        self.assertIn("How project decisions are made", english)
+        self.assertIn("Proje kararları nasıl alınır?", turkish)
+        self.assertIn("governance/decisions.json", policy)
+        self.assertIn("ADOPT, ADAPT, REFERENCE, and REJECT", english)
 
     def test_public_snapshot_uses_current_release_contract(self):
         for relative_path in PUBLIC_HISTORY_DOCS:

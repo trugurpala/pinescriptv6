@@ -37,6 +37,7 @@ _test/
 *.json
 !webhook-templates/*.json
 !knowledge/**/*.json
+!governance/*.json
 !examples/manifest.json
 !verification/*.json
 !tests/fixtures/**/*.json

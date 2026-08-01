@@ -21,7 +21,7 @@ Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Winds
 > [!IMPORTANT]
 > Bu paket bir yapay zekâ yanıtını iyileştirebilir. TradingView derleyicisinin veya grafik testinin yerini alamaz. Depo kontrolü, Pine kodunun derlendiğini, hiç yeniden çizim yapmadığını, güvenli ya da kârlı olduğunu kanıtlamaz.
 
-[Başlangıç](#pine-görevinle-başla) · [Nasıl çalışır?](#bir-yapay-zekâ-ajanı-bu-paketi-nasıl-kullanır) · [Kaynaklar](#bilgi-nereden-geliyor) · [Doğrulama](#kanıt-seviyeleri-ne-anlama-geliyor) · [Topluluk](#topluluk-için-ücretsiz) · [Katkı](#projeye-katkı)
+[Başlangıç](#pine-görevinle-başla) · [Nasıl çalışır?](#bir-yapay-zekâ-ajanı-bu-paketi-nasıl-kullanır) · [Kaynaklar](#bilgi-nereden-geliyor) · [Kararlar](#proje-kararları-nasıl-alınır) · [Doğrulama](#kanıt-seviyeleri-ne-anlama-geliyor) · [Topluluk](#topluluk-için-ücretsiz) · [Katkı](#projeye-katkı)
 
 ## Pine görevinle başla
 
@@ -109,8 +109,22 @@ Ağ kullanan tek kalite komutu `python tools/psak.py links` komutudur. Kayıtlı
 | 5. Ajan rehberliği | `agents/protocol.md` ve `adapters/` | Ortak davranış sözleşmesi ve araca özel çerçeve |
 | 6. Örnek durumu | `examples/manifest.json` | İzlenen her `.pine` dosyası için SHA-256 ve doğrulama durumu |
 | 7. Elle yapılan kontrol | `verification/tradingview.json` | Dosya özetiyle eşleşen TradingView test kayıtları |
+| 8. Proje kararları | `governance/decisions.json` | Kaynak ve uygulama bağlantılarıyla ADOPT, ADAPT, REFERENCE ve REJECT kararları |
 
 Ayrıntılı açıklama için [kaynak ve kanıt modelini](docs/provenance.md) okuyabilirsin.
+
+## Proje kararları nasıl alınır?
+
+Paket, yeni fikirlerin fark edilmeden kamusal iddiaya dönüşmemesi için küçük
+bir Divan karar sözlüğü kullanır:
+
+- `adopt`: fikri korunan proje kuralı veya yüzeyi olarak al
+- `adapt`: niyeti koru, fakat bu depoya uygun hâle getir
+- `reference`: bilgiyi bağlam olarak tut, üretilen rehberliğe dönüştürme
+- `reject`: yanlış güven, gereksiz bağımlılık, gizlilik riski veya kanıtsız iddia oluşturuyorsa dışarıda bırak
+
+Etkin karar defteri `python tools/psak.py validate` ile denetlenir. İnceleme
+kuralları için [karar politikasını](docs/decision-policy.md) oku.
 
 ## Kanıt seviyeleri ne anlama geliyor?
 
@@ -192,6 +206,7 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 ## Proje belgeleri
 
 - [Kaynak ve kanıt nasıl izleniyor?](docs/provenance.md)
+- [Proje kararları nasıl alınır?](docs/decision-policy.md)
 - [Kamusal yazım ilkeleri](docs/writing-style.md)
 - [Pine v6 sürüm kapsamı](knowledge/releases/2025-2026.md)
 - [Taşınabilir ajan becerisi](SKILL.md)

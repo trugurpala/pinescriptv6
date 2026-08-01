@@ -29,6 +29,8 @@ DISTRIBUTABLE_EVIDENCE = {
 }
 ABSOLUTE_WORDS = {"always", "never", "guaranteed", "must"}
 RULE_STATUSES = {"active", "needs-review", "superseded"}
+DECISION_DISPOSITIONS = {"adopt", "adapt", "reference", "reject"}
+DECISION_STATUSES = {"active", "deferred", "closed"}
 ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 
 DEFAULT_CRITICAL_FILES = (
@@ -42,6 +44,7 @@ DEFAULT_CRITICAL_FILES = (
     "AGENTS.md",
     "knowledge/catalog.json",
     "knowledge/sources.json",
+    "governance/decisions.json",
     "examples/manifest.json",
 )
 
@@ -234,6 +237,81 @@ def validate_catalog(
     return sorted(issues)
 
 
+def _validate_reference_path(root: Path, path_value: str) -> bool:
+    clean = path_value.split("#", 1)[0]
+    if not clean or "://" in clean:
+        return True
+    path = Path(clean)
+    if path.is_absolute() or ".." in path.parts:
+        return False
+    return (root / clean).exists()
+
+
+def validate_decisions(root: Path, data: object) -> list[Issue]:
+    issues: list[Issue] = []
+    if not isinstance(data, dict) or data.get("schema_version") != 1:
+        return [Issue("invalid-schema", "governance/decisions.json", "schema_version must be 1")]
+    decisions = data.get("decisions")
+    if not isinstance(decisions, list):
+        return [Issue("invalid-decisions", "governance/decisions.json", "decisions must be a list")]
+    if len(decisions) < 10:
+        issues.append(Issue("too-few-decisions", "governance/decisions.json", "at least 10 decision records are required"))
+    required = {
+        "id",
+        "title",
+        "disposition",
+        "status",
+        "decided_on",
+        "summary",
+        "rationale",
+        "user_impact",
+        "source_refs",
+        "implementation_refs",
+    }
+    decision_ids: set[str] = set()
+    for index, decision in enumerate(decisions):
+        path = f"governance/decisions.json#/decisions/{index}"
+        if not isinstance(decision, dict):
+            issues.append(Issue("invalid-decision", path, "decision must be an object"))
+            continue
+        missing = sorted(required - decision.keys())
+        if missing:
+            issues.append(Issue("missing-decision-field", path, f"missing fields: {', '.join(missing)}"))
+        decision_id = decision.get("id")
+        if not isinstance(decision_id, str) or not ID_PATTERN.fullmatch(decision_id):
+            issues.append(Issue("invalid-decision-id", path, "id must be stable ASCII text"))
+        elif decision_id in decision_ids:
+            issues.append(Issue("duplicate-decision-id", path, f"duplicate id: {decision_id}"))
+        else:
+            decision_ids.add(decision_id)
+        for field in ("title", "summary", "rationale", "user_impact"):
+            value = decision.get(field)
+            if not isinstance(value, str) or not value.strip():
+                issues.append(Issue("invalid-decision-field", path, f"{field} must be non-empty text"))
+        if decision.get("disposition") not in DECISION_DISPOSITIONS:
+            issues.append(Issue("invalid-decision-disposition", path, "unsupported decision disposition"))
+        if decision.get("status") not in DECISION_STATUSES:
+            issues.append(Issue("invalid-decision-status", path, "unsupported decision status"))
+        if not _valid_date(decision.get("decided_on")):
+            issues.append(Issue("invalid-decision-date", path, "decided_on must be an ISO date"))
+        for field, issue_code, missing_code in (
+            ("source_refs", "invalid-decision-source", "missing-decision-source"),
+            ("implementation_refs", "invalid-decision-implementation", "missing-decision-implementation"),
+        ):
+            values = decision.get(field)
+            if (
+                not isinstance(values, list)
+                or not values
+                or any(not isinstance(item, str) or not item.strip() for item in values)
+            ):
+                issues.append(Issue(missing_code, path, f"{field} must contain non-empty text values"))
+                continue
+            for value in values:
+                if not _validate_reference_path(root, value):
+                    issues.append(Issue(issue_code, path, f"unresolvable reference: {value}"))
+    return sorted(issues)
+
+
 def validate_critical_files(
     root: Path, paths: tuple[str, ...] = DEFAULT_CRITICAL_FILES
 ) -> list[Issue]:
@@ -251,6 +329,7 @@ def validate_repository(root: Path) -> list[Issue]:
     required = {
         "knowledge/catalog.json": "missing-catalog",
         "knowledge/sources.json": "missing-sources",
+        "governance/decisions.json": "missing-decisions",
         "examples/manifest.json": "missing-examples",
         "verification/tradingview.json": "missing-verification",
     }
@@ -277,6 +356,13 @@ def validate_repository(root: Path) -> list[Issue]:
             issues.append(Issue("invalid-json", "knowledge/catalog.json", str(error)))
         else:
             issues.extend(validate_catalog(root, catalog_data, source_ids))
+    if (root / "governance/decisions.json").is_file():
+        try:
+            decision_data = load_json(root / "governance/decisions.json")
+        except (OSError, ValueError) as error:
+            issues.append(Issue("invalid-json", "governance/decisions.json", str(error)))
+        else:
+            issues.extend(validate_decisions(root, decision_data))
     if (root / "examples/manifest.json").is_file() and (root / "verification/tradingview.json").is_file():
         from .examples import validate_examples
 

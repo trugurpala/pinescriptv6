@@ -21,7 +21,7 @@ Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline, 
 > [!IMPORTANT]
 > This kit can improve an AI answer, but it cannot replace the TradingView compiler or a chart test. A repository check never becomes a claim that Pine code compiles, never repaints, is secure, or is profitable.
 
-[Start](#start-with-your-pine-task) · [How it works](#how-an-ai-agent-uses-this-kit) · [Sources](#where-the-knowledge-comes-from) · [Verification](#what-the-evidence-levels-mean) · [Community](#free-for-the-community) · [Contribute](#contributing)
+[Start](#start-with-your-pine-task) · [How it works](#how-an-ai-agent-uses-this-kit) · [Sources](#where-the-knowledge-comes-from) · [Decisions](#how-project-decisions-are-made) · [Verification](#what-the-evidence-levels-mean) · [Community](#free-for-the-community) · [Contribute](#contributing)
 
 ## Start with your Pine task
 
@@ -109,8 +109,23 @@ Every generated instruction starts with a named source. A source does not become
 | 5. Agent guidance | `agents/protocol.md` and `adapters/` | A shared behavior contract and tool-specific framing |
 | 6. Example status | `examples/manifest.json` | SHA-256 and verification state for every tracked `.pine` file |
 | 7. Manual evidence | `verification/tradingview.json` | Hash-bound TradingView test records |
+| 8. Project decisions | `governance/decisions.json` | ADOPT, ADAPT, REFERENCE, and REJECT decisions with source and implementation references |
 
 Read the full model in [Source provenance](docs/provenance.md).
+
+## How project decisions are made
+
+The kit uses a small Divan decision vocabulary so new ideas do not become public
+claims by accident:
+
+- `adopt`: keep the idea as a maintained project rule or surface
+- `adapt`: keep the intent, but reshape it for this repository
+- `reference`: keep it as context, not generated guidance
+- `reject`: leave it out because it would add false confidence, dependency
+  weight, privacy risk, or unsupported claims
+
+The active decision register is checked by `python tools/psak.py validate`. Read
+[Decision policy](docs/decision-policy.md) for the review rules.
 
 ## What the evidence levels mean
 
@@ -192,6 +207,7 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 ## Project documentation
 
 - [How source and evidence are tracked](docs/provenance.md)
+- [How project decisions are made](docs/decision-policy.md)
 - [Public writing principles](docs/writing-style.md)
 - [Pine v6 release coverage](knowledge/releases/2025-2026.md)
 - [Portable Agent Skill](SKILL.md)

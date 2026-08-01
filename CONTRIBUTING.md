@@ -9,9 +9,11 @@ welcome when their confidence matches their evidence.
 2. Find or register the official source in `knowledge/sources.json`.
 3. Give each new rule a stable `PSAK-*` ID, narrow claim, rationale, scope,
    exceptions, source IDs, evidence level, verification date, body, and tags.
-4. Add a failing regression test before validator or renderer behavior changes.
-5. Run the renderer instead of hand-editing generated instruction files.
-6. Report Pine examples honestly: local static success is `structural-only`.
+4. Use `docs/decision-policy.md` to mark durable choices as ADOPT, ADAPT,
+   REFERENCE, or REJECT when the change affects public behavior.
+5. Add a failing regression test before validator or renderer behavior changes.
+6. Run the renderer instead of hand-editing generated instruction files.
+7. Report Pine examples honestly: local static success is `structural-only`.
 
 Community material can suggest research, but an active distributed rule needs
 official or hash-bound manual evidence. Sanitize compiler errors; do not submit
