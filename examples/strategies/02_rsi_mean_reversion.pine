@@ -1,0 +1,36 @@
+//@version=6
+// RSI Mean Reversion — OB/OS Fade — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+strategy("RSI Mean Reversion [trugurpala]",
+    overlay=true, initial_capital=10000,
+    default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+    commission_type=strategy.commission.percent, commission_value=0.1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   rsiLen  = input.int(14, "RSI Length", minval=1)
+float obLevel = input.float(70, "OB Level", minval=60, maxval=90)
+float osLevel = input.float(30, "OS Level", minval=10, maxval=40)
+int   atrLen  = input.int(14, "ATR Length", minval=1)
+float slMult  = input.float(2.0, "SL Mult", step=0.1)
+float tpMult  = input.float(1.5, "TP Mult", step=0.1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float rsi    = ta.rsi(close, rsiLen)
+float atrVal = ta.atr(atrLen)
+bool  longEntry  = ta.crossover(rsi,  osLevel) and strategy.position_size == 0
+bool  shortEntry = ta.crossunder(rsi, obLevel) and strategy.position_size == 0
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if longEntry
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop=close - slMult * atrVal, limit=close + tpMult * atrVal)
+
+if shortEntry
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop=close + slMult * atrVal, limit=close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(shortEntry, "Short", shape.triangledown, location.abovebar, color.red,   size=size.normal)

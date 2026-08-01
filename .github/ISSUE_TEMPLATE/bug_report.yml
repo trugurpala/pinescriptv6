@@ -1,0 +1,21 @@
+name: "🐛 Bug Report"
+description: "Hatalı kod veya yanlış bilgi / Broken code or wrong info"
+title: "[BUG] "
+labels: ["bug"]
+assignees: ["trugurpala"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Ne yanlış? / What's wrong?"
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: "Kod / Code"
+      render: pine
+  - type: input
+    id: tv-error
+    attributes:
+      label: "TradingView hata mesajı / error message (varsa / if any)"

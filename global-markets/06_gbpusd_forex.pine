@@ -1,0 +1,53 @@
+//@version=6
+// GBP/USD Forex Strategy — London Session Focus
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+//
+// TR: Sembol: FX:GBPUSD
+// EN: Symbol: FX:GBPUSD
+// London: 07:00–17:00 GMT (cable en çok hareket eder)
+strategy("GBP/USD Forex Strategy [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 2,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.006,
+    slippage          = 1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen   = input.int(9,    "Fast EMA",    minval=1)
+int   slowLen   = input.int(21,   "Slow EMA",    minval=1)
+int   trendLen  = input.int(50,   "Trend EMA",   minval=1)
+int   atrLen    = input.int(14,   "ATR",         minval=1)
+float slMult    = input.float(1.5, "SL Mult",    step=0.1)
+float tpMult    = input.float(2.0, "TP Mult",    step=0.1)
+
+// ── London Seans Filtresi ─────────────────────────────────────────────────────
+bool inSession = not na(time(timeframe.period, "0700-1700", "GMT"))
+
+// ── Hesaplamalar ──────────────────────────────────────────────────────────────
+float fastEma   = ta.ema(close, fastLen)
+float slowEma   = ta.ema(close, slowLen)
+float trendEma  = ta.ema(close, trendLen)
+float atrVal    = ta.atr(atrLen)
+
+bool bullCross = ta.crossover(fastEma, slowEma) and close > trendEma and inSession
+bool bearCross = ta.crossunder(fastEma, slowEma) and close < trendEma and inSession
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop=close - slMult*atrVal, limit=close + tpMult*atrVal)
+if bearCross
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop=close + slMult*atrVal, limit=close - tpMult*atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+bgcolor(inSession ? color.new(color.blue, 96) : color.new(color.gray, 97))
+plot(fastEma,  "Fast",  fastEma > slowEma ? color.green : color.red,   linewidth=2)
+plot(slowEma,  "Slow",  fastEma > slowEma ? color.lime  : color.orange,linewidth=2)
+plot(trendEma, "Trend", color.new(color.gray, 40),                     linewidth=1)
+plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green)
+plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red)

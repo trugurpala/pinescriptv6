@@ -1,0 +1,62 @@
+//@version=6
+// E-mini S&P 500 (ES) / Micro E-mini (MES) Strategy
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+//
+// TR: Semboller: CME_MINI:ES1! (tam lot) / CME_MICRO:MES1! (mikro)
+// EN: Symbols:  CME_MINI:ES1! (full) / CME_MICRO:MES1! (micro)
+//
+// Seans / Session: 09:30–16:00 ET (14:30–21:00 UTC)
+// Kontrat değeri / Tick value: ES=$12.50/tick | MES=$1.25/tick
+// Komisyon / Commission: ~$2–5/side (tam) | ~$0.25–0.50 (mikro)
+strategy("ES S&P500 Strategy [trugurpala]",
+    overlay           = true,
+    initial_capital   = 25000,
+    default_qty_type  = strategy.fixed,
+    default_qty_value = 1,
+    commission_type   = strategy.commission.cash_per_contract,
+    commission_value  = 4.0,   // ~$4/side for ES
+    slippage          = 1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen    = input.int(9,    "Fast EMA",    minval=1)
+int   slowLen    = input.int(21,   "Slow EMA",    minval=1)
+int   atrLen     = input.int(14,   "ATR",         minval=1)
+float slMult     = input.float(1.5, "SL Mult",    step=0.1)
+float tpMult     = input.float(3.0, "TP Mult",    step=0.1)
+bool  longOnly   = input.bool(false, "Long Only")
+
+// ── ES Seans Filtresi: 09:30–16:00 ET (UTC-4/UTC-5) ──────────────────────────
+// EN: RTH (Regular Trading Hours) filter for ES
+bool inRTH = not na(time(timeframe.period, "0930-1600", "America/New_York"))
+
+// ── Hesaplamalar / Calculations ───────────────────────────────────────────────
+float fastEma  = ta.ema(close, fastLen)
+float slowEma  = ta.ema(close, slowLen)
+float atrVal   = ta.atr(atrLen)
+bool  bullCross = ta.crossover(fastEma,  slowEma) and inRTH
+bool  bearCross = ta.crossunder(fastEma, slowEma) and inRTH
+
+// ── RTH sonu tüm pozisyonları kapat / Close all at RTH end ──────────────────
+bool rthEnd = inRTH[1] and not inRTH
+if rthEnd
+    strategy.close_all(comment="RTH End")
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if bearCross and not longOnly
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+bgcolor(inRTH ? na : color.new(color.gray, 96), title="Outside RTH")
+plot(fastEma, "Fast", fastEma > slowEma ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
+plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red,   size=size.small)

@@ -1,0 +1,74 @@
+//@version=6
+// Alert Conditions — Complete Reference
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+indicator("Alert Examples [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int fastLen = input.int(9,  "Fast EMA", minval=1)
+int slowLen = input.int(21, "Slow EMA", minval=1)
+int rsiLen  = input.int(14, "RSI",      minval=1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float fastEma  = ta.ema(close, fastLen)
+float slowEma  = ta.ema(close, slowLen)
+float rsi      = ta.rsi(close, rsiLen)
+float atr      = ta.atr(14)
+
+bool bullCross = ta.crossover(fastEma,  slowEma)
+bool bearCross = ta.crossunder(fastEma, slowEma)
+bool rsiOb     = ta.crossunder(rsi, 70)
+bool rsiOs     = ta.crossover(rsi,  30)
+
+// ── alertcondition() — Kullanıcı manuel alarm kurar ──────────────────────────
+// TR: TradingView'da elle alarm oluşturmak için
+// EN: For manually creating alerts in TradingView UI
+alertcondition(bullCross,
+    title   = "EMA Bull Cross",
+    message = "🟢 EMA Bull | {{ticker}} | {{interval}} | {{close}}")
+
+alertcondition(bearCross,
+    title   = "EMA Bear Cross",
+    message = "🔴 EMA Bear | {{ticker}} | {{interval}} | {{close}}")
+
+alertcondition(rsiOb,
+    title   = "RSI Overbought Exit",
+    message = "⚠️ RSI OB Exit | {{ticker}} | RSI seviyesi 70 altına düştü")
+
+alertcondition(rsiOs,
+    title   = "RSI Oversold Exit",
+    message = "⚠️ RSI OS Exit | {{ticker}} | RSI seviyesi 30 üstüne çıktı")
+
+// ── alert() — Kod içinde tetiklenir ──────────────────────────────────────────
+// TR: Koşul gerçekleşince otomatik tetiklenir
+// EN: Fires automatically when condition is met
+
+// Her bar başına bir kez
+if bullCross
+    alert("🟢 BULL CROSS | " + syminfo.ticker + " | " + str.tostring(close),
+          alert.freq_once_per_bar)
+
+// Sadece bar kapanışında
+if bearCross
+    alert("🔴 BEAR CROSS | " + syminfo.ticker + " | " + str.tostring(close),
+          alert.freq_once_per_bar_close)
+
+// Her tickte (dikkatli kullan!)
+// if someCondition
+//     alert("msg", alert.freq_all)
+
+// ── JSON webhook örneği ───────────────────────────────────────────────────────
+// TR: Bu mesajı TradingView Alert → Message kutusuna yapıştır
+// EN: Paste this in TradingView Alert → Message box
+// {
+//   "symbol":   "{{ticker}}",
+//   "action":   "buy",
+//   "price":    {{close}},
+//   "interval": "{{interval}}",
+//   "atr":      "hesaplanacak"
+// }
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(fastEma, "Fast", fastEma > slowEma ? color.green : color.red, linewidth=2)
+plot(slowEma, "Slow", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
+plotshape(bullCross, "Bull", shape.triangleup,   location.belowbar, color.green)
+plotshape(bearCross, "Bear", shape.triangledown, location.abovebar, color.red)

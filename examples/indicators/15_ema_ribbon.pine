@@ -1,0 +1,39 @@
+//@version=6
+// EMA Ribbon — 8 EMA Şeridi
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+indicator("EMA Ribbon [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+bool showFill = input.bool(true, "Fill Between")
+
+// ── 8 EMA ────────────────────────────────────────────────────────────────────
+float e1  = ta.ema(close, 8)
+float e2  = ta.ema(close, 13)
+float e3  = ta.ema(close, 21)
+float e4  = ta.ema(close, 34)
+float e5  = ta.ema(close, 55)
+float e6  = ta.ema(close, 89)
+float e7  = ta.ema(close, 144)
+float e8  = ta.ema(close, 233)
+
+bool bullish = e1 > e2 and e2 > e3 and e3 > e4
+bool bearish = e1 < e2 and e2 < e3 and e3 < e4
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+color ribbonCol = bullish ? color.green : bearish ? color.red : color.gray
+
+p1 = plot(e1,  "EMA 8",   ribbonCol, linewidth=1)
+p2 = plot(e2,  "EMA 13",  ribbonCol, linewidth=1)
+p3 = plot(e3,  "EMA 21",  ribbonCol, linewidth=1)
+p4 = plot(e4,  "EMA 34",  ribbonCol, linewidth=1)
+p5 = plot(e5,  "EMA 55",  ribbonCol, linewidth=1)
+p6 = plot(e6,  "EMA 89",  ribbonCol, linewidth=1)
+p7 = plot(e7,  "EMA 144", ribbonCol, linewidth=1)
+p8 = plot(e8,  "EMA 233", ribbonCol, linewidth=2)
+
+if showFill
+    fill(p1, p8, bullish ? color.new(color.green, 88) :
+                 bearish ? color.new(color.red,   88) :
+                           color.new(color.gray,  88))
+
+bgcolor(bullish ? color.new(color.green, 96) : bearish ? color.new(color.red, 96) : na)

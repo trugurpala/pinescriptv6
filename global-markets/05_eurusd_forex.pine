@@ -1,0 +1,61 @@
+//@version=6
+// EUR/USD Forex Strategy — London + NY Session
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+//
+// TR: Sembol: FX:EURUSD / OANDA:EURUSD / FXCM:EURUSD
+// EN: Symbol: FX:EURUSD / OANDA:EURUSD / FXCM:EURUSD
+//
+// En Aktif Seanslar / Most Active Sessions:
+// London: 08:00–16:00 GMT
+// New York: 13:00–21:00 GMT
+// Overlap (en iyi): 13:00–16:00 GMT
+strategy("EUR/USD Forex Strategy [trugurpala]",
+    overlay           = true,
+    initial_capital   = 10000,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 2,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.005,  // ~0.5 pip spread
+    slippage          = 1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen   = input.int(9,    "Fast EMA",  minval=1)
+int   slowLen   = input.int(21,   "Slow EMA",  minval=1)
+int   atrLen    = input.int(14,   "ATR",       minval=1)
+float slMult    = input.float(1.5, "SL Mult",  step=0.1)
+float tpMult    = input.float(2.0, "TP Mult",  step=0.1)
+
+// ── London + NY Seans Filtresi ────────────────────────────────────────────────
+bool london = not na(time(timeframe.period, "0800-1600", "GMT"))
+bool newYork = not na(time(timeframe.period, "1300-2100", "GMT"))
+bool inSession = london or newYork
+
+// ── Hesaplamalar ──────────────────────────────────────────────────────────────
+float fastEma  = ta.ema(close, fastLen)
+float slowEma  = ta.ema(close, slowLen)
+float atrVal   = ta.atr(atrLen)
+
+bool bullCross = ta.crossover(fastEma,  slowEma) and inSession
+bool bearCross = ta.crossunder(fastEma, slowEma) and inSession
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if bearCross
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+bgcolor(london and newYork ? color.new(color.green, 96) : // Overlap — en aktif
+        inSession           ? color.new(color.blue, 96)  :
+                              color.new(color.gray, 97))
+plot(fastEma, "Fast", fastEma > slowEma ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
+plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green)
+plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red)

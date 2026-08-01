@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "outputs": [
+    ".clinerules",
+    ".cursor/rules/pinescriptv6.mdc",
+    ".cursorrules",
+    ".github/copilot-instructions.md",
+    ".github/instructions/pine-script.instructions.md",
+    ".windsurf/rules/pine-script-agent-kit.md",
+    ".windsurfrules",
+    ".zed/rules",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "generated/custom-gpt/INSTRUCTIONS.md",
+    "generated/custom-gpt/KNOWLEDGE.md"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {"id": "BAD-MATH", "claim": "Never use math.avg()."},
+    {"id": "BAD-INPUT", "claim": "Never use bare input()."},
+    {"id": "BAD-TICK", "claim": "Never use calc_on_every_tick."},
+    {"id": "BAD-BARSTATE", "claim": "Always replace barstate.islast with barstate.isconfirmed."},
+    {"id": "BAD-SECURITY", "claim": "Always add [1] and lookahead_on to request.security()."}
+  ]
+}

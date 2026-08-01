@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions — Soru / Fikir / Paylaşım
+    url: https://github.com/trugurpala/pinescriptv6/discussions
+    about: TR - Soru, fikir veya Pine Script v6 hakkında tartışmalar için. / EN - For questions, ideas, or Pine Script v6 discussions.
+  - name: 🐦 X/Twitter @trugurpala
+    url: https://x.com/trugurpala
+    about: Hızlı sorular / Quick questions
+  - name: 📈 TradingView trugurpala
+    url: https://tr.tradingview.com/u/trugurpala/
+    about: Yayınlanan scriptler / Published scripts

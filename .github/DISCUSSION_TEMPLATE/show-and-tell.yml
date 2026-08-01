@@ -1,0 +1,37 @@
+title: "[Show] "
+labels: ["show-and-tell"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎉 Paylaş / Share
+        TR: Bu repo'dan ilham alarak yaptığın bir şeyi paylaş!
+        EN: Share something you built inspired by this repo!
+  - type: input
+    id: title
+    attributes:
+      label: "Ne yaptın? / What did you build?"
+      placeholder: "VIOP için özel strateji, indikatör, otomasyon..."
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: "Açıklama / Description"
+      description: "TR veya EN yazabilirsin / Write in TR or EN"
+    validations:
+      required: true
+  - type: input
+    id: tv-link
+    attributes:
+      label: "TradingView Linki (varsa / if any)"
+      placeholder: "https://tr.tradingview.com/script/..."
+  - type: dropdown
+    id: pine-version
+    attributes:
+      label: "Pine Script versiyonu / Version"
+      options:
+        - "v6 (önerilen / recommended)"
+        - "v5"
+    validations:
+      required: true

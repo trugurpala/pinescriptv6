@@ -1,0 +1,177 @@
+//@version=6
+// MTF VİOP Strategy — 5dk Trend + 1dk Entry
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: İki katmanlı MTF strateji.
+//     5dk: Trend yönü (EMA + Supertrend)
+//     1dk: Entry sinyali (EMA cross + Hacim + Fakeout filtresi)
+//     VİOP 09:30-18:15 seans filtresi dahil.
+//
+// EN: Two-layer MTF strategy.
+//     5min: Trend direction (EMA + Supertrend)
+//     1min: Entry signal (EMA cross + Volume + Fakeout filter)
+//     VIOP session filter 09:30-18:15 included.
+//
+// Önerilen / Recommended:
+//   Sembol: BIST:XU030D1! (VİOP) veya herhangi bir sembol
+//   Chart TF: 1dk / 1min  (entry timeframe)
+//   Trend TF: 5dk / 5min  (input ile değiştirilebilir)
+
+strategy("MTF VİOP Strategy [trugurpala]",
+    overlay           = true,
+    initial_capital   = 100000,
+    default_qty_type  = strategy.fixed,
+    default_qty_value = 1,
+    commission_type   = strategy.commission.cash_per_contract,
+    commission_value  = 2.0,
+    slippage          = 2)
+
+// ── Inputs — Trend TF (Üst) ──────────────────────────────────────────────────
+string trendTF   = input.string("5",   "Trend TF (5dk önerilen)",
+    options=["3","5","15","30","60"], group="Trend TF (Üst / Upper)")
+int    trendFast = input.int(9,  "Trend Fast EMA", minval=1, group="Trend TF (Üst / Upper)")
+int    trendSlow = input.int(21, "Trend Slow EMA", minval=1, group="Trend TF (Üst / Upper)")
+int    stLen     = input.int(10, "Supertrend ATR Periyot", minval=1, group="Trend TF (Üst / Upper)")
+float  stFact    = input.float(3.0, "Supertrend Faktör", step=0.1, group="Trend TF (Üst / Upper)")
+
+// ── Inputs — Entry (Alt / Chart TF) ─────────────────────────────────────────
+int    entFast   = input.int(9,  "Entry Fast EMA", minval=1, group="Entry (Alt / Chart TF)")
+int    entSlow   = input.int(21, "Entry Slow EMA", minval=1, group="Entry (Alt / Chart TF)")
+int    atrLen    = input.int(14, "ATR", minval=1, group="Entry (Alt / Chart TF)")
+float  slMult    = input.float(2.0, "SL (ATR×)", step=0.1, group="Entry (Alt / Chart TF)")
+float  tpMult    = input.float(3.0, "TP (ATR×)", step=0.1, group="Entry (Alt / Chart TF)")
+bool   longOnly  = input.bool(false, "Long Only", group="Entry (Alt / Chart TF)")
+
+// ── Inputs — Filtreler ───────────────────────────────────────────────────────
+bool   useVol    = input.bool(true,  "Hacim Filtresi",  group="Filtreler / Filters")
+int    volLen    = input.int(20,    "Volume MA",  minval=5, group="Filtreler / Filters")
+float  volMult   = input.float(1.3,  "Volume Mult", step=0.1, group="Filtreler / Filters")
+bool   useNoise  = input.bool(true,  "ATR Gürültü Filtresi", group="Filtreler / Filters")
+float  noiseMult = input.float(0.3,  "Noise (ATR×)", step=0.05, group="Filtreler / Filters")
+
+// ── Inputs — Seans ───────────────────────────────────────────────────────────
+bool   useSession = input.bool(true, "VİOP Seans Filtresi (09:30-18:15)", group="Seans / Session")
+
+// ── TREND TF — request.security ile üst TF verileri ─────────────────────────
+// LESSONS_LEARNED: [1] + lookahead_on → repainting yok
+[tfFastEma, tfSlowEma, tfStUp, tfStDir] = request.security(
+    syminfo.tickerid, trendTF,
+    [ta.ema(close, trendFast)[1],
+     ta.ema(close, trendSlow)[1],
+     ta.supertrend(stFact, stLen)[0][1],
+     ta.supertrend(stFact, stLen)[1][1]],
+    lookahead = barmerge.lookahead_on)
+
+// Üst TF trend yönü
+bool trendBull = tfFastEma > tfSlowEma and tfStDir == 1
+bool trendBear = tfFastEma < tfSlowEma and tfStDir == -1
+
+// ── ENTRY TF — chart timeframe hesaplamaları ──────────────────────────────────
+float entFastEma = ta.ema(close, entFast)
+float entSlowEma = ta.ema(close, entSlow)
+float atrVal     = ta.atr(atrLen)
+float volAvg     = ta.sma(volume, volLen)
+
+// ── Seans Filtresi ────────────────────────────────────────────────────────────
+bool inSession  = not useSession or not na(time(timeframe.period, "0930-1815", "UTC+3"))
+bool sesClose   = useSession and (not na(time(timeframe.period, "0930-1815", "UTC+3")[0]) == false) and not na(time(timeframe.period, "0930-1815", "UTC+3")[1])
+
+if sesClose
+    strategy.close_all(comment="Seans sonu")
+
+// ── Filtreler ─────────────────────────────────────────────────────────────────
+bool f_vol   = not useVol   or volume > volAvg * volMult
+bool f_noise = not useNoise or math.abs(close - close[1]) > atrVal * noiseMult
+
+// ── Entry Sinyalleri ─────────────────────────────────────────────────────────
+// Entry: alt TF cross + üst TF trend yönü + filtreler
+bool longEntry  = ta.crossover(entFastEma, entSlowEma) and trendBull and f_vol and f_noise and inSession
+bool shortEntry = ta.crossunder(entFastEma, entSlowEma) and trendBear and f_vol and f_noise and inSession and not longOnly
+
+// ── Girişler ──────────────────────────────────────────────────────────────────
+if longEntry and strategy.position_size == 0
+    strategy.entry("Long", strategy.long, comment="MTF ↑")
+    strategy.exit("Long Exit", "Long",
+        stop           = close - slMult * atrVal,
+        limit          = close + tpMult * atrVal,
+        comment_loss   = "SL",
+        comment_profit = "TP")
+
+if shortEntry and strategy.position_size == 0
+    strategy.entry("Short", strategy.short, comment="MTF ↓")
+    strategy.exit("Short Exit", "Short",
+        stop           = close + slMult * atrVal,
+        limit          = close - tpMult * atrVal,
+        comment_loss   = "SL",
+        comment_profit = "TP")
+
+// ── Alertler — LESSONS_LEARNED: alert() kullan ───────────────────────────────
+if longEntry
+    alert("MTF LONG — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+if shortEntry
+    alert("MTF SHORT — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"), alert.freq_once_per_bar)
+
+// ── Görseller ────────────────────────────────────────────────────────────────
+// Entry EMA'ları
+plot(entFastEma, "Entry Fast", entFastEma > entSlowEma ? color.green : color.red, linewidth=1)
+plot(entSlowEma, "Entry Slow", entFastEma > entSlowEma ? color.lime  : color.orange, linewidth=2)
+
+// Trend EMA'ları (üst TF) — kalın, yarı saydam
+plot(tfFastEma, "Trend Fast (5dk)", color.new(color.aqua,  40), linewidth=2)
+plot(tfSlowEma, "Trend Slow (5dk)", color.new(color.purple, 40), linewidth=2)
+
+// Seans arka planı
+bgcolor(inSession and useSession ? color.new(color.blue, 97) : na, title="Seans BG")
+
+// Trend arka planı
+bgcolor(trendBull ? color.new(color.green, 96) : trendBear ? color.new(color.red, 96) : na, title="Trend BG")
+
+// Sinyal okları
+plotshape(longEntry,  "Long",  shape.triangleup,   location.belowbar, color.new(color.green, 0), size=size.normal)
+plotshape(shortEntry, "Short", shape.triangledown,  location.abovebar, color.new(color.red,   0), size=size.normal)
+
+// ── Durum Tablosu — LESSONS_LEARNED: barstate.isconfirmed ────────────────────
+var table st = table.new(
+    position.top_right, 2, 5,
+    bgcolor      = color.new(color.black, 70),
+    border_width = 2,
+    frame_color  = color.new(color.gray, 50),
+    frame_width  = 2)
+
+if barstate.isconfirmed
+    // Başlık
+    table.cell(st, 0, 0, "MTF VİOP",
+        bgcolor=color.new(color.navy, 20), text_color=color.white,
+        text_size=size.normal, text_halign=text.align_left, width=10)
+    table.cell(st, 1, 0, "DURUM",
+        bgcolor=color.new(color.navy, 20), text_color=color.white,
+        text_size=size.normal, text_halign=text.align_center, width=7)
+    // Trend (5dk)
+    string trendTxt = trendBull ? "▲ BULL" : trendBear ? "▼ BEAR" : "— NÖTR"
+    color  trendClr = trendBull ? color.lime  : trendBear ? color.red : color.gray
+    color  trendBg  = trendBull ? color.new(color.green, 70) : trendBear ? color.new(color.red, 70) : color.new(color.gray, 80)
+    table.cell(st, 0, 1, "Trend " + trendTF + "dk",
+        bgcolor=trendBg, text_color=color.white, text_size=size.normal)
+    table.cell(st, 1, 1, trendTxt,
+        text_color=trendClr, bgcolor=trendBg, text_size=size.large)
+    // Hacim
+    table.cell(st, 0, 2, "Hacim",
+        bgcolor=color.new(color.gray, 80), text_color=color.white, text_size=size.normal)
+    table.cell(st, 1, 2, useVol ? (f_vol ? "  ✓" : "  ✗") : " OFF",
+        text_color=useVol ? (f_vol ? color.lime : color.red) : color.gray,
+        bgcolor=color.new(color.gray, 80), text_size=size.large)
+    // Gürültü
+    table.cell(st, 0, 3, "ATR Gürültü",
+        bgcolor=color.new(color.gray, 82), text_color=color.white, text_size=size.normal)
+    table.cell(st, 1, 3, useNoise ? (f_noise ? "  ✓" : "  ✗") : " OFF",
+        text_color=useNoise ? (f_noise ? color.lime : color.red) : color.gray,
+        bgcolor=color.new(color.gray, 82), text_size=size.large)
+    // Sinyal
+    string sigTxt = longEntry ? "▲  LONG" : shortEntry ? "▼  SHORT" : "—  BEKLE"
+    color  sigBg  = longEntry ? color.new(color.green, 30) : shortEntry ? color.new(color.red, 30) : color.new(color.gray, 60)
+    color  sigFg  = longEntry ? color.lime : shortEntry ? color.red : color.silver
+    table.cell(st, 0, 4, "◉  SİNYAL",
+        bgcolor=sigBg, text_color=color.white, text_size=size.large, text_halign=text.align_left)
+    table.cell(st, 1, 4, sigTxt,
+        text_color=sigFg, bgcolor=sigBg, text_size=size.large, text_halign=text.align_center)

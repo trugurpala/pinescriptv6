@@ -1,0 +1,27 @@
+//@version=6
+// EMA Cross Indicator — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("EMA Cross [trugurpala]", overlay=true)
+
+// ── Inputs ──────────────────────────────────────────────────────────────────
+int  fastLen = input.int(9,  "Fast EMA", minval=1)
+int  slowLen = input.int(21, "Slow EMA", minval=1)
+bool showBg  = input.bool(true, "Background Color")
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float fastEma  = ta.ema(close, fastLen)
+float slowEma  = ta.ema(close, slowLen)
+bool  bullCross = ta.crossover(fastEma,  slowEma)
+bool  bearCross = ta.crossunder(fastEma, slowEma)
+bool  isBull    = fastEma > slowEma
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(fastEma, "Fast EMA", isBull ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow EMA", isBull ? color.lime  : color.orange, linewidth=2)
+bgcolor(showBg ? (isBull ? color.new(color.green, 93) : color.new(color.red, 93)) : na)
+plotshape(bullCross, "Bull", shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(bearCross, "Bear", shape.triangledown, location.abovebar, color.red,   size=size.small)
+
+// ── Alerts ───────────────────────────────────────────────────────────────────
+alertcondition(bullCross, "Bull Cross", "EMA Bull Cross — {{ticker}} @ {{close}}")
+alertcondition(bearCross, "Bear Cross", "EMA Bear Cross — {{ticker}} @ {{close}}")

@@ -1,0 +1,43 @@
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local design review exports
+tmp/figma-review/
+
+# Python (backtest tools)
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.env
+*.egg-info/
+
+# Pine Script taslaklar / drafts
+*.draft.pine
+_local/
+_test/
+
+# Data files
+*.csv
+*.xlsx
+*.json
+!webhook-templates/*.json
+!knowledge/**/*.json
+!examples/manifest.json
+!verification/*.json
+!tests/fixtures/**/*.json
+!tests/golden/*.json

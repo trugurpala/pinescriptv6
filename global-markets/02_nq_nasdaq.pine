@@ -1,0 +1,64 @@
+//@version=6
+// E-mini Nasdaq-100 (NQ) / Micro E-mini (MNQ) Strategy
+// github.com/trugurpala/pinescriptv6 — Author: Ugur Pala
+//
+// TR: Semboller: CME_MINI:NQ1! (tam) / CME_MICRO:MNQ1! (mikro)
+// EN: Symbols:  CME_MINI:NQ1! (full) / CME_MICRO:MNQ1! (micro)
+//
+// Seans / Session: 09:30–16:00 ET
+// Tick değeri / Tick value: NQ=$5/tick | MNQ=$0.50/tick
+// Not: NQ volatilitesi ES'den ~2x yüksek — ATR çarpanlarını ayarla
+// Note: NQ volatility is ~2x ES — adjust ATR multipliers accordingly
+strategy("NQ Nasdaq Strategy [trugurpala]",
+    overlay           = true,
+    initial_capital   = 25000,
+    default_qty_type  = strategy.fixed,
+    default_qty_value = 1,
+    commission_type   = strategy.commission.cash_per_contract,
+    commission_value  = 4.0,
+    slippage          = 1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen    = input.int(9,    "Fast EMA",  minval=1)
+int   slowLen    = input.int(21,   "Slow EMA",  minval=1)
+int   rsiLen     = input.int(14,   "RSI",       minval=1)
+float rsiMin     = input.float(52, "RSI Min Long", minval=45, maxval=70)
+float rsiMax     = input.float(48, "RSI Max Short",minval=30, maxval=55)
+int   atrLen     = input.int(14,   "ATR",       minval=1)
+float slMult     = input.float(2.0, "SL Mult",  step=0.1)
+float tpMult     = input.float(3.5, "TP Mult",  step=0.1)
+
+// ── Seans Filtresi ────────────────────────────────────────────────────────────
+bool inRTH = not na(time(timeframe.period, "0930-1600", "America/New_York"))
+bool rthEnd = inRTH[1] and not inRTH
+if rthEnd
+    strategy.close_all(comment="RTH End")
+
+// ── Hesaplamalar ──────────────────────────────────────────────────────────────
+float fastEma  = ta.ema(close, fastLen)
+float slowEma  = ta.ema(close, slowLen)
+float rsi      = ta.rsi(close, rsiLen)
+float atrVal   = ta.atr(atrLen)
+
+bool bullCross = ta.crossover(fastEma, slowEma) and rsi > rsiMin and inRTH
+bool bearCross = ta.crossunder(fastEma, slowEma) and rsi < rsiMax and inRTH
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Long Exit", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal)
+
+if bearCross
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short Exit", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+bgcolor(inRTH ? na : color.new(color.gray, 96))
+plot(fastEma, "Fast", fastEma > slowEma ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow", fastEma > slowEma ? color.lime  : color.orange, linewidth=2)
+plotshape(bullCross, "Long",  shape.triangleup,   location.belowbar, color.green)
+plotshape(bearCross, "Short", shape.triangledown, location.abovebar, color.red)

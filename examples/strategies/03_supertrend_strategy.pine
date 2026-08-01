@@ -1,0 +1,44 @@
+//@version=6
+// Supertrend Trend Following — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+strategy("Supertrend Strategy [trugurpala]",
+    overlay=true, initial_capital=10000,
+    default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+    commission_type=strategy.commission.percent, commission_value=0.1)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   atrLen   = input.int(10,   "ATR Length",     minval=1)
+float atrMult  = input.float(3.0, "ATR Multiplier", step=0.1)
+bool  longOnly = input.bool(false, "Long Only")
+
+// ── Supertrend ───────────────────────────────────────────────────────────────
+float atr       = ta.atr(atrLen)
+float upperBand = hl2 + atrMult * atr
+float lowerBand = hl2 - atrMult * atr
+var float superTrend = na
+var int   direction  = 1
+float prevUpper = nz(upperBand[1], upperBand)
+float prevLower = nz(lowerBand[1], lowerBand)
+upperBand := upperBand < prevUpper or close[1] > prevUpper ? upperBand : prevUpper
+lowerBand := lowerBand > prevLower or close[1] < prevLower ? lowerBand : prevLower
+if close > nz(superTrend[1], 0)
+    superTrend := lowerBand
+    direction  := 1
+else
+    superTrend := upperBand
+    direction  := -1
+bool bullSwitch = direction ==  1 and direction[1] == -1
+bool bearSwitch = direction == -1 and direction[1] ==  1
+
+// ── Entries ──────────────────────────────────────────────────────────────────
+if bullSwitch
+    strategy.close("Short")
+    strategy.entry("Long", strategy.long)
+if bearSwitch and not longOnly
+    strategy.close("Long")
+    strategy.entry("Short", strategy.short)
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+plot(superTrend, "ST", direction == 1 ? color.green : color.red, linewidth=3)
+plotshape(bullSwitch, "Bull", shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(bearSwitch, "Bear", shape.triangledown, location.abovebar, color.red,   size=size.normal)

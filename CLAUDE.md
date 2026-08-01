@@ -1,0 +1,186 @@
+<!-- Generated from knowledge/catalog.json and agents/protocol.md.
+     Regenerate with: python tools/psak.py render -->
+# Pine Script Agent Kit memory for Claude Code
+
+Use this file as project memory. Load focused rule bodies only when the task
+touches their scope; do not convert evidence labels into stronger claims.
+
+# Evidence-first operating protocol
+
+You are working with Pine Script v6. Treat `knowledge/catalog.json` as the
+canonical rule index and `knowledge/sources.json` as the canonical source index.
+
+1. Establish the user's indicator, strategy, library, migration, or review intent.
+2. Establish timeframe relationships, repaint expectations, strategy execution
+   semantics, data availability, and alert/webhook risk before choosing a pattern.
+3. Apply only rules whose scope matches. Preserve each rule's exceptions.
+4. Cite the registered official source ID when behavior depends on Pine semantics.
+5. Label local static results `structural-only`. Do not describe them as compiled,
+   TradingView-tested, non-repainting, secure, or production-ready.
+6. Treat a hash-matching record in `verification/tradingview.json` as manual
+   evidence only for the recorded file and environment.
+7. If sources conflict, a source is unavailable, or intent is ambiguous, narrow
+   the claim and state what remains unverified.
+8. Never expose credentials or place real webhook secrets in code or output.
+9. Prefer a minimal change, include a validation path, and separate code-ready,
+   tested, published, and live states.
+
+The project is independent and is not affiliated with or endorsed by TradingView.
+
+# Active sourced rules
+
+## PSAK-BARSTATE-001 — Choose bar states by intent
+
+barstate.islast and barstate.isconfirmed describe different execution states and are not mechanical replacements for one another.
+
+**Scope:** Indicators, libraries, and strategies whose behavior depends on chart update state.
+
+**Why:** The last available chart bar and a confirmed update are different conditions, especially on realtime bars.
+
+**Exceptions:**
+- A script can legitimately require both conditions or neither condition.
+
+**Evidence:** `official` · **Sources:** `tv-bar-states` · **Verified:** 2026-07-31
+
+## PSAK-HTF-001 — Confirmed higher-timeframe requests
+
+For confirmed higher-timeframe values, offset the requested expression and pair it with barmerge.lookahead_on.
+
+**Scope:** request.security calls where the requested timeframe is higher than the chart and confirmed values are the intended behavior.
+
+**Why:** This pattern retrieves the last confirmed higher-timeframe value consistently on historical and realtime bars.
+
+**Exceptions:**
+- Do not apply the pattern mechanically to lower or equal timeframes, or when developing-bar values are intentional.
+
+**Evidence:** `official` · **Sources:** `tv-other-timeframes` · **Verified:** 2026-07-31
+
+## PSAK-INPUT-001 — Generic and typed inputs
+
+Generic input() remains valid; typed input functions are useful when type-specific parameters or clearer intent are needed.
+
+**Scope:** User-configurable script inputs in Pine Script v6.
+
+**Why:** Pine v6 documents both generic and typed input functions.
+
+**Exceptions:**
+- A typed function is required when using parameters that exist only on that typed input.
+
+**Evidence:** `official` · **Sources:** `tv-inputs`, `tv-reference-v6` · **Verified:** 2026-07-31
+
+## PSAK-INPUT-002 — Conditionally active inputs
+
+The active parameter can make supported input controls editable only when a controlling condition is true.
+
+**Scope:** Input functions that expose the active parameter in current Pine v6.
+
+**Why:** The July 2025 release added conditional activation to input controls.
+
+**Exceptions:**
+- The parameter changes UI editability, not the runtime type of the input value.
+
+**Evidence:** `official` · **Sources:** `tv-inputs`, `tv-release-notes` · **Verified:** 2026-07-31
+
+## PSAK-MATH-001 — Use documented math.avg
+
+math.avg() is a documented Pine v6 function and can be used when its averaging semantics match the task.
+
+**Scope:** Arithmetic means over arguments accepted by the current math.avg overloads.
+
+**Why:** The v6 reference includes math.avg; banning it produces incorrect guidance.
+
+**Exceptions:**
+- Use another averaging function when windowed, weighted, or collection semantics are required.
+
+**Evidence:** `official` · **Sources:** `tv-reference-v6` · **Verified:** 2026-07-31
+
+## PSAK-RELEASE-001 — Current symbol and timeframe metadata
+
+Current Pine v6 includes syminfo.current_contract, syminfo.isin, and timeframe_bars_back additions documented in the 2025 release notes.
+
+**Scope:** Scripts running where the documented symbol or timeframe data is available.
+
+**Why:** These additions reduce custom metadata work and support newer market/timeframe queries.
+
+**Exceptions:**
+- Availability and returned values still depend on the chart symbol, market, and timeframe context.
+
+**Evidence:** `official` · **Sources:** `tv-release-notes`, `tv-reference-v6` · **Verified:** 2026-07-31
+
+## PSAK-RELEASE-002 — Footprint requests
+
+request.footprint() and its footprint and volume_row objects expose documented volume-footprint data in Pine v6.
+
+**Scope:** Scripts and accounts for which footprint data is available under TradingView's current product rules.
+
+**Why:** The January 2026 release introduced an official footprint data model.
+
+**Exceptions:**
+- Scripts need to handle unavailable data and should not infer account entitlement from static checks.
+
+**Evidence:** `official` · **Sources:** `tv-release-notes`, `tv-reference-v6` · **Verified:** 2026-07-31
+
+## PSAK-RELEASE-003 — UDT collection sorting fields
+
+The sort_field parameter can select a field when sorting supported collections of user-defined type objects.
+
+**Scope:** Supported array and matrix sorting operations on user-defined type objects.
+
+**Why:** The April 2026 release expanded collection sorting for UDT objects.
+
+**Exceptions:**
+- Field values and collection element types need to satisfy the documented sorting constraints.
+
+**Evidence:** `official` · **Sources:** `tv-arrays`, `tv-release-notes`, `tv-reference-v6` · **Verified:** 2026-07-31
+
+## PSAK-STRATEGY-001 — Realtime tick recalculation is a semantic choice
+
+calc_on_every_tick changes strategy recalculation behavior and can produce results that differ after a chart reload.
+
+**Scope:** Strategies that opt into recalculation on realtime ticks.
+
+**Why:** Historical bars do not contain the complete realtime tick sequence available while a bar is open.
+
+**Exceptions:**
+- A strategy may intentionally require realtime tick reactions and disclose the repaint/reload implications.
+
+**Evidence:** `official` · **Sources:** `tv-strategies` · **Verified:** 2026-07-31
+
+## PSAK-STRATEGY-002 — Historical tick recalculation
+
+calc_on_every_history_tick enables documented strategy recalculation on available historical intrabar updates for eligible plans on standard chart types.
+
+**Scope:** Pine v6 strategies used by Premium or Ultimate accounts on standard chart types with supported historical data.
+
+**Why:** The July 2026 release added a distinct historical recalculation setting for Premium and Ultimate users on standard charts.
+
+**Exceptions:**
+- The setting is unavailable on non-standard chart types; plan availability can change, and behavior still depends on the market and timeframe data.
+
+**Evidence:** `official` · **Sources:** `tv-release-notes`, `tv-strategies` · **Verified:** 2026-07-31
+
+## PSAK-STRING-001 — Multiline strings
+
+Pine v6 supports multiline string literals under the syntax documented in the April 2026 release notes.
+
+**Scope:** String literals authored for current Pine v6.
+
+**Why:** Multiline source text no longer needs to be represented only through concatenated single-line literals.
+
+**Exceptions:**
+- Formatting, escapes, and runtime string-size limits still apply.
+
+**Evidence:** `official` · **Sources:** `tv-release-notes`, `tv-strings` · **Verified:** 2026-07-31
+
+## PSAK-WRAP-001 — Current line wrapping behavior
+
+Current Pine v6 accepts documented wrapping inside parentheses and includes the July 2026 automatic-parentheses update.
+
+**Scope:** Pine v6 source formatted according to the current grammar and release notes.
+
+**Why:** Older indentation-only wrapping warnings can reject syntax that current Pine accepts.
+
+**Exceptions:**
+- Code still needs syntactically valid expression boundaries; release-note changes do not make arbitrary line breaks valid.
+
+**Evidence:** `official` · **Sources:** `tv-release-notes`, `tv-reference-v6` · **Verified:** 2026-07-31

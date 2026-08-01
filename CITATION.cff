@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "Pine Script Agent Kit"
+message: >-
+  If you use this source-traceable Pine Script v6 knowledge and agent kit,
+  please cite it using this metadata.
+type: software
+version: 1.0.0
+date-released: 2026-08-01
+authors:
+  - family-names: Pala
+    given-names: Uğur
+    email: mail@ugurpala.com
+repository-code: "https://github.com/trugurpala/pinescriptv6"
+url: "https://github.com/trugurpala/pinescriptv6"
+abstract: >-
+  A free, open, community-built Pine Script v6 knowledge and instruction kit
+  with sourced rules, explicit evidence levels, deterministic AI adapters,
+  and hash-inventoried examples.
+keywords:
+  - pine-script-v6
+  - tradingview
+  - ai-coding-agents
+  - provenance
+  - codex
+  - claude-code
+  - gemini-cli
+  - cursor
+  - github-copilot
+license: MIT

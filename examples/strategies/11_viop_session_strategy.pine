@@ -1,0 +1,111 @@
+//@version=6
+// VİOP Session Strategy — BIST30 Futures Seans Bazlı
+// Author: Ugur Pala · github.com/trugurpala/pinescriptv6
+// TradingView: https://tr.tradingview.com/u/trugurpala/
+//
+// TR: VİOP (Türkiye vadeli işlem piyasası) için seans bazlı strateji.
+//     09:30-18:15 UTC+3 seans saatleri içinde işlem yapar.
+//     Seans kapanışında tüm pozisyonlar otomatik kapatılır.
+//     ATR tabanlı SL/TP, EMA cross sinyali.
+//
+// EN: Session-based strategy for VIOP (Turkish futures market).
+//     Only trades within market hours: 09:30-18:15 UTC+3.
+//     All positions auto-closed at session end.
+//     ATR-based SL/TP, EMA cross signal.
+//
+// Sembol / Symbol: BIST:XU030D1! veya F_XU030 (VİOP)
+// Önerilen TF / Recommended TF: 5M, 15M, 1H
+//
+// LESSONS_LEARNED uygulanan düzeltmeler:
+//   - alertcondition() → alert() (strategy içinde çalışmaz)
+//   - barstate.islast label kaldırıldı → bgcolor ile seans gösterimi
+//   - calc_on_every_tick kaldırıldı (default false — backtest güvenilir)
+
+strategy("VİOP Session Strategy [trugurpala]",
+    overlay              = true,
+    initial_capital      = 100000,
+    default_qty_type     = strategy.fixed,
+    default_qty_value    = 1,
+    commission_type      = strategy.commission.cash_per_contract,
+    commission_value     = 2.0,
+    slippage             = 2)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   fastLen  = input.int(9,    "Fast EMA",        minval=1,   group="Sinyal / Signal")
+int   slowLen  = input.int(21,   "Slow EMA",        minval=1,   group="Sinyal / Signal")
+int   atrLen   = input.int(14,   "ATR Length",      minval=1,   group="Risk")
+float slMult   = input.float(2.0, "SL (ATR ×)",     step=0.1,   group="Risk",
+    tooltip="TR: ATR çarpanı — stop loss mesafesi\nEN: ATR multiplier — stop loss distance")
+float tpMult   = input.float(3.0, "TP (ATR ×)",     step=0.1,   group="Risk",
+    tooltip="TR: ATR çarpanı — take profit mesafesi\nEN: ATR multiplier — take profit distance")
+bool  longOnly = input.bool(false, "Sadece Long / Long Only", group="Sinyal / Signal",
+    tooltip="TR: Sadece long pozisyon aç\nEN: Only open long positions")
+
+// ── VİOP Seans Filtresi — 09:30-18:15 UTC+3 ──────────────────────────────────
+// TR: Seans saatleri dışında sinyal üretilmez
+// EN: No signals generated outside session hours
+bool inSession = not na(time(timeframe.period, "0930-1815", "UTC+3"))
+
+// TR: Seans kapanışında tüm pozisyonları kapat
+// EN: Close all positions at session end
+bool sesClose = not inSession and inSession[1]
+if sesClose
+    strategy.close_all(comment="Seans sonu / Session end")
+
+// ── Hesaplamalar / Calculations ───────────────────────────────────────────────
+float fastEma = ta.ema(close, fastLen)
+float slowEma = ta.ema(close, slowLen)
+float atrVal  = ta.atr(atrLen)
+bool  bullish = fastEma > slowEma
+
+// TR: Sinyal — seans içinde EMA kesişimi
+// EN: Signal — EMA crossover within session
+bool bullCross = ta.crossover(fastEma,  slowEma) and inSession
+bool bearCross = ta.crossunder(fastEma, slowEma) and inSession
+
+// ── Girişler / Entries ────────────────────────────────────────────────────────
+if bullCross
+    strategy.entry("Long", strategy.long, comment="EMA ↑")
+    strategy.exit("Long SL/TP", "Long",
+        stop  = close - slMult * atrVal,
+        limit = close + tpMult * atrVal,
+        comment_loss="SL", comment_profit="TP")
+
+if bearCross and not longOnly
+    strategy.entry("Short", strategy.short, comment="EMA ↓")
+    strategy.exit("Short SL/TP", "Short",
+        stop  = close + slMult * atrVal,
+        limit = close - tpMult * atrVal,
+        comment_loss="SL", comment_profit="TP")
+
+// ── Alertler / Alerts ─────────────────────────────────────────────────────────
+// TR: alert() strategy içinde çalışır, alertcondition() çalışmaz
+// EN: alert() works inside strategies, alertcondition() does not
+if bullCross
+    alert("VİOP Long — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"),
+        alert.freq_once_per_bar)
+if bearCross
+    alert("VİOP Short — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"),
+        alert.freq_once_per_bar)
+if sesClose
+    alert("VİOP Seans Sonu — pozisyonlar kapatıldı / session closed",
+        alert.freq_once_per_bar)
+
+// ── Görseller / Visuals ───────────────────────────────────────────────────────
+// TR: Seans içi mavi arka plan, dışı gri
+// EN: Blue background inside session, gray outside
+bgcolor(inSession ? color.new(color.blue, 96) : color.new(color.gray, 97),
+    title="Seans / Session BG")
+
+plot(fastEma, "Fast EMA", bullish ? color.green : color.red,    linewidth=2)
+plot(slowEma, "Slow EMA", bullish ? color.lime  : color.orange, linewidth=2)
+
+plotshape(bullCross, "Long Signal",  shape.triangleup,
+    location.belowbar, color.new(color.green, 0), size=size.normal)
+plotshape(bearCross, "Short Signal", shape.triangledown,
+    location.abovebar, color.new(color.red,   0), size=size.normal)
+
+// TR: Seans durumu — plot ile göster (label yerine, uyarısız)
+// EN: Session status — shown via plot (no warning, unlike label)
+plotchar(inSession, "Seans / Session", "●",
+    location.top, color.new(color.blue, 40), size=size.tiny)

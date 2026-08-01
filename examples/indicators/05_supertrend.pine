@@ -1,0 +1,43 @@
+//@version=6
+// Supertrend — ATR-Based Trend Direction — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("Supertrend [trugurpala]", overlay=true)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int   atrLen  = input.int(10,   "ATR Length",     minval=1)
+float atrMult = input.float(3.0, "ATR Multiplier", step=0.1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float atr       = ta.atr(atrLen)
+float upperBand = hl2 + atrMult * atr
+float lowerBand = hl2 - atrMult * atr
+
+var float superTrend = na
+var int   direction  = 1
+
+float prevUpper = nz(upperBand[1], upperBand)
+float prevLower = nz(lowerBand[1], lowerBand)
+
+upperBand := upperBand < prevUpper or close[1] > prevUpper ? upperBand : prevUpper
+lowerBand := lowerBand > prevLower or close[1] < prevLower ? lowerBand : prevLower
+
+if close > nz(superTrend[1], 0)
+    superTrend := lowerBand
+    direction  := 1
+else
+    superTrend := upperBand
+    direction  := -1
+
+bool bullSwitch = direction ==  1 and direction[1] == -1
+bool bearSwitch = direction == -1 and direction[1] ==  1
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+color trendColor = direction == 1 ? color.green : color.red
+plot(superTrend, "Supertrend", trendColor, linewidth=3)
+plotshape(bullSwitch, "Bull", shape.triangleup,   location.belowbar, color.green, size=size.normal)
+plotshape(bearSwitch, "Bear", shape.triangledown, location.abovebar, color.red,   size=size.normal)
+bgcolor(direction == 1 ? color.new(color.green, 94) : color.new(color.red, 94))
+
+// ── Alerts ───────────────────────────────────────────────────────────────────
+alertcondition(bullSwitch, "ST Bull", "Supertrend Bull — {{ticker}} @ {{close}}")
+alertcondition(bearSwitch, "ST Bear", "Supertrend Bear — {{ticker}} @ {{close}}")

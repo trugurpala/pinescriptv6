@@ -1,0 +1,33 @@
+title: "[Fikir / Idea] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💡 Fikir / Idea
+        TR: Yeni örnek, strateji veya özellik öner.
+        EN: Suggest a new example, strategy, or feature.
+  - type: textarea
+    id: idea
+    attributes:
+      label: "Fikrin / Your Idea"
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: "Kategori / Category"
+      options:
+        - "Yeni indikatör örneği / New indicator example"
+        - "Yeni strateji örneği / New strategy example"
+        - "Yeni market / New market"
+        - "LESSONS_LEARNED güncellemesi"
+        - "Webhook / Otomasyon"
+        - "Dokümantasyon / Documentation"
+        - "Diğer / Other"
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: "Detay / Detail"

@@ -1,0 +1,23 @@
+# Normalize text in every checkout.
+* text=auto
+
+# Pine Script files
+*.pine text eol=lf linguist-language=Pine
+*.pinescript text eol=lf linguist-language=Pine
+*.psc text eol=lf linguist-language=Pine
+
+# Documentation files
+*.md text eol=lf linguist-detectable=true
+
+# Project and automation sources
+*.json text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Visual assets
+*.png binary
+
+# Override shell for CI/workflow files if needed (optional)
+# .github/workflows/*.yml linguist-vendored=true

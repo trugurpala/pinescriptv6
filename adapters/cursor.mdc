@@ -1,0 +1,15 @@
+---
+description: Evidence-scoped Pine Script v6 guidance
+globs: "**/*.pine"
+alwaysApply: false
+---
+{{NOTICE}}
+# Pine Script Agent Kit for Cursor
+
+Apply this rule to Pine files and Pine-specific documentation.
+
+{{PROTOCOL}}
+
+# Active sourced rules
+
+{{RULES}}

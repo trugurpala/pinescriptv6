@@ -1,0 +1,34 @@
+//@version=6
+// Stochastic RSI K/D — github.com/trugurpala/pinescriptv6
+// Author: Ugur Pala · mail@ugurpala.com
+indicator("Stoch RSI [trugurpala]", overlay=false)
+
+// ── Inputs ───────────────────────────────────────────────────────────────────
+int rsiLen   = input.int(14, "RSI Length",   minval=1)
+int stochLen = input.int(14, "Stoch Length", minval=1)
+int kSmooth  = input.int(3,  "K Smooth",     minval=1)
+int dSmooth  = input.int(3,  "D Smooth",     minval=1)
+
+// ── Calculations ─────────────────────────────────────────────────────────────
+float rsi      = ta.rsi(close, rsiLen)
+float stochRsi = (rsi - ta.lowest(rsi, stochLen)) /
+                  math.max(ta.highest(rsi, stochLen) - ta.lowest(rsi, stochLen), 1e-10) * 100
+float kLine    = ta.sma(stochRsi, kSmooth)
+float dLine    = ta.sma(kLine, dSmooth)
+bool  bullCross = ta.crossover(kLine, dLine)  and kLine < 20
+bool  bearCross = ta.crossunder(kLine, dLine) and kLine > 80
+
+// ── Visuals ──────────────────────────────────────────────────────────────────
+hline(80, "OB",  color.new(color.red,   40), hline.style_dashed)
+hline(50, "Mid", color.new(color.gray,  60), hline.style_dotted)
+hline(20, "OS",  color.new(color.green, 40), hline.style_dashed)
+plot(kLine, "K", color.new(color.blue,   10), linewidth=2)
+plot(dLine, "D", color.new(color.orange, 10), linewidth=2)
+bgcolor(kLine > 80 ? color.new(color.red,   92) : na)
+bgcolor(kLine < 20 ? color.new(color.green, 92) : na)
+plotshape(bullCross, "Bull", shape.triangleup,   location.absolute, color.green, size=size.small)
+plotshape(bearCross, "Bear", shape.triangledown, location.absolute, color.red,   size=size.small)
+
+// ── Alerts ───────────────────────────────────────────────────────────────────
+alertcondition(bullCross, "StochRSI Bull", "Stoch RSI Bull — {{ticker}}")
+alertcondition(bearCross, "StochRSI Bear", "Stoch RSI Bear — {{ticker}}")
