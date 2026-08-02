@@ -13,6 +13,27 @@ non-repainting behavior, profitability, or live-trading suitability.
 
 Before making a stronger claim, follow the [TradingView manual verification guide](../docs/tradingview-manual-verification.md). Never paste credentials or private code into an issue or pull request; see the [support guide](../SUPPORT.md).
 
+## Disclosure checklist
+
+Review each example against this checklist before adapting it:
+
+- Evidence status
+- Signal timing
+- Requested timeframes and confirmation
+- Strategy calculation settings
+- Order fill timing
+- Commission and slippage
+- Stop/target anchor
+- Alert setup
+
+The two EMA examples below are the first hardened slice. The other examples in
+the 56-file manifest do not yet carry equivalent disclosure detail.
+
+| File | Current-code disclosure |
+| --- | --- |
+| `indicators/01_ema_cross.pine` | Structural-only chart-timeframe indicator. Open realtime-bar crosses and markers can change before close. `alertcondition()` exposes selectable conditions; Create Alert controls frequency, and bar-close delivery is only a timing choice. |
+| `strategies/01_ema_cross_strategy.pine` | Structural-only chart-timeframe strategy using default recalculation/order processing. Signals calculate at bar close and orders are normally first eligible on the next tick. Commission is fixed at 0.1%, slippage is unset, exits anchor to signal-bar close plus/minus ATR, and no alert workflow is configured. |
+
 ## Indicators
 
 | File | Focus |

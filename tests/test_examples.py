@@ -1,6 +1,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import json
+import re
 import subprocess
 import sys
 import unittest
@@ -15,8 +16,190 @@ from tools.psaklib.examples import (
 
 VALID_PINE = '//@version=6\nindicator("Structural fixture")\nplot(close)\n'
 
+AUGUST_2_EXAMPLES = (
+    "examples/indicators/01_ema_cross.pine",
+    "examples/indicators/12_mtf_ema.pine",
+    "examples/indicators/18_fakeout_filter.pine",
+    "examples/strategies/01_ema_cross_strategy.pine",
+    "examples/strategies/07_mtf_trend_strategy.pine",
+    "examples/strategies/11_viop_session_strategy.pine",
+    "examples/strategies/13_fakeout_confirmed_strategy.pine",
+    "examples/strategies/14_mtf_viop_strategy.pine",
+)
+
+HTF_COMMENT_EXAMPLES = (
+    "examples/indicators/12_mtf_ema.pine",
+    "examples/indicators/18_fakeout_filter.pine",
+    "examples/strategies/07_mtf_trend_strategy.pine",
+    "examples/strategies/13_fakeout_confirmed_strategy.pine",
+    "examples/strategies/14_mtf_viop_strategy.pine",
+)
+
 
 class ExampleTests(unittest.TestCase):
+    def test_ema_indicator_discloses_timing_and_alert_boundaries(self):
+        text = Path("examples/indicators/01_ema_cross.pine").read_text(encoding="utf-8")
+
+        for concept in (
+            "Evidence: structural-only; no TradingView compile/chart record exists.",
+            "chart-timeframe values only; no request.*() call",
+            "bullCross/bearCross use developing chart-timeframe values on an open realtime bar",
+            "condition and marker can change before close",
+            "alertcondition() exposes UI-selectable conditions",
+            "frequency is selected in TradingView Create Alert",
+            "bar-close delivery addresses timing only, not a blanket repaint verdict",
+        ):
+            self.assertIn(concept, text)
+
+    def test_ema_strategy_discloses_timing_fill_and_cost_boundaries(self):
+        text = Path("examples/strategies/01_ema_cross_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        for concept in (
+            "Evidence: structural-only; no TradingView compile/chart record exists.",
+            "chart-timeframe values and default strategy recalculation/order-processing settings",
+            "signals are calculated at bar close",
+            "new orders are normally first eligible on the next tick",
+            "TradingView must verify actual chart behavior",
+            "fixed 0.1% example assumption; slippage is not configured",
+            "signal bar's close and ATR, not from a confirmed actual fill price",
+            "No alert workflow is configured in this example",
+        ):
+            self.assertIn(concept, text)
+
+    def test_ema_manifest_entries_keep_structural_hash_bound_evidence(self):
+        manifest = json.loads(Path("examples/manifest.json").read_text(encoding="utf-8"))
+        entries = {entry["path"]: entry for entry in manifest["examples"]}
+
+        for relative_path in (
+            "examples/indicators/01_ema_cross.pine",
+            "examples/strategies/01_ema_cross_strategy.pine",
+        ):
+            entry = entries[relative_path]
+            self.assertEqual(entry["evidence"], "structural-only")
+            self.assertIsNone(entry["tradingview_record"])
+            self.assertEqual(entry["sha256"], sha256_file(Path(relative_path)))
+
+    def test_august_2_example_records_have_current_structural_evidence(self):
+        manifest = json.loads(Path("examples/manifest.json").read_text(encoding="utf-8"))
+        entries = {entry["path"]: entry for entry in manifest["examples"]}
+
+        for relative_path in AUGUST_2_EXAMPLES:
+            entry = entries[relative_path]
+            self.assertEqual(entry["checked_on"], "2026-08-02", relative_path)
+            self.assertEqual(entry["evidence"], "structural-only", relative_path)
+            self.assertIsNone(entry["tradingview_record"], relative_path)
+            self.assertEqual(entry["sha256"], sha256_file(Path(relative_path)), relative_path)
+
+    def test_strategy_alert_comments_do_not_repeat_stale_blanket_claim(self):
+        text = Path("examples/strategies/11_viop_session_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertNotIn("strategy içinde çalışmaz", text)
+        self.assertNotRegex(text, r"(?m)alertcondition\(\) (?:çalışmaz|does not)\s*$")
+        for phrase in (
+            "alertcondition() can compile in a strategy",
+            "does not create selectable strategy alertcondition events",
+            "alert() is used",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_viop_session_close_alert_discloses_detection_and_fill_boundary(self):
+        text = Path("examples/strategies/11_viop_session_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("bool sesClose = not inSession and inSession[1]", text)
+        self.assertIn(
+            'strategy.close_all(comment="Seans sonu / Session end")', text
+        )
+        for phrase in (
+            "first available out-of-session chart execution after an in-session execution",
+            "No chart execution means no close request",
+            "close_all() requests a close",
+            "normally fills later under default settings",
+            "can fire while flat",
+            "not an order-fill confirmation",
+            "close_all() called, fill unverified",
+        ):
+            self.assertIn(phrase, text)
+        for stale_claim in (
+            "All positions auto-closed at session end",
+            "pozisyonlar kapatıldı / session closed",
+        ):
+            self.assertNotIn(stale_claim, text)
+
+    def test_viop_session_header_limits_only_entry_signals_and_entry_orders(self):
+        text = Path("examples/strategies/11_viop_session_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        for phrase in (
+            "Giriş sinyalleri ve giriş emri oluşturma 09:30-18:15 UTC+3 seansıyla sınırlıdır.",
+            "Çıkışlar ve dolumlar bu seansın dışında gerçekleşebilir.",
+            "Entry signals and entry-order creation are gated to 09:30-18:15 UTC+3.",
+            "Exits and fills can occur outside that session.",
+        ):
+            self.assertIn(phrase, text)
+        self.assertNotIn("Only trades within market hours", text)
+        self.assertNotIn("seans saatleri içinde işlem yapar", text)
+
+    def test_fakeout_strategy_uses_neutral_signal_description(self):
+        text = Path("examples/strategies/13_fakeout_confirmed_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("Signal strategy with four configurable fakeout filters.", text)
+        self.assertNotIn("High-quality signal strategy", text)
+        self.assertNotIn("yüksek kaliteli", text.lower())
+
+    def test_confirmed_htf_comments_preserve_the_timeframe_boundary(self):
+        boundary = (
+            "[1] + lookahead_on is a confirmed HTF pattern only when the requested "
+            "timeframe is higher than the chart; this code does not enforce that relation."
+        )
+
+        for relative_path in HTF_COMMENT_EXAMPLES:
+            text = Path(relative_path).read_text(encoding="utf-8")
+            self.assertIn(boundary, text, relative_path)
+            self.assertNotIn("confirmed HTF request pattern", text, relative_path)
+            self.assertNotIn("confirms the HTF request", text, relative_path)
+
+    def test_examples_readme_has_disclosure_checklist_and_ema_slice(self):
+        text = Path("examples/README.md").read_text(encoding="utf-8")
+
+        for item in (
+            "Evidence status",
+            "Signal timing",
+            "Requested timeframes and confirmation",
+            "Strategy calculation settings",
+            "Order fill timing",
+            "Commission and slippage",
+            "Stop/target anchor",
+            "Alert setup",
+            "indicators/01_ema_cross.pine",
+            "strategies/01_ema_cross_strategy.pine",
+            "first hardened slice",
+        ):
+            self.assertIn(item, text)
+
+    def test_tracked_pine_comments_avoid_blanket_repaint_and_backtest_phrases(self):
+        blanket = re.compile(
+            r"no repainting|repainting yok|backtest g(?:ü|Ã¼)venilir", re.IGNORECASE
+        )
+
+        offenders = []
+        for path in discover_pine_files(Path(".")):
+            for line_number, line in enumerate(
+                path.read_text(encoding="utf-8").splitlines(), start=1
+            ):
+                if blanket.search(line):
+                    offenders.append(f"{path.as_posix()}:{line_number}: {line.strip()}")
+
+        self.assertEqual(offenders, [])
+
     def test_pine_hash_is_stable_across_line_endings(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)

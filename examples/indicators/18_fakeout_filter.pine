@@ -43,7 +43,7 @@ float slowEma = ta.ema(close, slowLen)
 float atrVal  = ta.atr(atrLen)
 float volAvg  = ta.sma(volume, volLen)
 
-// HTF trend — repainting yok / no repainting
+// [1] + lookahead_on is a confirmed HTF pattern only when the requested timeframe is higher than the chart; this code does not enforce that relation.
 float htfEma  = request.security(syminfo.tickerid, htfTF,
     ta.ema(close, htfLen)[1], lookahead=barmerge.lookahead_on)
 

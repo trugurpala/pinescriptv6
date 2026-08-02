@@ -27,6 +27,30 @@ REQUIRED_LINKS = (
     "docs/tradingview-manual-verification.md",
 )
 
+RELIABILITY_DOCS = (
+    "docs/alerts.md",
+    "docs/strategy-execution.md",
+    "docs/repainting-taxonomy.md",
+    "docs/backtesting-realism.md",
+)
+
+NEW_PUBLIC_DOCS = (
+    "ADOPTION.md",
+    "COVERAGE.md",
+    "ROADMAP.md",
+    "docs/rule-contribution-template.md",
+    *RELIABILITY_DOCS,
+)
+
+NOT_CHECKED_LABELS = (
+    "NOT CHECKED: TradingView compilation",
+    "NOT CHECKED: Runtime/chart behavior",
+    "NOT CHECKED: Repaint behavior",
+    "NOT CHECKED: Alert delivery",
+    "NOT CHECKED: Market data",
+    "NOT CHECKED: Profitability",
+)
+
 PUBLIC_HISTORY_DOCS = (
     "README.md",
     "README.tr.md",
@@ -68,6 +92,231 @@ PUBLISH_DESCRIPTIONS = (
 
 
 class DocumentationTests(unittest.TestCase):
+    def test_public_reliability_guides_exist_and_readmes_link_them(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        for relative_path in NEW_PUBLIC_DOCS:
+            self.assertTrue((ROOT / relative_path).is_file(), relative_path)
+        for relative_path in (*RELIABILITY_DOCS, "ADOPTION.md", "COVERAGE.md", "ROADMAP.md"):
+            self.assertIn(relative_path, english)
+            self.assertIn(relative_path, turkish)
+
+    def test_readmes_show_the_complete_offline_check_boundary(self):
+        for relative_path in ("README.md", "README.tr.md"):
+            content = (ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn("OK: all offline checks passed", content, relative_path)
+            for label in NOT_CHECKED_LABELS:
+                self.assertIn(label, content, relative_path)
+
+    def test_adoption_covers_supported_surfaces_and_local_evidence_boundary(self):
+        path = ROOT / "ADOPTION.md"
+        self.assertTrue(path.is_file(), "ADOPTION.md")
+        content = path.read_text(encoding="utf-8")
+        expected_paths = {
+            "Portable Agent Skill": ("SKILL.md",),
+            "Codex": ("AGENTS.md",),
+            "Claude Code": ("CLAUDE.md",),
+            "Gemini CLI": ("GEMINI.md",),
+            "Cursor": (".cursor/rules/pinescriptv6.mdc", ".cursorrules"),
+            "Cline": ("AGENTS.md",),
+            "Devin": ("AGENTS.md",),
+            "Windsurf": (
+                "AGENTS.md",
+                ".windsurf/rules/pine-script-agent-kit.md",
+                ".windsurfrules",
+            ),
+            "GitHub Copilot": (
+                ".github/copilot-instructions.md",
+                ".github/instructions/pine-script.instructions.md",
+            ),
+            "Zed": (".cursorrules",),
+            "ChatGPT Custom GPT": (
+                "generated/custom-gpt/INSTRUCTIONS.md",
+                "generated/custom-gpt/KNOWLEDGE.md",
+                "knowledge/catalog.json",
+                "knowledge/sources.json",
+                "examples/manifest.json",
+                "verification/tradingview.json",
+            ),
+        }
+        table_lines = [line for line in content.splitlines() if line.startswith("|")]
+        data_rows = []
+        for line in table_lines:
+            cells = [cell.strip() for cell in line.strip("|").split("|")]
+            if len(cells) != 5 or cells[0] in ("Surface", "---"):
+                continue
+            data_rows.append(cells)
+
+        self.assertEqual(len(data_rows), 11)
+        rows_by_surface = {row[0]: row for row in data_rows}
+        self.assertEqual(set(rows_by_surface), set(expected_paths))
+        for surface, paths in expected_paths.items():
+            source, placement, verification, starter_prompt = rows_by_surface[surface][1:]
+            for canonical_path in paths:
+                self.assertIn(canonical_path, source, surface)
+            self.assertTrue(placement, surface)
+            self.assertTrue(verification, surface)
+            self.assertTrue(starter_prompt, surface)
+
+        portable_placement = rows_by_surface["Portable Agent Skill"][2]
+        for phrase in (
+            "complete repository tree",
+            "parent directory named `pine-script-agent-kit`",
+            "name must match the directory",
+            "agents/protocol.md",
+            "knowledge/catalog.json",
+            "knowledge/sources.json",
+            "examples/manifest.json",
+            "verification/tradingview.json",
+            "tools/psak.py",
+        ):
+            self.assertIn(phrase, portable_placement)
+
+        cline_source, cline_placement, cline_verification, _ = rows_by_surface["Cline"][1:]
+        self.assertIn("AGENTS.md", cline_source)
+        self.assertIn("project root", cline_placement)
+        self.assertIn("Rules panel", cline_verification)
+        self.assertIn("smoke prompt", cline_verification)
+
+        devin_source, devin_placement, devin_verification, devin_prompt = (
+            rows_by_surface["Devin"][1:]
+        )
+        self.assertEqual(devin_source, "`AGENTS.md`")
+        self.assertIn("project root", devin_placement)
+        self.assertIn("Accessed Knowledge", devin_verification)
+        self.assertIn("repo knowledge", devin_verification)
+        self.assertIn("smoke prompt", devin_verification)
+        self.assertIn("Devin", devin_prompt)
+
+        windsurf_source, windsurf_placement, _, _ = rows_by_surface["Windsurf"][1:]
+        self.assertIn("primary", windsurf_source)
+        self.assertIn("fallback workspace-rule bridge", windsurf_source)
+        self.assertNotIn("modern", windsurf_source)
+        self.assertIn("legacy", windsurf_source)
+        self.assertIn("root", windsurf_placement)
+
+        zed_source, zed_placement, _, _ = rows_by_surface["Zed"][1:]
+        self.assertEqual(zed_source, "`.cursorrules`")
+        self.assertIn("project root", zed_placement)
+        self.assertIn("first matching", zed_placement)
+        self.assertIn("precedes `AGENTS.md`", zed_placement)
+        self.assertIn("selected supported surface", zed_placement)
+        self.assertNotIn("AGENTS.md", zed_source)
+        self.assertNotIn(".zed/rules", " | ".join(rows_by_surface["Zed"]))
+        for command in REQUIRED_README_COMMANDS:
+            self.assertIn(command, content)
+        normalized_content = " ".join(content.split())
+        for phrase in (
+            "assumptions",
+            "exact PSAK rule IDs",
+            "exact source IDs",
+            "structural-only",
+            "separate TradingView manual-check list",
+            "File placement and local validation do not prove that the host loaded or obeyed",
+        ):
+            self.assertIn(phrase, normalized_content)
+
+    def test_rule_contribution_template_has_required_fields_and_public_links(self):
+        template_path = "docs/rule-contribution-template.md"
+        path = ROOT / template_path
+        self.assertTrue(path.is_file(), template_path)
+        template = path.read_text(encoding="utf-8")
+        contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        pull_request = (ROOT / ".github/pull_request_template.md").read_text(encoding="utf-8")
+        fields = (
+            "Rule ID",
+            "Claim",
+            "Scope",
+            "Rationale",
+            "Exceptions",
+            "Official source ID",
+            "Official source locator",
+            "Verified date",
+            "Example",
+            "Counterexample",
+            "Local test",
+            "TradingView manual verification required",
+        )
+
+        for field in fields:
+            self.assertEqual(template.count(f"## {field}"), 1, field)
+        self.assertIn(template_path, contributing)
+        durable_url = (
+            "https://github.com/trugurpala/pinescriptv6/blob/main/"
+            "docs/rule-contribution-template.md"
+        )
+        self.assertIn(durable_url, pull_request)
+        self.assertNotIn("../docs/rule-contribution-template.md", pull_request)
+
+    def test_reliability_guides_cover_apis_settings_and_evidence_limits(self):
+        for relative_path in RELIABILITY_DOCS:
+            self.assertTrue((ROOT / relative_path).is_file(), relative_path)
+        alerts = (ROOT / "docs/alerts.md").read_text(encoding="utf-8")
+        strategy = (ROOT / "docs/strategy-execution.md").read_text(encoding="utf-8")
+        repainting = (ROOT / "docs/repainting-taxonomy.md").read_text(encoding="utf-8")
+        backtesting = (ROOT / "docs/backtesting-realism.md").read_text(encoding="utf-8")
+
+        for term in (
+            "alert()",
+            "alertcondition()",
+            "alert_message",
+            "{{strategy.order.alert_message}}",
+            "creation snapshot",
+            "structural-only",
+            "Manual-check checklist",
+        ):
+            self.assertIn(term, alerts)
+        for term in (
+            "calc_on_every_tick",
+            "calc_on_order_fills",
+            "calc_on_every_history_tick",
+            "process_orders_on_close",
+            "Bar Magnifier",
+            "broker emulator",
+            "non-standard chart",
+            "TradingView",
+        ):
+            self.assertIn(term, strategy)
+        self.assertIn("`immediately` parameter on `strategy.close()`", strategy)
+        self.assertIn("`strategy.close_all()`", strategy)
+        self.assertNotIn("An order call's `immediately` behavior", strategy)
+        for term in (
+            "classification",
+            "varip",
+            "future leakage",
+            "provider/history revisions",
+            "latency",
+            "cannot conclude locally",
+        ):
+            self.assertIn(term, repainting)
+        for term in (
+            "**Same-bar sequencing:**",
+            "**Commission:**",
+            "**Slippage:**",
+            "**Alert-to-real-order latency:**",
+            "future execution",
+            "profitability",
+        ):
+            self.assertIn(term, backtesting)
+
+    def test_new_public_docs_avoid_unsupported_claims(self):
+        forbidden = (
+            "alertcondition() does not compile",
+            "backtest reliable",
+            "no repainting",
+            "production-ready",
+            "guaranteed profitable",
+            "guarantees profitability",
+        )
+
+        for relative_path in NEW_PUBLIC_DOCS:
+            path = ROOT / relative_path
+            self.assertTrue(path.is_file(), relative_path)
+            lowered = path.read_text(encoding="utf-8").lower()
+            for claim in forbidden:
+                self.assertNotIn(claim, lowered, relative_path)
+
     def test_readmes_share_status_commands_and_core_links(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
         turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
@@ -92,6 +341,30 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("The current release is **v1.0.0**", english)
         self.assertIn("Güncel sürüm **v1.0.0**", turkish)
 
+    def test_readmes_label_the_displayed_output_as_the_final_check_ending(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        self.assertIn(
+            "The final `python tools/psak.py check` command ends with:", english
+        )
+        self.assertNotIn("Expected result:", english)
+        self.assertIn(
+            "Son `python tools/psak.py check` komutunun çıktısı şu satırlarla biter:",
+            turkish,
+        )
+        self.assertNotIn("Beklenen sonuç:", turkish)
+
+    def test_readmes_map_zed_precedence_and_list_devin(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        for content in (english, turkish):
+            self.assertIn("| Zed | `.cursorrules` |", content)
+            self.assertNotIn("| Zed | `AGENTS.md`", content)
+            self.assertIn("| Devin | `AGENTS.md` |", content)
+            self.assertIn("Devin", "\n".join(content.splitlines()[:30]))
+
     def test_readmes_use_the_maintenance_first_public_format(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
         turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
@@ -107,17 +380,44 @@ class DocumentationTests(unittest.TestCase):
             self.assertIn(badge, english)
             self.assertIn(badge, turkish)
 
-        self.assertIn("No failing automation currently requires intervention", english)
-        self.assertIn("The project is in maintenance and accepts community contributions", english)
+        self.assertNotIn("No failing automation currently requires intervention", english)
+        self.assertIn("This project is maintained and accepts community contributions", english)
         self.assertIn("What it does", english)
         self.assertIn("What it does not do", english)
         self.assertIn("Free for the community", english)
 
-        self.assertIn("Şu anda müdahale gerektiren hata veya başarısız otomasyon bulunmuyor", turkish)
-        self.assertIn("Proje bakım ve topluluk katkısı kabul etme aşamasında", turkish)
+        self.assertNotIn("Şu anda müdahale gerektiren hata veya başarısız otomasyon bulunmuyor", turkish)
+        self.assertIn("Proje bakımdadır ve topluluk katkılarını kabul eder", turkish)
         self.assertIn("Ne işe yarar?", turkish)
         self.assertIn("Ne yapmaz?", turkish)
         self.assertIn("Topluluk için ücretsiz", turkish)
+
+    def test_skill_frontmatter_and_adoption_surfaces_follow_host_contracts(self):
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        self.assertTrue(skill.startswith("---\n"))
+        frontmatter = skill.split("---", 2)[1]
+
+        self.assertIn("name: pine-script-agent-kit", frontmatter)
+        self.assertIn("description: Evidence-first Pine Script v6 guidance", frontmatter)
+        self.assertIn("license: MIT", frontmatter)
+        self.assertIn("metadata:", frontmatter)
+        self.assertRegex(frontmatter, r"(?m)^  maintainer: .+$")
+        self.assertRegex(frontmatter, r"(?m)^  repository: https://github.com/trugurpala/pinescriptv6$")
+        self.assertNotRegex(frontmatter, r"(?m)^maintainer:")
+        self.assertNotRegex(frontmatter, r"(?m)^repository:")
+
+        scoped = (ROOT / ".github/instructions/pine-script.instructions.md").read_bytes()
+        repository_wide = (ROOT / ".github/copilot-instructions.md").read_bytes()
+        self.assertTrue(scoped.startswith(b'---\napplyTo: "**/*.pine"\n---\n'))
+        self.assertFalse(repository_wide.startswith(b"---"))
+
+    def test_roadmap_uses_durable_unreleased_status(self):
+        roadmap = (ROOT / "ROADMAP.md").read_text(encoding="utf-8")
+
+        self.assertNotIn("current branch", roadmap.lower())
+        self.assertIn("Unreleased", roadmap)
+        self.assertIn("CHANGELOG.md", roadmap)
+        self.assertIn("v1.0.0", roadmap)
 
     def test_social_preview_is_approved_png_size(self):
         path = ROOT / "assets/social-preview.png"
@@ -133,6 +433,24 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("Pine Script Agent Kit", source)
         self.assertIn("VERIFIED KNOWLEDGE", source)
         self.assertNotIn("LESSONS_LEARNED", source)
+
+    def test_readme_language_and_attribution_surfaces_are_consistent(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        self.assertIn("assets/social-preview.png", english)
+        self.assertIn("assets/social-preview.tr.png", turkish)
+        self.assertIn("> **Önemli sınır**", turkish)
+        self.assertNotIn("[!IMPORTANT]", turkish)
+        self.assertNotIn("Built with Divan", english)
+        self.assertNotIn("Divan ile üretildi", turkish)
+
+        path = ROOT / "assets/social-preview.tr.png"
+        data = path.read_bytes()
+        self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
+        self.assertEqual(data[12:16], b"IHDR")
+        width, height = struct.unpack(">II", data[16:24])
+        self.assertEqual((width, height), (1280, 640))
 
     def test_readmes_guide_people_before_exposing_repository_internals(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -200,6 +518,16 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("## [Unreleased]", changelog)
         self.assertIn("Pine Script Agent Kit", citation)
         self.assertIn("https://github.com/trugurpala/pinescriptv6", citation)
+
+    def test_unreleased_changelog_records_host_and_session_alert_hardening(self):
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        unreleased = changelog.split("## [1.0.0]", 1)[0]
+
+        self.assertIn("Windsurf", unreleased)
+        self.assertIn("host adoption", unreleased)
+        self.assertIn("session-close alert", unreleased)
+        self.assertIn("first-match precedence", unreleased)
+        self.assertIn("entry signals", unreleased)
 
     def test_manual_tradingview_verification_guide_is_linked_without_overclaiming(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -295,9 +623,11 @@ class DocumentationTests(unittest.TestCase):
             ROOT / "docs/provenance.md",
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_KNOWLEDGE_PACK.md",
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_HATA_HAFIZASI_GPT.md",
+            *(ROOT / relative_path for relative_path in NEW_PUBLIC_DOCS),
         )
         missing = []
         for path in paths:
+            self.assertTrue(path.is_file(), str(path.relative_to(ROOT)))
             content = path.read_text(encoding="utf-8")
             for target in re.findall(r"\[[^]]+\]\(([^)]+)\)", content):
                 clean = target.split("#", 1)[0]

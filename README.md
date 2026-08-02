@@ -10,10 +10,12 @@ Help AI coding tools give Pine Script v6 answers they can trace to named sources
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, and Zed the same evidence-aware Pine v6 guidance. It keeps the source, the rule, its exceptions, and its verification state connected.
+Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
+Windsurf, Zed, and Devin the same evidence-aware Pine v6 guidance. It keeps the
+source, the rule, its exceptions, and its verification state connected.
 
 > [!NOTE]
-> **Project status:** No failing automation currently requires intervention. The project is in maintenance and accepts community contributions.
+> **Project status:** This project is maintained and accepts community contributions.
 >
 > The current release is **v1.0.0**. It is the clean public starting point for future changes.
 
@@ -83,12 +85,16 @@ python tools/psak.py render --check
 python tools/psak.py check
 ```
 
-Expected result:
+The final `python tools/psak.py check` command ends with:
 
 ```text
-OK: repository data is valid
-OK: generated outputs are current
 OK: all offline checks passed
+NOT CHECKED: TradingView compilation
+NOT CHECKED: Runtime/chart behavior
+NOT CHECKED: Repaint behavior
+NOT CHECKED: Alert delivery
+NOT CHECKED: Market data
+NOT CHECKED: Profitability
 ```
 
 `python tools/psak.py links` is the only network-aware quality command. It checks registered official URLs and reports a link it cannot reach as unverified.
@@ -124,9 +130,9 @@ Changing a Pine file changes its SHA-256 hash and invalidates an older manual re
 
 ## Current Pine v6 coverage
 
-The source catalog follows official Pine v6 release notes through July 2026. Coverage includes conditionally active inputs, current-contract and ISIN fields, `timeframe_bars_back`, `request.footprint()`, multiline strings, user-defined type sorting, updated wrapping, and historical tick recalculation.
+The source catalog follows official Pine v6 release notes through July 2026. Coverage includes conditionally active inputs, current-contract and ISIN fields, `timeframe_bars_back`, `request.footprint()`, multiline strings, user-defined type sorting, updated wrapping, alerts, strategy recalculation and execution timing, and a repaint taxonomy.
 
-Coverage does not guarantee that every account, market, timeframe, or chart supports every feature. Read [Pine v6 release coverage](knowledge/releases/2025-2026.md) for version boundaries.
+Coverage does not guarantee that every account, market, timeframe, or chart supports every feature. See [current and planned coverage](COVERAGE.md) and read [Pine v6 release coverage](knowledge/releases/2025-2026.md) for version boundaries.
 
 Official starting points:
 
@@ -147,6 +153,9 @@ To promote an example beyond `structural-only`, follow [TradingView manual verif
 
 ## Supported AI tools
 
+Follow the [adoption guide](ADOPTION.md) for placement, local validation, and a
+host smoke prompt.
+
 | Tool | Project surface |
 | --- | --- |
 | Portable Agent Skill | [`SKILL.md`](SKILL.md) |
@@ -154,10 +163,11 @@ To promote an example beyond `structural-only`, follow [TradingView manual verif
 | Claude Code | `CLAUDE.md` |
 | Gemini CLI | `GEMINI.md` |
 | Cursor | `.cursor/rules/pinescriptv6.mdc` |
-| Cline | `.clinerules` |
-| Windsurf | `.windsurf/rules/pine-script-agent-kit.md` |
+| Cline | `AGENTS.md` |
+| Devin | `AGENTS.md` |
+| Windsurf | `AGENTS.md` (primary) |
 | GitHub Copilot | `.github/copilot-instructions.md` and scoped instructions |
-| Zed | `AGENTS.md` and the `.zed/rules` compatibility bridge |
+| Zed | `.cursorrules` |
 | Portable knowledge pack | `generated/custom-gpt/` |
 
 ## Quality commands
@@ -194,6 +204,9 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 
 ## Project documentation
 
+- [Adoption guide](ADOPTION.md), [coverage](COVERAGE.md), and [roadmap](ROADMAP.md)
+- [Alerts](docs/alerts.md) and [strategy execution](docs/strategy-execution.md)
+- [Repainting taxonomy](docs/repainting-taxonomy.md) and [backtesting realism](docs/backtesting-realism.md)
 - [How source and evidence are tracked](docs/provenance.md)
 - [TradingView manual verification](docs/tradingview-manual-verification.md)
 - [Public writing principles](docs/writing-style.md)

@@ -80,6 +80,17 @@ class RenderingTests(unittest.TestCase):
                 "{{NOTICE}}\n# Host\n\n{{PROTOCOL}}\n\n{{RULES}}\n",
                 encoding="utf-8",
             )
+        (root / "adapters/windsurf-bridge.md").write_text(
+            "---\n"
+            "trigger: always_on\n"
+            "---\n"
+            "{{NOTICE}}\n"
+            "# Windsurf bridge\n\n"
+            "Use the root `AGENTS.md` as the canonical project instructions.\n\n"
+            "Local checks remain structural-only and do not establish TradingView "
+            "compilation or runtime behavior.\n",
+            encoding="utf-8",
+        )
 
     def test_rule_section_filters_unverified_and_sorts(self):
         rules = [
@@ -105,6 +116,67 @@ class RenderingTests(unittest.TestCase):
             self.assertEqual(first, second)
             self.assertTrue(first)
             self.assertTrue(all(GENERATED_NOTICE in content for content in first.values()))
+
+    def test_only_path_specific_copilot_output_has_apply_to_frontmatter(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._repository(root)
+
+            outputs = render_outputs(root)
+            scoped = outputs[Path(".github/instructions/pine-script.instructions.md")]
+            repository_wide = outputs[Path(".github/copilot-instructions.md")]
+
+            frontmatter = '---\napplyTo: "**/*.pine"\n---\n'
+            self.assertTrue(scoped.startswith(frontmatter))
+            self.assertFalse(repository_wide.startswith("---"))
+            self.assertTrue(repository_wide.startswith(GENERATED_NOTICE))
+            self.assertEqual(scoped[len(frontmatter):], repository_wide)
+
+    def test_windsurf_fallback_workspace_rule_bridge_is_short_and_always_on(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._repository(root)
+
+            outputs = render_outputs(root)
+            fallback_bridge = outputs[Path(".windsurf/rules/pine-script-agent-kit.md")]
+            legacy = outputs[Path(".windsurfrules")]
+
+            self.assertTrue(fallback_bridge.startswith("---\ntrigger: always_on\n---\n"))
+            self.assertLess(len(fallback_bridge), 12_000)
+            self.assertIn("AGENTS.md", fallback_bridge)
+            self.assertIn("structural-only", fallback_bridge)
+            self.assertIn(
+                "TradingView compilation or runtime behavior", fallback_bridge
+            )
+            self.assertNotIn("PSAK-Z", fallback_bridge)
+            self.assertFalse(legacy.startswith("---"))
+            self.assertIn("PSAK-Z", legacy)
+
+    def test_repository_windsurf_bridge_starts_at_byte_zero_and_stays_bounded(self):
+        root = Path(__file__).resolve().parents[1]
+        fallback_bridge = (
+            root / ".windsurf/rules/pine-script-agent-kit.md"
+        ).read_bytes()
+        legacy = (root / ".windsurfrules").read_text(encoding="utf-8")
+
+        self.assertTrue(
+            fallback_bridge.startswith(b"---\ntrigger: always_on\n---\n")
+        )
+        decoded_bridge = fallback_bridge.decode("utf-8")
+        self.assertLess(len(decoded_bridge), 12_000)
+        self.assertIn("fallback workspace-rule bridge", decoded_bridge)
+        self.assertIn("fallback workspace-rule bridge", legacy)
+        self.assertNotIn("modern", decoded_bridge)
+        self.assertNotIn("modern", legacy)
+
+    def test_retained_zed_output_discloses_unsupported_legacy_status(self):
+        root = Path(__file__).resolve().parents[1]
+        legacy = (root / ".zed/rules").read_text(encoding="utf-8")
+
+        self.assertIn("unsupported retained legacy artifact", legacy)
+        self.assertIn("not a supported Zed instruction path", legacy)
+        self.assertIn("`.cursorrules`", legacy)
+        self.assertIn("found before `AGENTS.md`", legacy)
 
     def test_check_reports_changed_generated_file(self):
         with TemporaryDirectory() as directory:

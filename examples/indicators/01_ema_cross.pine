@@ -1,6 +1,12 @@
 //@version=6
 // EMA Cross Indicator — github.com/trugurpala/pinescriptv6
 // Author: Ugur Pala · mail@ugurpala.com
+// Evidence: structural-only; no TradingView compile/chart record exists.
+// Uses chart-timeframe values only; no request.*() call is made.
+// bullCross/bearCross use developing chart-timeframe values on an open realtime bar;
+// the condition and marker can change before close.
+// alertcondition() exposes UI-selectable conditions; frequency is selected in TradingView Create Alert.
+// Choosing bar-close delivery addresses timing only, not a blanket repaint verdict.
 indicator("EMA Cross [trugurpala]", overlay=true)
 
 // ── Inputs ──────────────────────────────────────────────────────────────────

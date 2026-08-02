@@ -14,10 +14,10 @@ TEMPLATE_OUTPUTS = {
     "adapters/gemini.md": ("GEMINI.md",),
     "adapters/cursor.mdc": (".cursor/rules/pinescriptv6.mdc", ".cursorrules"),
     "adapters/cline.md": (".clinerules",),
-    "adapters/windsurf.md": (
+    "adapters/windsurf-bridge.md": (
         ".windsurf/rules/pine-script-agent-kit.md",
-        ".windsurfrules",
     ),
+    "adapters/windsurf.md": (".windsurfrules",),
     "adapters/copilot.md": (
         ".github/copilot-instructions.md",
         ".github/instructions/pine-script.instructions.md",
@@ -27,6 +27,12 @@ TEMPLATE_OUTPUTS = {
         "generated/custom-gpt/INSTRUCTIONS.md",
     ),
     "adapters/custom-gpt-knowledge.md": ("generated/custom-gpt/KNOWLEDGE.md",),
+}
+
+OUTPUT_PREFIXES = {
+    ".github/instructions/pine-script.instructions.md": (
+        '---\napplyTo: "**/*.pine"\n---\n'
+    ),
 }
 
 
@@ -83,7 +89,7 @@ def render_outputs(root: Path) -> dict[Path, str]:
             + "\n"
         )
         for output_name in output_names:
-            outputs[Path(output_name)] = content
+            outputs[Path(output_name)] = OUTPUT_PREFIXES.get(output_name, "") + content
     return dict(sorted(outputs.items(), key=lambda item: item[0].as_posix()))
 
 

@@ -3,16 +3,16 @@
 // Author: Ugur Pala · github.com/trugurpala/pinescriptv6
 // TradingView: https://tr.tradingview.com/u/trugurpala/
 //
-// TR: Tüm 4 fakeout filtresi aktif, yüksek kaliteli sinyal stratejisi.
-// EN: High-quality signal strategy with all 4 fakeout filters active.
+// TR: Dört yapılandırılabilir fakeout filtresi kullanan sinyal stratejisi.
+// EN: Signal strategy with four configurable fakeout filters.
 // Önerilen TF: 15M, 1H, 4H
 
 // LESSONS_LEARNED kontrol listesi:
 // ✅ alertcondition() yok → alert() kullanıldı
-// ✅ calc_on_every_tick yok → backtest güvenilir
+// ✅ calc_on_every_tick yok: bar-close calculation setting; fill, data, and cost assumptions remain.
 // ✅ barstate.isconfirmed + table → uyarısız, kapanmış barda güncellenir
 // ✅ Çok satırlı "and" yok → tek satır
-// ✅ request.security() → [1] + lookahead_on (repainting yok)
+// ✅ [1] + lookahead_on is a confirmed HTF pattern only when the requested timeframe is higher than the chart; this code does not enforce that relation.
 
 strategy("Fakeout-Confirmed Strategy [trugurpala]",
     overlay            = true,
@@ -54,7 +54,7 @@ float fastEma = ta.ema(close, fastLen)
 float slowEma = ta.ema(close, slowLen)
 float atrVal  = ta.atr(atrLen)
 float volAvg  = ta.sma(volume, volLen)
-// LESSONS_LEARNED: request.security → [1] + lookahead_on = repainting yok
+// [1] + lookahead_on is a confirmed HTF pattern only when the requested timeframe is higher than the chart; this code does not enforce that relation.
 float htfEma  = request.security(syminfo.tickerid, htfTF, ta.ema(close, htfLen)[1], lookahead=barmerge.lookahead_on)
 
 // ── 4 Filtre ─────────────────────────────────────────────────────────────────

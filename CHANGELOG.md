@@ -4,6 +4,14 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 
 ## [Unreleased]
 
+- Added source-bound reliability rules for alerts, strategy recalculation and
+  execution timing, backtesting assumptions, and repaint classification.
+- Made the offline CLI boundary explicit with six `NOT CHECKED` results after a
+  successful `check` run.
+- Added public alert, strategy execution, repainting, backtesting, adoption,
+  coverage, and roadmap guides.
+- Added a rule contribution template and linked contribution paths for source,
+  rule, correction, example, verification, adapter, claim, and security reviews.
 - Hardened catalog rule body validation so rule explanation paths must stay
   inside the repository.
 - Added TradingView manual verification guidance for promoting examples beyond
@@ -14,6 +22,12 @@ All notable public changes to Pine Script Agent Kit are recorded here.
   request prompts for community contributions.
 - Reworked subdirectory guides with clear entry points, evidence limits, and
   safer TradingView, migration, market, and webhook workflows.
+- Hardened EMA and related example comments with timing, fill, cost, alert, and
+  mechanism-specific repaint disclosures without changing Pine behavior.
+- Hardened Cline, Windsurf, Devin, and Zed host adoption around supported
+  surfaces and first-match precedence while retaining generated artifacts.
+- Corrected VİOP entry signals and session-close alert wording to distinguish
+  the entry window, possible out-of-session exits and fills, and close requests.
 
 ## [1.0.0] — 2026-08-01
 

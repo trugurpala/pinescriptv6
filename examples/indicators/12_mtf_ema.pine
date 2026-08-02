@@ -9,7 +9,7 @@ bool showD  = input.bool(true, "Daily EMA")
 bool showW  = input.bool(true, "Weekly EMA")
 bool showM  = input.bool(false,"Monthly EMA")
 
-// ── Calculations (confirmed bars — no repainting) ────────────────────────────
+// [1] + lookahead_on is a confirmed HTF pattern only when the requested timeframe is higher than the chart; this code does not enforce that relation.
 float emaD = request.security(syminfo.tickerid, "D", ta.ema(close, emaLen)[1], lookahead=barmerge.lookahead_on)
 float emaW = request.security(syminfo.tickerid, "W", ta.ema(close, emaLen)[1], lookahead=barmerge.lookahead_on)
 float emaM = request.security(syminfo.tickerid, "M", ta.ema(close, emaLen)[1], lookahead=barmerge.lookahead_on)

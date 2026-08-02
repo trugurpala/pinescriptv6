@@ -15,7 +15,7 @@ int    atrLen     = input.int(14, "ATR", minval=1)
 float  slMult     = input.float(1.5, "SL Mult", step=0.1)
 float  tpMult     = input.float(2.5, "TP Mult", step=0.1)
 
-// ── Higher Timeframe (no repainting) ─────────────────────────────────────────
+// [1] + lookahead_on is a confirmed HTF pattern only when the requested timeframe is higher than the chart; this code does not enforce that relation.
 float htfEma   = request.security(syminfo.tickerid, htfInput, ta.ema(close, htfEmaLen)[1], lookahead=barmerge.lookahead_on)
 float htfClose = request.security(syminfo.tickerid, htfInput, close[1], lookahead=barmerge.lookahead_on)
 bool  htfBull   = htfClose > htfEma

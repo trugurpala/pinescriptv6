@@ -10,10 +10,12 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf ve Zed için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı, istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
+Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
+Windsurf, Zed ve Devin için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı,
+istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
 
 > [!NOTE]
-> **Proje durumu:** Şu anda müdahale gerektiren hata veya başarısız otomasyon bulunmuyor. Proje bakım ve topluluk katkısı kabul etme aşamasında.
+> **Proje durumu:** Proje bakımdadır ve topluluk katkılarını kabul eder.
 >
 > Güncel sürüm **v1.0.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
 
@@ -83,12 +85,16 @@ python tools/psak.py render --check
 python tools/psak.py check
 ```
 
-Beklenen sonuç:
+Son `python tools/psak.py check` komutunun çıktısı şu satırlarla biter:
 
 ```text
-OK: repository data is valid
-OK: generated outputs are current
 OK: all offline checks passed
+NOT CHECKED: TradingView compilation
+NOT CHECKED: Runtime/chart behavior
+NOT CHECKED: Repaint behavior
+NOT CHECKED: Alert delivery
+NOT CHECKED: Market data
+NOT CHECKED: Profitability
 ```
 
 Ağ kullanan tek kalite komutu `python tools/psak.py links` komutudur. Kayıtlı resmî adresleri denetler; ulaşamadığı bağlantıyı doğrulanmamış olarak bildirir.
@@ -124,9 +130,9 @@ Pine dosyası değişince SHA-256 özeti de değişir; eski elle kontrol kaydı 
 
 ## Güncel Pine v6 kapsamı
 
-Kaynak kataloğu, Temmuz 2026’ya kadar yayımlanan resmî Pine v6 sürüm notlarını izler. Koşula bağlı girdiler, güncel sözleşme ve ISIN alanları, `timeframe_bars_back`, `request.footprint()`, çok satırlı metinler, kullanıcı tanımlı tür sıralaması, güncel satır kaydırma ve geçmiş tik hesabı kapsamdadır.
+Kaynak kataloğu, Temmuz 2026’ya kadar yayımlanan resmî Pine v6 sürüm notlarını izler. Koşula bağlı girdiler, güncel sözleşme ve ISIN alanları, `timeframe_bars_back`, `request.footprint()`, çok satırlı metinler, kullanıcı tanımlı tür sıralaması, güncel satır kaydırma, alarmlar, strateji hesaplaması, simüle emir gerçekleşme zamanlaması ve yeniden çizim sınıflandırması kapsamdadır.
 
-Bu kapsam, her hesabın, piyasanın, zaman diliminin veya grafiğin bütün özellikleri desteklediğini göstermez. Sürüm sınırları için [Pine v6 sürüm kapsamını](knowledge/releases/2025-2026.md) okuyabilirsin.
+Bu kapsam, her hesabın, piyasanın, zaman diliminin veya grafiğin bütün özellikleri desteklediğini göstermez. [Güncel ve planlanan kapsamı](COVERAGE.md) inceleyebilir, sürüm sınırları için [Pine v6 sürüm kapsamını](knowledge/releases/2025-2026.md) okuyabilirsin.
 
 Başlıca resmî kaynaklar:
 
@@ -147,6 +153,9 @@ Bir örneği `structural-only` durumunun ötesine taşımak için [TradingView e
 
 ## Desteklenen yapay zekâ araçları
 
+Dosyaları yerleştirmek, yerel kontrolleri çalıştırmak ve aracın rehberi kullanıp
+kullanmadığını sınamak için [kullanım rehberini](ADOPTION.md) izle.
+
 | Araç | Projedeki talimat yüzeyi |
 | --- | --- |
 | Taşınabilir ajan becerisi | [`SKILL.md`](SKILL.md) |
@@ -154,10 +163,11 @@ Bir örneği `structural-only` durumunun ötesine taşımak için [TradingView e
 | Claude Code | `CLAUDE.md` |
 | Gemini CLI | `GEMINI.md` |
 | Cursor | `.cursor/rules/pinescriptv6.mdc` |
-| Cline | `.clinerules` |
-| Windsurf | `.windsurf/rules/pine-script-agent-kit.md` |
+| Cline | `AGENTS.md` |
+| Devin | `AGENTS.md` |
+| Windsurf | `AGENTS.md` (birincil) |
 | GitHub Copilot | `.github/copilot-instructions.md` ve kapsama özel talimatlar |
-| Zed | `AGENTS.md` ve `.zed/rules` uyumluluk köprüsü |
+| Zed | `.cursorrules` |
 | Taşınabilir bilgi paketi | `generated/custom-gpt/` |
 
 ## Kalite komutları
@@ -194,6 +204,9 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 
 ## Proje belgeleri
 
+- [Kullanım rehberi](ADOPTION.md), [kapsam](COVERAGE.md) ve [yol haritası](ROADMAP.md)
+- [Alarm rehberi](docs/alerts.md) ve [strateji yürütme rehberi](docs/strategy-execution.md)
+- [Yeniden çizim sınıflandırması](docs/repainting-taxonomy.md) ve [strateji simülasyonunun gerçekçiliği](docs/backtesting-realism.md)
 - [Kaynak ve kanıt nasıl izleniyor?](docs/provenance.md)
 - [TradingView elle doğrulama rehberi](docs/tradingview-manual-verification.md)
 - [Kamusal yazım ilkeleri](docs/writing-style.md)
@@ -208,12 +221,6 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 Güncel sürüm **v1.0.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
 
 Kod ve proje belgeleri [MIT Lisansı](LICENSE) ile yayımlanır. Atıf bilgileri [CITATION.cff](CITATION.cff) içindedir.
-
-Kamusal görsel sistemin adı **Verified Signal**’dır. Düzenlenebilir kaynak [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), ilkeler ise [görsel felsefe belgesi](docs/design/verified-signal-philosophy.md) içindedir.
-
-Topluluk için [Uğur Pala](https://github.com/trugurpala) tarafından sürdürülür.
-
-Bu bağımsız proje TradingView ile bağlantılı değildir ve TradingView tarafından onaylanmamıştır. Pine Script ve TradingView markaları ilgili sahiplerine aittir.
 
 Kamusal görsel sistemin adı **Verified Signal**’dır. Düzenlenebilir kaynak [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), ilkeler ise [görsel felsefe belgesi](docs/design/verified-signal-philosophy.md) içindedir.
 
