@@ -12,6 +12,14 @@ from psaklib.validation import load_json, validate_critical_files, validate_repo
 
 
 ROOT = Path(__file__).resolve().parents[1]
+LOCAL_VALIDATION_LIMITS = (
+    "TradingView compilation",
+    "Runtime/chart behavior",
+    "Repaint behavior",
+    "Alert delivery",
+    "Market data",
+    "Profitability",
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -33,10 +41,16 @@ def _print_issues() -> int:
     issues = validate_repository(ROOT)
     if not issues:
         print("OK: repository data is valid")
+        _print_local_validation_limits()
         return 0
     for issue in issues:
         print(f"ERROR {issue.code} {issue.path}: {issue.message}")
     return 1
+
+
+def _print_local_validation_limits() -> None:
+    for limit in LOCAL_VALIDATION_LIMITS:
+        print(f"NOT CHECKED: {limit}")
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -74,6 +88,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 print(f"ERROR {issue.code} {issue.path}: {issue.message}")
             return 1
         print("OK: all offline checks passed")
+        _print_local_validation_limits()
         return 0
     if args.command == "links":
         results = check_source_links(load_json(ROOT / "knowledge/sources.json"))
