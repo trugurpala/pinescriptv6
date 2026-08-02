@@ -18,7 +18,7 @@ Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Winds
 >
 > Güncel sürüm **v1.0.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
 
-> [!IMPORTANT]
+> **Önemli sınır**
 > Bu paket bir yapay zekâ yanıtını iyileştirebilir. TradingView derleyicisinin veya grafik testinin yerini alamaz. Depo kontrolü, Pine kodunun derlendiğini, hiç yeniden çizim yapmadığını, güvenli ya da kârlı olduğunu kanıtlamaz.
 
 [Başlangıç](#pine-görevinle-başla) · [Nasıl çalışır?](#bir-yapay-zekâ-ajanı-bu-paketi-nasıl-kullanır) · [Kaynaklar](#bilgi-nereden-geliyor) · [Doğrulama](#kanıt-seviyeleri-ne-anlama-geliyor) · [Topluluk](#topluluk-için-ücretsiz) · [Katkı](#projeye-katkı)
