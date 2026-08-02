@@ -9,7 +9,6 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 [![kalite](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Divan ile üretildi](https://img.shields.io/badge/Divan%20ile-%C3%BCretildi-087F8C)](https://github.com/trugurpala/divan)
 
 Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf ve Zed için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı, istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
 
@@ -209,10 +208,6 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 Güncel sürüm **v1.0.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
 
 Kod ve proje belgeleri [MIT Lisansı](LICENSE) ile yayımlanır. Atıf bilgileri [CITATION.cff](CITATION.cff) içindedir.
-
-## Divan ile üretildi
-
-[Divan](https://github.com/trugurpala/divan), bu projenin araştırma, planlama, uygulama, denetim ve yayın hazırlığına yardım etti. Açık kaynaklıdır ve projenin çalışma bağımlılığı değildir.
 
 Kamusal görsel sistemin adı **Verified Signal**’dır. Düzenlenebilir kaynak [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), ilkeler ise [görsel felsefe belgesi](docs/design/verified-signal-philosophy.md) içindedir.
 
