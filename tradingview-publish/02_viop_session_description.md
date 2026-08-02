@@ -3,6 +3,10 @@
 ## Pine Dosyası
 `examples/strategies/11_viop_session_strategy.pine`
 
+> Evidence boundary: the repository record is `structural-only`. Check the
+> exact file hash, session timezone, contract, and TradingView behavior before
+> publishing or relying on it.
+
 ## TradingView Title
 ```
 VIOP Session Strategy — Seans Filtreli BIST30 [trugurpala]
@@ -30,7 +34,7 @@ No positions opened outside market hours. All positions auto-closed at day end.
 ✅ ATR tabanlı SL/TP — volatiliteye adaptif
 ✅ Hacim onayı — fakeout sinyalleri filtrelenir
 ✅ EMA trend filtresi — trend yönünde giriş
-✅ Komisyon %0.03 — VİOP gerçekçi backtest
+✅ Komisyon %0.03 — örnek ayar; kendi sözleşme ve ücretlerinle doğrula
 ✅ Slippage 2 tick dahil
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

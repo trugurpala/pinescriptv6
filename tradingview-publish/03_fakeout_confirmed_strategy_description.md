@@ -3,6 +3,9 @@
 ## Pine Dosyası
 `examples/strategies/13_fakeout_confirmed_strategy.pine`
 
+> Evidence boundary: the repository record is `structural-only`. Check the
+> exact file hash and TradingView behavior before publishing or relying on it.
+
 ## TradingView Title
 ```
 Fakeout-Confirmed Strategy — Volume + HTF + ATR + Bar [trugurpala]
@@ -41,8 +44,8 @@ F4 — ATR Gürültü / ATR Noise Filter
 GÖRSEL / VISUALS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🟢 Yeşil üçgen → Onaylı long sinyal
-🔴 Kırmızı üçgen → Onaylı short sinyal
+🟢 Yeşil üçgen → Koşulları sağlayan long işareti
+🔴 Kırmızı üçgen → Koşulları sağlayan short işareti
 ⚪ Küçük daire → Filtrelenmiş sinyal (karşılaştırma için)
 
 Sağ üst tablo: Her filtrenin anlık durumu ✓/✗

@@ -3,8 +3,14 @@
 ## Pine Dosyası
 `examples/indicators/18_fakeout_filter.pine`
 
-## TradingView URL ✅ PUBLISHED
+> Evidence boundary: the repository record is `structural-only`. Check the
+> exact file hash and TradingView behavior before publishing or relying on it.
+
+## TradingView URL — reported reference
 https://tr.tradingview.com/script/SY1XkTBH/
+
+> Publication status and the current URL must be checked in TradingView before
+> reuse. This repository does not treat this note as a current release record.
 
 ## TradingView Title
 ```
@@ -52,7 +58,7 @@ Is the fast EMA above the slow EMA?
 SKOR / SCORE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🟢 3-4 → Güçlü sinyal / Strong → Giriş yap / Enter
+🟢 3-4 → Daha yüksek skor / Higher score → Bağlamla birlikte incele / Review in context
 🟡 2   → Orta / Medium → Dikkatli / Cautious
 🔴 0-1 → Zayıf / Weak → Bekleme / Wait
 

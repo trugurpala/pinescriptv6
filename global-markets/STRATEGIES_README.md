@@ -1,38 +1,38 @@
-# Global Market Strategies — Pine Script v6
-> Maintainer: Ugur Pala · mail@ugurpala.com
-> TradingView: https://tr.tradingview.com/u/trugurpala/
-> X: https://x.com/trugurpala
-> GitHub: https://github.com/trugurpala/pinescriptv6
+# Global market strategy examples
 
-TR: Her strateji gerçek piyasa koşullarına göre optimize edilmiştir.
-    Doğru seans saatleri, komisyon ve slippage ayarları dahildir.
-EN: Each strategy is optimised for real market conditions.
-    Correct session times, commission and slippage settings included.
+These ten strategy files extend the market-context examples with trend,
+pullback, breakout, VWAP, and session patterns. They are educational starting
+points, not optimized systems or recommended risk settings.
 
----
+## Evidence and limits
 
-## Stratejiler / Strategies
+The files remain `structural-only` in the repository manifest. A strategy test
+result depends on the exact file hash, symbol, feed, session timezone, data
+history, commission, slippage, and account context. Repository checks do not
+prove a backtest, profitability, non-repainting behavior, or live suitability.
 
-| # | Dosya | Piyasa / Market | Özellik / Feature |
-|---|-------|-----------------|-------------------|
-| 13 | `13_btc_trend_pullback.pine` | 🪙 BTC/USDT | EMA trend + RSI pullback entry |
-| 14 | `14_eth_momentum.pine` | 🪙 ETH/USDT | Momentum breakout + volume confirm |
-| 15 | `15_es_opening_range.pine` | 🇺🇸 ES S&P500 | Opening Range Breakout (ORB) |
-| 16 | `16_nq_vwap_reversion.pine` | 🇺🇸 NQ Nasdaq | VWAP mean reversion |
-| 17 | `17_gc_gold_trend.pine` | 🥇 Gold XAUUSD | Triple EMA trend following |
-| 18 | `18_cl_crude_momentum.pine` | 🛢️ Crude Oil | ATR momentum + session filter |
-| 19 | `19_eurusd_london_breakout.pine` | 💱 EUR/USD | London session breakout |
-| 20 | `20_gbpusd_structure.pine` | 💱 GBP/USD | Market structure + EMA filter |
-| 21 | `21_usdjpy_carry_trend.pine` | 💱 USD/JPY | Carry trade trend following |
-| 22 | `22_dax_gap_fade.pine` | 🇩🇪 DAX | Gap fade + Xetra session |
+Use the [TradingView manual verification guide](../docs/tradingview-manual-verification.md)
+for a human check and the [support guide](../SUPPORT.md) for questions or safe
+reporting.
 
----
+## Strategies
 
-## Nasıl Kullanılır / How to Use
+| File | Context | Pattern |
+| --- | --- | --- |
+| `13_btc_trend_pullback.pine` | BTC/USDT | EMA trend and RSI pullback |
+| `14_eth_momentum.pine` | ETH/USDT | Momentum and volume context |
+| `15_es_opening_range.pine` | ES S&P 500 | Opening-range pattern |
+| `16_nq_vwap_reversion.pine` | NQ Nasdaq | VWAP reversion context |
+| `17_gc_gold_trend.pine` | Gold / XAUUSD | Triple EMA trend |
+| `18_cl_crude_momentum.pine` | Crude oil | ATR momentum and session |
+| `19_eurusd_london_breakout.pine` | EUR/USD | London-session pattern |
+| `20_gbpusd_structure.pine` | GBP/USD | Structure and EMA context |
+| `21_usdjpy_carry_trend.pine` | USD/JPY | Carry-trend context |
+| `22_dax_gap_fade.pine` | DAX | Gap and Xetra-session context |
 
-1. TradingView → Pine Editor → kodu yapıştır → **Add to chart**
-2. Strategy Tester ile backtest yap
-3. Parametreleri sembolünüze göre ayarlayın
+## Suggested review
 
-> TR: Eğitim amaçlıdır. Canlı işlemde risk yönetimi yapın.
-> EN: Educational purposes only. Apply risk management in live trading.
+1. Confirm the exact file and its manifest hash.
+2. Check symbol, session timezone, order sizing, commission, and slippage.
+3. Test in Pine Editor and Strategy Tester for the intended context.
+4. Treat backtest output as an observation, not a promise of future results.

@@ -24,6 +24,7 @@ REQUIRED_LINKS = (
     "CHANGELOG.md",
     "SKILL.md",
     "docs/provenance.md",
+    "docs/tradingview-manual-verification.md",
 )
 
 PUBLIC_HISTORY_DOCS = (
@@ -49,6 +50,21 @@ REQUIRED_README_BADGES = (
 EXPLANATORY_ASSETS = (
     ("assets/agent-journey.png", (1280, 720)),
     ("assets/source-provenance.png", (1280, 720)),
+)
+
+SUB_READMES = (
+    "examples/README.md",
+    "global-markets/README.md",
+    "global-markets/STRATEGIES_README.md",
+    "tradingview-publish/README.md",
+    "v5-to-v6-migration/README.md",
+    "webhook-templates/README.md",
+)
+
+PUBLISH_DESCRIPTIONS = (
+    "tradingview-publish/01_fakeout_filter_description.md",
+    "tradingview-publish/02_viop_session_description.md",
+    "tradingview-publish/03_fakeout_confirmed_strategy_description.md",
 )
 
 
@@ -179,6 +195,66 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("Pine Script Agent Kit", citation)
         self.assertIn("https://github.com/trugurpala/pinescriptv6", citation)
 
+    def test_manual_tradingview_verification_guide_is_linked_without_overclaiming(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+        contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        guide = (ROOT / "docs/tradingview-manual-verification.md").read_text(encoding="utf-8")
+
+        for content in (english, turkish, contributing):
+            self.assertIn("docs/tradingview-manual-verification.md", content)
+
+        self.assertIn("structural-only", guide)
+        self.assertIn("tradingview-verified", guide)
+        self.assertIn("verification/tradingview.json", guide)
+        self.assertIn("examples/manifest.json", guide)
+        self.assertIn("Do not record", guide)
+
+    def test_support_guide_is_linked_and_routes_sensitive_questions(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+        contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        support = (ROOT / "SUPPORT.md").read_text(encoding="utf-8")
+
+        for content in (english, turkish, contributing):
+            self.assertIn("SUPPORT.md", content)
+
+        for link in (
+            "github.com/trugurpala/pinescriptv6/discussions",
+            "github.com/trugurpala/pinescriptv6/issues/new/choose",
+            "SECURITY.md",
+            "docs/tradingview-manual-verification.md",
+        ):
+            self.assertIn(link, support)
+
+        self.assertIn("Do not post private code", support)
+        self.assertIn("Özel kodu", support)
+
+    def test_subdirectory_readmes_are_user_facing_and_evidence_bounded(self):
+        forbidden = (
+            "copy-paste ready",
+            "errors auto-saved",
+            "Premium or higher required",
+            "ready-to-use trading systems",
+        )
+
+        for relative_path in SUB_READMES:
+            content = (ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn("structural-only", content, relative_path)
+            self.assertIn("SUPPORT.md", content, relative_path)
+            self.assertIn("tradingview-manual-verification.md", content, relative_path)
+            lowered = content.lower()
+            for claim in forbidden:
+                self.assertNotIn(claim.lower(), lowered, relative_path)
+
+    def test_publish_descriptions_keep_publication_and_signal_claims_bounded(self):
+        for relative_path in PUBLISH_DESCRIPTIONS:
+            content = (ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn("structural-only", content, relative_path)
+            self.assertIn("Evidence boundary", content, relative_path)
+            self.assertNotIn("PUBLISHED", content, relative_path)
+            self.assertNotIn("gerçekçi backtest", content.lower(), relative_path)
+
     def test_legacy_custom_gpt_docs_are_safe_bridges(self):
         paths = (
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_KNOWLEDGE_PACK.md",
@@ -204,6 +280,12 @@ class DocumentationTests(unittest.TestCase):
             ROOT / "README.tr.md",
             ROOT / "CONTRIBUTING.md",
             ROOT / "SECURITY.md",
+            ROOT / "SUPPORT.md",
+            ROOT / "examples/README.md",
+            ROOT / "global-markets/README.md",
+            ROOT / "tradingview-publish/README.md",
+            ROOT / "v5-to-v6-migration/README.md",
+            ROOT / "webhook-templates/README.md",
             ROOT / "docs/provenance.md",
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_KNOWLEDGE_PACK.md",
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_HATA_HAFIZASI_GPT.md",

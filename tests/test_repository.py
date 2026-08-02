@@ -62,6 +62,34 @@ class RepositoryTests(unittest.TestCase):
         self.assertIn("python tools/psak.py check", workflow)
         self.assertNotIn("python tools/psak.py links", workflow)
 
+    def test_source_link_workflow_is_advisory_network_gate(self):
+        workflow = (ROOT / ".github/workflows/source-links.yml").read_text(encoding="utf-8")
+        quality = (ROOT / ".github/workflows/quality.yml").read_text(encoding="utf-8")
+
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("schedule:", workflow)
+        self.assertIn("python tools/psak.py links", workflow)
+        self.assertNotIn("python -m unittest discover -s tests -v", workflow)
+        self.assertNotIn("python tools/psak.py check", workflow)
+        self.assertNotIn("python tools/psak.py links", quality)
+
+    def test_pull_request_template_keeps_tradingview_evidence_hash_bound(self):
+        template = (ROOT / ".github/pull_request_template.md").read_text(encoding="utf-8")
+
+        self.assertNotIn("TradingView'da test edildi / Tested in TradingView", template)
+        self.assertIn("structural-only", template)
+        self.assertIn("verification/tradingview.json", template)
+        self.assertIn("examples/manifest.json", template)
+
+    def test_issue_and_question_forms_request_reproducible_context(self):
+        bug = (ROOT / ".github/ISSUE_TEMPLATE/bug_report.yml").read_text(encoding="utf-8")
+        question = (ROOT / ".github/DISCUSSION_TEMPLATE/questions.yml").read_text(encoding="utf-8")
+
+        for content in (bug, question):
+            self.assertIn("timeframe", content.lower())
+            self.assertIn("symbol", content.lower())
+            self.assertIn("sanitized", content.lower())
+
 
 if __name__ == "__main__":
     unittest.main()
