@@ -2,7 +2,7 @@
 
 All notable public changes to Pine Script Agent Kit are recorded here.
 
-## [Unreleased]
+## [1.1.0] — 2026-08-02
 
 - Hardened catalog rule body validation so rule explanation paths must stay
   inside the repository.
@@ -14,6 +14,10 @@ All notable public changes to Pine Script Agent Kit are recorded here.
   request prompts for community contributions.
 - Reworked subdirectory guides with clear entry points, evidence limits, and
   safer TradingView, migration, market, and webhook workflows.
+
+## [Unreleased]
+
+No public changes yet.
 
 ## [1.0.0] — 2026-08-01
 
@@ -36,5 +40,6 @@ Repository checks establish structure and consistency. They do not establish
 TradingView compilation, runtime behavior, profitability, non-repainting
 behavior, data entitlement, or live-trading suitability.
 
-[Unreleased]: https://github.com/trugurpala/pinescriptv6/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/trugurpala/pinescriptv6/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/trugurpala/pinescriptv6/releases/tag/v1.1.0
 [1.0.0]: https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0

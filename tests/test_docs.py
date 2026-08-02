@@ -10,7 +10,7 @@ REQUIRED_README_COMMANDS = (
     "python tools/psak.py render --check",
     "python tools/psak.py check",
 )
-REQUIRED_STATUS_PHRASES = ("v1.0.0",)
+REQUIRED_STATUS_PHRASES = ("v1.1.0",)
 FORBIDDEN_CLAIMS = (
     "all examples are tested in tradingview",
     "production-ready",
@@ -90,8 +90,8 @@ class DocumentationTests(unittest.TestCase):
         )
         self.assertIn("README.tr.md", english)
         self.assertIn("README.md", turkish)
-        self.assertIn("The current release is **v1.0.0**", english)
-        self.assertIn("Güncel sürüm **v1.0.0**", turkish)
+        self.assertIn("The current release is **v1.1.0**", english)
+        self.assertIn("Güncel sürüm **v1.1.0**", turkish)
 
     def test_readmes_use_the_maintenance_first_public_format(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")

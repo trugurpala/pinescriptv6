@@ -16,7 +16,7 @@ Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline, 
 > [!NOTE]
 > **Project status:** No failing automation currently requires intervention. The project is in maintenance and accepts community contributions.
 >
-> The current release is **v1.0.0**. It is the clean public starting point for future changes.
+> The current release is **v1.1.0**. It includes evidence-bound validation and community contribution guidance.
 
 > [!IMPORTANT]
 > This kit can improve an AI answer, but it cannot replace the TradingView compiler or a chart test. A repository check never becomes a claim that Pine code compiles, never repaints, is secure, or is profitable.
@@ -206,7 +206,7 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 
 ## Releases, license, and citation
 
-The current release is **v1.0.0**. See the [release record](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0) and [changelog](CHANGELOG.md). Future changes stay under `Unreleased` until they receive their own tag and GitHub Release.
+The current release is **v1.1.0**. See the [release record](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.1.0) and [changelog](CHANGELOG.md). Future changes stay under `Unreleased` until they receive their own tag and GitHub Release.
 
 Code and project documentation use the [MIT License](LICENSE). Citation metadata is available in [CITATION.cff](CITATION.cff).
 
