@@ -131,6 +131,21 @@ class ExampleTests(unittest.TestCase):
         ):
             self.assertNotIn(stale_claim, text)
 
+    def test_viop_session_header_limits_only_entry_signals_and_entry_orders(self):
+        text = Path("examples/strategies/11_viop_session_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        for phrase in (
+            "Giriş sinyalleri ve giriş emri oluşturma 09:30-18:15 UTC+3 seansıyla sınırlıdır.",
+            "Çıkışlar ve dolumlar bu seansın dışında gerçekleşebilir.",
+            "Entry signals and entry-order creation are gated to 09:30-18:15 UTC+3.",
+            "Exits and fills can occur outside that session.",
+        ):
+            self.assertIn(phrase, text)
+        self.assertNotIn("Only trades within market hours", text)
+        self.assertNotIn("seans saatleri içinde işlem yapar", text)
+
     def test_fakeout_strategy_uses_neutral_signal_description(self):
         text = Path("examples/strategies/13_fakeout_confirmed_strategy.pine").read_text(
             encoding="utf-8"

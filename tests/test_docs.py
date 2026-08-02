@@ -121,6 +121,7 @@ class DocumentationTests(unittest.TestCase):
             "Gemini CLI": ("GEMINI.md",),
             "Cursor": (".cursor/rules/pinescriptv6.mdc", ".cursorrules"),
             "Cline": ("AGENTS.md",),
+            "Devin": ("AGENTS.md",),
             "Windsurf": (
                 "AGENTS.md",
                 ".windsurf/rules/pine-script-agent-kit.md",
@@ -130,7 +131,7 @@ class DocumentationTests(unittest.TestCase):
                 ".github/copilot-instructions.md",
                 ".github/instructions/pine-script.instructions.md",
             ),
-            "Zed": ("AGENTS.md",),
+            "Zed": (".cursorrules",),
             "ChatGPT Custom GPT": (
                 "generated/custom-gpt/INSTRUCTIONS.md",
                 "generated/custom-gpt/KNOWLEDGE.md",
@@ -148,7 +149,7 @@ class DocumentationTests(unittest.TestCase):
                 continue
             data_rows.append(cells)
 
-        self.assertEqual(len(data_rows), 10)
+        self.assertEqual(len(data_rows), 11)
         rows_by_surface = {row[0]: row for row in data_rows}
         self.assertEqual(set(rows_by_surface), set(expected_paths))
         for surface, paths in expected_paths.items():
@@ -179,16 +180,30 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("Rules panel", cline_verification)
         self.assertIn("smoke prompt", cline_verification)
 
+        devin_source, devin_placement, devin_verification, devin_prompt = (
+            rows_by_surface["Devin"][1:]
+        )
+        self.assertEqual(devin_source, "`AGENTS.md`")
+        self.assertIn("project root", devin_placement)
+        self.assertIn("Accessed Knowledge", devin_verification)
+        self.assertIn("repo knowledge", devin_verification)
+        self.assertIn("smoke prompt", devin_verification)
+        self.assertIn("Devin", devin_prompt)
+
         windsurf_source, windsurf_placement, _, _ = rows_by_surface["Windsurf"][1:]
         self.assertIn("primary", windsurf_source)
-        self.assertIn("modern", windsurf_source)
-        self.assertIn("bridge", windsurf_source)
+        self.assertIn("fallback workspace-rule bridge", windsurf_source)
+        self.assertNotIn("modern", windsurf_source)
         self.assertIn("legacy", windsurf_source)
         self.assertIn("root", windsurf_placement)
 
         zed_source, zed_placement, _, _ = rows_by_surface["Zed"][1:]
-        self.assertEqual(zed_source, "`AGENTS.md`")
+        self.assertEqual(zed_source, "`.cursorrules`")
         self.assertIn("project root", zed_placement)
+        self.assertIn("first matching", zed_placement)
+        self.assertIn("precedes `AGENTS.md`", zed_placement)
+        self.assertIn("selected supported surface", zed_placement)
+        self.assertNotIn("AGENTS.md", zed_source)
         self.assertNotIn(".zed/rules", " | ".join(rows_by_surface["Zed"]))
         for command in REQUIRED_README_COMMANDS:
             self.assertIn(command, content)
@@ -327,6 +342,30 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("The current release is **v1.0.0**", english)
         self.assertIn("Güncel sürüm **v1.0.0**", turkish)
 
+    def test_readmes_label_the_displayed_output_as_the_final_check_ending(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        self.assertIn(
+            "The final `python tools/psak.py check` command ends with:", english
+        )
+        self.assertNotIn("Expected result:", english)
+        self.assertIn(
+            "Son `python tools/psak.py check` komutunun çıktısı şu satırlarla biter:",
+            turkish,
+        )
+        self.assertNotIn("Beklenen sonuç:", turkish)
+
+    def test_readmes_map_zed_precedence_and_list_devin(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        for content in (english, turkish):
+            self.assertIn("| Zed | `.cursorrules` |", content)
+            self.assertNotIn("| Zed | `AGENTS.md`", content)
+            self.assertIn("| Devin | `AGENTS.md` |", content)
+            self.assertIn("Devin", "\n".join(content.splitlines()[:30]))
+
     def test_readmes_use_the_maintenance_first_public_format(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
         turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
@@ -463,6 +502,8 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("Windsurf", unreleased)
         self.assertIn("host adoption", unreleased)
         self.assertIn("session-close alert", unreleased)
+        self.assertIn("first-match precedence", unreleased)
+        self.assertIn("entry signals", unreleased)
 
     def test_manual_tradingview_verification_guide_is_linked_without_overclaiming(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")

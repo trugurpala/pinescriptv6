@@ -283,7 +283,7 @@
     },
     {
       "path": "examples/strategies/11_viop_session_strategy.pine",
-      "sha256": "39f3ab8aadb7bace2f6fae070eec3d907e1907223ff6e76139548a615f9c9585",
+      "sha256": "cdf8cb5bc421ae8ff3f6625db2e4bfe9dc1208ce770de49d4515cf0f0774b005",
       "evidence": "structural-only",
       "checked_on": "2026-08-02",
       "tradingview_record": null,

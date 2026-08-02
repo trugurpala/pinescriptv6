@@ -11,7 +11,9 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Divan ile üretildi](https://img.shields.io/badge/Divan%20ile-%C3%BCretildi-087F8C)](https://github.com/trugurpala/divan)
 
-Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf ve Zed için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı, istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
+Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
+Windsurf, Zed ve Devin için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı,
+istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
 
 > [!NOTE]
 > **Proje durumu:** Proje bakımdadır ve topluluk katkılarını kabul eder.
@@ -84,7 +86,7 @@ python tools/psak.py render --check
 python tools/psak.py check
 ```
 
-Beklenen sonuç:
+Son `python tools/psak.py check` komutunun çıktısı şu satırlarla biter:
 
 ```text
 OK: all offline checks passed
@@ -163,9 +165,10 @@ kullanmadığını sınamak için [kullanım rehberini](ADOPTION.md) izle.
 | Gemini CLI | `GEMINI.md` |
 | Cursor | `.cursor/rules/pinescriptv6.mdc` |
 | Cline | `AGENTS.md` |
+| Devin | `AGENTS.md` |
 | Windsurf | `AGENTS.md` (birincil) |
 | GitHub Copilot | `.github/copilot-instructions.md` ve kapsama özel talimatlar |
-| Zed | `AGENTS.md` |
+| Zed | `.cursorrules` |
 | Taşınabilir bilgi paketi | `generated/custom-gpt/` |
 
 ## Kalite komutları

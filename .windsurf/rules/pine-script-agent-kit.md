@@ -5,9 +5,10 @@ trigger: always_on
      Regenerate with: python tools/psak.py render -->
 # Pine Script Agent Kit for Windsurf
 
-Use the repository-root [`AGENTS.md`](../../AGENTS.md) as the primary project
-instruction surface for Pine Script work. Canonical Pine claims and source
-records remain in `knowledge/catalog.json` and `knowledge/sources.json`.
+This file is a fallback workspace-rule bridge. Use the repository-root
+[`AGENTS.md`](../../AGENTS.md) as the primary project instruction surface for
+Pine Script work. Canonical Pine claims and source records remain in
+`knowledge/catalog.json` and `knowledge/sources.json`.
 
 Label local static results `structural-only`. Local checks do not establish
 TradingView compilation or runtime behavior, repaint behavior, alert delivery,

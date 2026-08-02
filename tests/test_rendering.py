@@ -132,30 +132,51 @@ class RenderingTests(unittest.TestCase):
             self.assertTrue(repository_wide.startswith(GENERATED_NOTICE))
             self.assertEqual(scoped[len(frontmatter):], repository_wide)
 
-    def test_windsurf_modern_rule_is_a_short_always_on_bridge(self):
+    def test_windsurf_fallback_workspace_rule_bridge_is_short_and_always_on(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)
             self._repository(root)
 
             outputs = render_outputs(root)
-            modern = outputs[Path(".windsurf/rules/pine-script-agent-kit.md")]
+            fallback_bridge = outputs[Path(".windsurf/rules/pine-script-agent-kit.md")]
             legacy = outputs[Path(".windsurfrules")]
 
-            self.assertTrue(modern.startswith("---\ntrigger: always_on\n---\n"))
-            self.assertLess(len(modern), 12_000)
-            self.assertIn("AGENTS.md", modern)
-            self.assertIn("structural-only", modern)
-            self.assertIn("TradingView compilation or runtime behavior", modern)
-            self.assertNotIn("PSAK-Z", modern)
+            self.assertTrue(fallback_bridge.startswith("---\ntrigger: always_on\n---\n"))
+            self.assertLess(len(fallback_bridge), 12_000)
+            self.assertIn("AGENTS.md", fallback_bridge)
+            self.assertIn("structural-only", fallback_bridge)
+            self.assertIn(
+                "TradingView compilation or runtime behavior", fallback_bridge
+            )
+            self.assertNotIn("PSAK-Z", fallback_bridge)
             self.assertFalse(legacy.startswith("---"))
             self.assertIn("PSAK-Z", legacy)
 
     def test_repository_windsurf_bridge_starts_at_byte_zero_and_stays_bounded(self):
         root = Path(__file__).resolve().parents[1]
-        modern = (root / ".windsurf/rules/pine-script-agent-kit.md").read_bytes()
+        fallback_bridge = (
+            root / ".windsurf/rules/pine-script-agent-kit.md"
+        ).read_bytes()
+        legacy = (root / ".windsurfrules").read_text(encoding="utf-8")
 
-        self.assertTrue(modern.startswith(b"---\ntrigger: always_on\n---\n"))
-        self.assertLess(len(modern.decode("utf-8")), 12_000)
+        self.assertTrue(
+            fallback_bridge.startswith(b"---\ntrigger: always_on\n---\n")
+        )
+        decoded_bridge = fallback_bridge.decode("utf-8")
+        self.assertLess(len(decoded_bridge), 12_000)
+        self.assertIn("fallback workspace-rule bridge", decoded_bridge)
+        self.assertIn("fallback workspace-rule bridge", legacy)
+        self.assertNotIn("modern", decoded_bridge)
+        self.assertNotIn("modern", legacy)
+
+    def test_retained_zed_output_discloses_unsupported_legacy_status(self):
+        root = Path(__file__).resolve().parents[1]
+        legacy = (root / ".zed/rules").read_text(encoding="utf-8")
+
+        self.assertIn("unsupported retained legacy artifact", legacy)
+        self.assertIn("not a supported Zed instruction path", legacy)
+        self.assertIn("`.cursorrules`", legacy)
+        self.assertIn("found before `AGENTS.md`", legacy)
 
     def test_check_reports_changed_generated_file(self):
         with TemporaryDirectory() as directory:

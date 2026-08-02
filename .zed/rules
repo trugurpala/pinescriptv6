@@ -1,9 +1,11 @@
 <!-- Generated from knowledge/catalog.json and agents/protocol.md.
      Regenerate with: python tools/psak.py render -->
-# Pine Script Agent Kit compatibility rules for Zed
+# Pine Script Agent Kit unsupported retained legacy artifact for Zed
 
-Zed can consume the root `AGENTS.md`; this file remains a generated compatibility
-surface for the existing repository layout.
+This generated `.zed/rules` file is an unsupported retained legacy artifact. It
+is not a supported Zed instruction path. Under Zed's first-match precedence,
+the project-root `.cursorrules` is found before `AGENTS.md` in this full
+repository; use `.cursorrules` as the selected supported surface.
 
 # Evidence-first operating protocol
 

@@ -11,7 +11,9 @@ Help AI coding tools give Pine Script v6 answers they can trace to named sources
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Built with Divan](https://img.shields.io/badge/Divan%20ile-%C3%BCretildi-087F8C)](https://github.com/trugurpala/divan)
 
-Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, and Zed the same evidence-aware Pine v6 guidance. It keeps the source, the rule, its exceptions, and its verification state connected.
+Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
+Windsurf, Zed, and Devin the same evidence-aware Pine v6 guidance. It keeps the
+source, the rule, its exceptions, and its verification state connected.
 
 > [!NOTE]
 > **Project status:** This project is maintained and accepts community contributions.
@@ -84,7 +86,7 @@ python tools/psak.py render --check
 python tools/psak.py check
 ```
 
-Expected result:
+The final `python tools/psak.py check` command ends with:
 
 ```text
 OK: all offline checks passed
@@ -163,9 +165,10 @@ host smoke prompt.
 | Gemini CLI | `GEMINI.md` |
 | Cursor | `.cursor/rules/pinescriptv6.mdc` |
 | Cline | `AGENTS.md` |
+| Devin | `AGENTS.md` |
 | Windsurf | `AGENTS.md` (primary) |
 | GitHub Copilot | `.github/copilot-instructions.md` and scoped instructions |
-| Zed | `AGENTS.md` |
+| Zed | `.cursorrules` |
 | Portable knowledge pack | `generated/custom-gpt/` |
 
 ## Quality commands
