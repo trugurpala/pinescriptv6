@@ -114,50 +114,69 @@ class DocumentationTests(unittest.TestCase):
         path = ROOT / "ADOPTION.md"
         self.assertTrue(path.is_file(), "ADOPTION.md")
         content = path.read_text(encoding="utf-8")
-        tool_names = (
-            "Portable Agent Skill",
-            "Codex",
-            "Claude Code",
-            "Gemini CLI",
-            "Cursor",
-            "Cline",
-            "Windsurf",
-            "GitHub Copilot",
-            "Zed",
-            "ChatGPT Custom GPT",
-        )
-        canonical_paths = (
-            "SKILL.md",
-            "AGENTS.md",
-            "CLAUDE.md",
-            "GEMINI.md",
-            ".cursor/rules/pinescriptv6.mdc",
-            ".cursorrules",
-            ".clinerules",
-            ".windsurf/rules/pine-script-agent-kit.md",
-            ".windsurfrules",
-            ".github/copilot-instructions.md",
-            ".github/instructions/pine-script.instructions.md",
-            ".zed/rules",
-            "generated/custom-gpt/INSTRUCTIONS.md",
-            "generated/custom-gpt/KNOWLEDGE.md",
-        )
+        expected_paths = {
+            "Portable Agent Skill": ("SKILL.md",),
+            "Codex": ("AGENTS.md",),
+            "Claude Code": ("CLAUDE.md",),
+            "Gemini CLI": ("GEMINI.md",),
+            "Cursor": (".cursor/rules/pinescriptv6.mdc", ".cursorrules"),
+            "Cline": (".clinerules",),
+            "Windsurf": (
+                ".windsurf/rules/pine-script-agent-kit.md",
+                ".windsurfrules",
+            ),
+            "GitHub Copilot": (
+                ".github/copilot-instructions.md",
+                ".github/instructions/pine-script.instructions.md",
+            ),
+            "Zed": ("AGENTS.md", ".zed/rules"),
+            "ChatGPT Custom GPT": (
+                "generated/custom-gpt/INSTRUCTIONS.md",
+                "generated/custom-gpt/KNOWLEDGE.md",
+            ),
+        }
+        table_lines = [line for line in content.splitlines() if line.startswith("|")]
+        data_rows = []
+        for line in table_lines:
+            cells = [cell.strip() for cell in line.strip("|").split("|")]
+            if len(cells) != 5 or cells[0] in ("Surface", "---"):
+                continue
+            data_rows.append(cells)
 
-        for tool_name in tool_names:
-            self.assertIn(tool_name, content)
-        for canonical_path in canonical_paths:
-            self.assertIn(canonical_path, content)
+        self.assertEqual(len(data_rows), 10)
+        rows_by_surface = {row[0]: row for row in data_rows}
+        self.assertEqual(set(rows_by_surface), set(expected_paths))
+        for surface, paths in expected_paths.items():
+            source, placement, verification, starter_prompt = rows_by_surface[surface][1:]
+            for canonical_path in paths:
+                self.assertIn(canonical_path, source, surface)
+            self.assertTrue(placement, surface)
+            self.assertTrue(verification, surface)
+            self.assertTrue(starter_prompt, surface)
+
+        portable_placement = rows_by_surface["Portable Agent Skill"][2]
+        for phrase in (
+            "repository tree intact",
+            "repository root as the skill directory",
+            "agents/protocol.md",
+            "knowledge/catalog.json",
+            "examples/manifest.json",
+            "verification/tradingview.json",
+            "tools/psak.py",
+        ):
+            self.assertIn(phrase, portable_placement)
         for command in REQUIRED_README_COMMANDS:
             self.assertIn(command, content)
+        normalized_content = " ".join(content.split())
         for phrase in (
             "assumptions",
             "exact PSAK rule IDs",
             "exact source IDs",
             "structural-only",
             "separate TradingView manual-check list",
-            "does not prove that the host loaded or obeyed",
+            "File placement and local validation do not prove that the host loaded or obeyed",
         ):
-            self.assertIn(phrase, content)
+            self.assertIn(phrase, normalized_content)
 
     def test_rule_contribution_template_has_required_fields_and_public_links(self):
         template_path = "docs/rule-contribution-template.md"
@@ -184,7 +203,12 @@ class DocumentationTests(unittest.TestCase):
         for field in fields:
             self.assertEqual(template.count(f"## {field}"), 1, field)
         self.assertIn(template_path, contributing)
-        self.assertIn("../docs/rule-contribution-template.md", pull_request)
+        durable_url = (
+            "https://github.com/trugurpala/pinescriptv6/blob/main/"
+            "docs/rule-contribution-template.md"
+        )
+        self.assertIn(durable_url, pull_request)
+        self.assertNotIn("../docs/rule-contribution-template.md", pull_request)
 
     def test_reliability_guides_cover_apis_settings_and_evidence_limits(self):
         for relative_path in RELIABILITY_DOCS:
@@ -225,10 +249,10 @@ class DocumentationTests(unittest.TestCase):
         ):
             self.assertIn(term, repainting)
         for term in (
-            "commission",
-            "slippage",
-            "same-bar sequencing",
-            "alert-to-real-order latency",
+            "**Same-bar sequencing:**",
+            "**Commission:**",
+            "**Slippage:**",
+            "**Alert-to-real-order latency:**",
             "future execution",
             "profitability",
         ):

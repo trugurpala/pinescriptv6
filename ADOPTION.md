@@ -6,7 +6,7 @@ more than one file.
 
 | Surface | Source file(s) | Destination or placement | Verification step | Starter prompt |
 | --- | --- | --- | --- | --- |
-| Portable Agent Skill | `SKILL.md` | Put it in the skill directory recognized by your agent host. | Ask the host to name the loaded skill and run the smoke prompt below. | “Use the Portable Agent Skill to review this Pine v6 code; follow the smoke-prompt evidence format.” |
+| Portable Agent Skill | `SKILL.md` | Keep the repository tree intact and use the repository root as the skill directory because `SKILL.md` depends on `agents/protocol.md`, `knowledge/catalog.json`, `examples/manifest.json`, `verification/tradingview.json`, and `tools/psak.py`. | Ask the host to name the loaded skill and run the smoke prompt below. | “Use the Portable Agent Skill to review this Pine v6 code; follow the smoke-prompt evidence format.” |
 | Codex | `AGENTS.md` | Keep it at the project root, or at the intended subtree root. | Open the project in Codex and run the smoke prompt from a file under its scope. | “Use the Codex project instructions to review this Pine v6 code; follow the smoke-prompt evidence format.” |
 | Claude Code | `CLAUDE.md` | Keep it at the project root. | Start Claude Code in that project and run the smoke prompt. | “Use the Claude Code project guidance to review this Pine v6 code; follow the smoke-prompt evidence format.” |
 | Gemini CLI | `GEMINI.md` | Keep it at the project root. | Start Gemini CLI in that project and run the smoke prompt. | “Use the Gemini CLI project guidance to review this Pine v6 code; follow the smoke-prompt evidence format.” |
@@ -28,7 +28,7 @@ python tools/psak.py check
 ```
 
 They check the shared data and generated surfaces. File placement and local
-validation does not prove that the host loaded or obeyed the files. Host behavior
+validation do not prove that the host loaded or obeyed the files. Host behavior
 can change, so the verification step in each row remains necessary.
 
 ## Smoke prompt

@@ -8,19 +8,19 @@ Use this checklist before interpreting a TradingView strategy report:
 - **Order type:** Identify market, limit, stop, and stop-limit assumptions.
 - **Creation/fill timing:** Separate the calculation, order creation, and first
   eligible emulator fill.
-- **same-bar sequencing:** Explain which intrabar path or data supports the order
+- **Same-bar sequencing:** Explain which intrabar path or data supports the order
   sequence.
 - **Bar Magnifier/data coverage:** Record lower-timeframe detail and gaps in its
   available history.
-- **commission:** State the model and value; zero is also an assumption.
-- **slippage:** State the tick assumption and where it applies.
+- **Commission:** State the model and value; zero is also an assumption.
+- **Slippage:** State the tick assumption and where it applies.
 - **Sizing:** Record quantity, equity, currency, leverage, margin, and rounding.
 - **Sessions:** Check session filters and order behavior outside the intended hours.
 - **Gaps:** Inspect missing bars, session gaps, and requested-data gap handling.
 - **Symbol/exchange:** Record the ticker, venue, contract, adjustments, and data
   entitlement.
 - **Stop/target anchor:** Say which price, bar, or fill anchors each level.
-- **alert-to-real-order latency:** Separate a Pine event, alert delivery, receiver
+- **Alert-to-real-order latency:** Separate a Pine event, alert delivery, receiver
   processing, broker acceptance, and eventual fill.
 
 TradingView's broker emulator provides simulated performance under selected data
