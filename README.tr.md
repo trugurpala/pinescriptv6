@@ -4,7 +4,7 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 
 [English](README.md)
 
-![Yapay zekâ kodlama araçları için kaynağı izlenebilir Pine Script bilgi yolu](assets/social-preview.png)
+![Yapay zekâ kodlama araçları için kaynağı izlenebilir Pine Script bilgi yolu](assets/social-preview.tr.png)
 
 [![kalite](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
