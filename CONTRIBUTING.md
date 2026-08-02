@@ -20,6 +20,18 @@ Community material can suggest research, but an active distributed rule needs
 official or hash-bound manual evidence. Sanitize compiler errors; do not submit
 customer code, credentials, personal data, or private prompts.
 
+Use the [rule contribution template](docs/rule-contribution-template.md) for a
+new rule or a correction. Contributions can cover:
+
+- an official source refresh;
+- a new PSAK rule;
+- an exception/correction;
+- a Pine example;
+- a hash-bound TradingView record;
+- an adapter test;
+- a stale/incorrect claim report;
+- a security/webhook review.
+
 ## Pine examples
 
 Every `.pine` file needs:

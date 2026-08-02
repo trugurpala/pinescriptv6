@@ -87,9 +87,13 @@ python tools/psak.py check
 Expected result:
 
 ```text
-OK: repository data is valid
-OK: generated outputs are current
 OK: all offline checks passed
+NOT CHECKED: TradingView compilation
+NOT CHECKED: Runtime/chart behavior
+NOT CHECKED: Repaint behavior
+NOT CHECKED: Alert delivery
+NOT CHECKED: Market data
+NOT CHECKED: Profitability
 ```
 
 `python tools/psak.py links` is the only network-aware quality command. It checks registered official URLs and reports a link it cannot reach as unverified.
@@ -125,9 +129,9 @@ Changing a Pine file changes its SHA-256 hash and invalidates an older manual re
 
 ## Current Pine v6 coverage
 
-The source catalog follows official Pine v6 release notes through July 2026. Coverage includes conditionally active inputs, current-contract and ISIN fields, `timeframe_bars_back`, `request.footprint()`, multiline strings, user-defined type sorting, updated wrapping, and historical tick recalculation.
+The source catalog follows official Pine v6 release notes through July 2026. Coverage includes conditionally active inputs, current-contract and ISIN fields, `timeframe_bars_back`, `request.footprint()`, multiline strings, user-defined type sorting, updated wrapping, alerts, strategy recalculation and execution timing, and a repaint taxonomy.
 
-Coverage does not guarantee that every account, market, timeframe, or chart supports every feature. Read [Pine v6 release coverage](knowledge/releases/2025-2026.md) for version boundaries.
+Coverage does not guarantee that every account, market, timeframe, or chart supports every feature. See [current and planned coverage](COVERAGE.md) and read [Pine v6 release coverage](knowledge/releases/2025-2026.md) for version boundaries.
 
 Official starting points:
 
@@ -147,6 +151,9 @@ That status does not establish compilation, runtime behavior, profitability, non
 To promote an example beyond `structural-only`, follow [TradingView manual verification](docs/tradingview-manual-verification.md).
 
 ## Supported AI tools
+
+Follow the [adoption guide](ADOPTION.md) for placement, local validation, and a
+host smoke prompt.
 
 | Tool | Project surface |
 | --- | --- |
@@ -195,6 +202,9 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 
 ## Project documentation
 
+- [Adoption guide](ADOPTION.md), [coverage](COVERAGE.md), and [roadmap](ROADMAP.md)
+- [Alerts](docs/alerts.md) and [strategy execution](docs/strategy-execution.md)
+- [Repainting taxonomy](docs/repainting-taxonomy.md) and [backtesting realism](docs/backtesting-realism.md)
 - [How source and evidence are tracked](docs/provenance.md)
 - [TradingView manual verification](docs/tradingview-manual-verification.md)
 - [Public writing principles](docs/writing-style.md)

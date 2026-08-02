@@ -27,6 +27,30 @@ REQUIRED_LINKS = (
     "docs/tradingview-manual-verification.md",
 )
 
+RELIABILITY_DOCS = (
+    "docs/alerts.md",
+    "docs/strategy-execution.md",
+    "docs/repainting-taxonomy.md",
+    "docs/backtesting-realism.md",
+)
+
+NEW_PUBLIC_DOCS = (
+    "ADOPTION.md",
+    "COVERAGE.md",
+    "ROADMAP.md",
+    "docs/rule-contribution-template.md",
+    *RELIABILITY_DOCS,
+)
+
+NOT_CHECKED_LABELS = (
+    "NOT CHECKED: TradingView compilation",
+    "NOT CHECKED: Runtime/chart behavior",
+    "NOT CHECKED: Repaint behavior",
+    "NOT CHECKED: Alert delivery",
+    "NOT CHECKED: Market data",
+    "NOT CHECKED: Profitability",
+)
+
 PUBLIC_HISTORY_DOCS = (
     "README.md",
     "README.tr.md",
@@ -69,6 +93,164 @@ PUBLISH_DESCRIPTIONS = (
 
 
 class DocumentationTests(unittest.TestCase):
+    def test_public_reliability_guides_exist_and_readmes_link_them(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        for relative_path in NEW_PUBLIC_DOCS:
+            self.assertTrue((ROOT / relative_path).is_file(), relative_path)
+        for relative_path in (*RELIABILITY_DOCS, "ADOPTION.md", "COVERAGE.md", "ROADMAP.md"):
+            self.assertIn(relative_path, english)
+            self.assertIn(relative_path, turkish)
+
+    def test_readmes_show_the_complete_offline_check_boundary(self):
+        for relative_path in ("README.md", "README.tr.md"):
+            content = (ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn("OK: all offline checks passed", content, relative_path)
+            for label in NOT_CHECKED_LABELS:
+                self.assertIn(label, content, relative_path)
+
+    def test_adoption_covers_supported_surfaces_and_local_evidence_boundary(self):
+        path = ROOT / "ADOPTION.md"
+        self.assertTrue(path.is_file(), "ADOPTION.md")
+        content = path.read_text(encoding="utf-8")
+        tool_names = (
+            "Portable Agent Skill",
+            "Codex",
+            "Claude Code",
+            "Gemini CLI",
+            "Cursor",
+            "Cline",
+            "Windsurf",
+            "GitHub Copilot",
+            "Zed",
+            "ChatGPT Custom GPT",
+        )
+        canonical_paths = (
+            "SKILL.md",
+            "AGENTS.md",
+            "CLAUDE.md",
+            "GEMINI.md",
+            ".cursor/rules/pinescriptv6.mdc",
+            ".cursorrules",
+            ".clinerules",
+            ".windsurf/rules/pine-script-agent-kit.md",
+            ".windsurfrules",
+            ".github/copilot-instructions.md",
+            ".github/instructions/pine-script.instructions.md",
+            ".zed/rules",
+            "generated/custom-gpt/INSTRUCTIONS.md",
+            "generated/custom-gpt/KNOWLEDGE.md",
+        )
+
+        for tool_name in tool_names:
+            self.assertIn(tool_name, content)
+        for canonical_path in canonical_paths:
+            self.assertIn(canonical_path, content)
+        for command in REQUIRED_README_COMMANDS:
+            self.assertIn(command, content)
+        for phrase in (
+            "assumptions",
+            "exact PSAK rule IDs",
+            "exact source IDs",
+            "structural-only",
+            "separate TradingView manual-check list",
+            "does not prove that the host loaded or obeyed",
+        ):
+            self.assertIn(phrase, content)
+
+    def test_rule_contribution_template_has_required_fields_and_public_links(self):
+        template_path = "docs/rule-contribution-template.md"
+        path = ROOT / template_path
+        self.assertTrue(path.is_file(), template_path)
+        template = path.read_text(encoding="utf-8")
+        contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        pull_request = (ROOT / ".github/pull_request_template.md").read_text(encoding="utf-8")
+        fields = (
+            "Rule ID",
+            "Claim",
+            "Scope",
+            "Rationale",
+            "Exceptions",
+            "Official source ID",
+            "Official source locator",
+            "Verified date",
+            "Example",
+            "Counterexample",
+            "Local test",
+            "TradingView manual verification required",
+        )
+
+        for field in fields:
+            self.assertEqual(template.count(f"## {field}"), 1, field)
+        self.assertIn(template_path, contributing)
+        self.assertIn("../docs/rule-contribution-template.md", pull_request)
+
+    def test_reliability_guides_cover_apis_settings_and_evidence_limits(self):
+        for relative_path in RELIABILITY_DOCS:
+            self.assertTrue((ROOT / relative_path).is_file(), relative_path)
+        alerts = (ROOT / "docs/alerts.md").read_text(encoding="utf-8")
+        strategy = (ROOT / "docs/strategy-execution.md").read_text(encoding="utf-8")
+        repainting = (ROOT / "docs/repainting-taxonomy.md").read_text(encoding="utf-8")
+        backtesting = (ROOT / "docs/backtesting-realism.md").read_text(encoding="utf-8")
+
+        for term in (
+            "alert()",
+            "alertcondition()",
+            "alert_message",
+            "{{strategy.order.alert_message}}",
+            "creation snapshot",
+            "structural-only",
+            "Manual-check checklist",
+        ):
+            self.assertIn(term, alerts)
+        for term in (
+            "calc_on_every_tick",
+            "calc_on_order_fills",
+            "calc_on_every_history_tick",
+            "process_orders_on_close",
+            "Bar Magnifier",
+            "broker emulator",
+            "non-standard chart",
+            "TradingView",
+        ):
+            self.assertIn(term, strategy)
+        for term in (
+            "classification",
+            "varip",
+            "future leakage",
+            "provider/history revisions",
+            "latency",
+            "cannot conclude locally",
+        ):
+            self.assertIn(term, repainting)
+        for term in (
+            "commission",
+            "slippage",
+            "same-bar sequencing",
+            "alert-to-real-order latency",
+            "future execution",
+            "profitability",
+        ):
+            self.assertIn(term, backtesting)
+
+    def test_new_public_docs_avoid_unsupported_claims(self):
+        forbidden = (
+            "alertcondition() does not compile",
+            "backtest reliable",
+            "no repainting",
+            "production-ready",
+            "guaranteed profitable",
+            "guarantees profitability",
+        )
+
+        for relative_path in NEW_PUBLIC_DOCS:
+            path = ROOT / relative_path
+            self.assertTrue(path.is_file(), relative_path)
+            lowered = path.read_text(encoding="utf-8").lower()
+            for claim in forbidden:
+                self.assertNotIn(claim, lowered, relative_path)
+
     def test_readmes_share_status_commands_and_core_links(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
         turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
@@ -289,9 +471,11 @@ class DocumentationTests(unittest.TestCase):
             ROOT / "docs/provenance.md",
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_KNOWLEDGE_PACK.md",
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_HATA_HAFIZASI_GPT.md",
+            *(ROOT / relative_path for relative_path in NEW_PUBLIC_DOCS),
         )
         missing = []
         for path in paths:
+            self.assertTrue(path.is_file(), str(path.relative_to(ROOT)))
             content = path.read_text(encoding="utf-8")
             for target in re.findall(r"\[[^]]+\]\(([^)]+)\)", content):
                 clean = target.split("#", 1)[0]

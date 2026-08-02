@@ -4,6 +4,14 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 
 ## [Unreleased]
 
+- Added source-bound reliability rules for alerts, strategy recalculation and
+  execution timing, backtesting assumptions, and repaint classification.
+- Made the offline CLI boundary explicit with six `NOT CHECKED` results after a
+  successful `check` run.
+- Added public alert, strategy execution, repainting, backtesting, adoption,
+  coverage, and roadmap guides.
+- Added a rule contribution template and linked contribution paths for source,
+  rule, correction, example, verification, adapter, claim, and security reviews.
 - Hardened catalog rule body validation so rule explanation paths must stay
   inside the repository.
 - Added TradingView manual verification guidance for promoting examples beyond
