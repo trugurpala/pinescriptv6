@@ -187,7 +187,7 @@ This project is free and open community infrastructure. It has no paid API, usag
 
 You can contribute without writing code. Report an official-source change, improve an explanation, add a sourced rule, record a manual check, or test an adapter in another AI coding tool.
 
-Use [GitHub Discussions](https://github.com/trugurpala/pinescriptv6/discussions) for questions and proposals. Use the [issue chooser](https://github.com/trugurpala/pinescriptv6/issues/new/choose) for reproducible defects, source changes, and documentation problems.
+Use [GitHub Discussions](https://github.com/trugurpala/pinescriptv6/discussions) for questions and proposals. Use the [issue chooser](https://github.com/trugurpala/pinescriptv6/issues/new/choose) for reproducible defects, source changes, and documentation problems. See [Support](SUPPORT.md) for the full routing guide.
 
 ## Contributing
 
@@ -201,6 +201,7 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 - [Pine v6 release coverage](knowledge/releases/2025-2026.md)
 - [Portable Agent Skill](SKILL.md)
 - [Contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), and [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Support guide](SUPPORT.md)
 - [Change history](CHANGELOG.md) and [citation metadata](CITATION.cff)
 
 ## Releases, license, and citation

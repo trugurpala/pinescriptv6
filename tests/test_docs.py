@@ -195,6 +195,26 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("examples/manifest.json", guide)
         self.assertIn("Do not record", guide)
 
+    def test_support_guide_is_linked_and_routes_sensitive_questions(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+        contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        support = (ROOT / "SUPPORT.md").read_text(encoding="utf-8")
+
+        for content in (english, turkish, contributing):
+            self.assertIn("SUPPORT.md", content)
+
+        for link in (
+            "github.com/trugurpala/pinescriptv6/discussions",
+            "github.com/trugurpala/pinescriptv6/issues/new/choose",
+            "SECURITY.md",
+            "docs/tradingview-manual-verification.md",
+        ):
+            self.assertIn(link, support)
+
+        self.assertIn("Do not post private code", support)
+        self.assertIn("Özel kodu", support)
+
     def test_legacy_custom_gpt_docs_are_safe_bridges(self):
         paths = (
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_KNOWLEDGE_PACK.md",

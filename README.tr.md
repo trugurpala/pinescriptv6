@@ -187,7 +187,7 @@ Bu proje ücretsiz ve açık bir topluluk altyapısıdır. Ücretli API, kullan�
 
 Katkı vermek için kod yazman gerekmez. Resmî kaynak değişikliğini bildirebilir, bir açıklamayı sadeleştirebilir, kanıtlı kural ekleyebilir, elle kontrol kaydı oluşturabilir veya başka bir yapay zekâ aracındaki talimatları deneyebilirsin.
 
-Soru ve öneriler için [GitHub Discussions](https://github.com/trugurpala/pinescriptv6/discussions) bölümünü kullan. Tekrarlanabilir hata, kaynak değişikliği veya belge sorunu için uygun [issue formunu](https://github.com/trugurpala/pinescriptv6/issues/new/choose) seç.
+Soru ve öneriler için [GitHub Discussions](https://github.com/trugurpala/pinescriptv6/discussions) bölümünü kullan. Tekrarlanabilir hata, kaynak değişikliği veya belge sorunu için uygun [issue formunu](https://github.com/trugurpala/pinescriptv6/issues/new/choose) seç. Ayrıntılı yönlendirme için [destek rehberine](SUPPORT.md) bak.
 
 ## Projeye katkı
 
@@ -201,6 +201,7 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 - [Pine v6 sürüm kapsamı](knowledge/releases/2025-2026.md)
 - [Taşınabilir ajan becerisi](SKILL.md)
 - [Katkı rehberi](CONTRIBUTING.md), [güvenlik politikası](SECURITY.md) ve [Davranış Kuralları](CODE_OF_CONDUCT.md)
+- [Destek rehberi](SUPPORT.md)
 - [Değişiklik geçmişi](CHANGELOG.md) ve [atıf bilgileri](CITATION.cff)
 
 ## Sürüm, lisans ve atıf

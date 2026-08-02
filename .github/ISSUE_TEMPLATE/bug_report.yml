@@ -16,6 +16,21 @@ body:
       label: "Kod / Code"
       render: pine
   - type: input
+    id: timeframe
+    attributes:
+      label: "Grafik ve istenen zaman dilimleri / Chart and requested timeframes"
+      placeholder: "15m chart, 1h request.security"
+  - type: input
+    id: symbol
+    attributes:
+      label: "Sembol veya piyasa / Symbol or market"
+      placeholder: "BIST:THYAO, BTCUSDT, or not applicable"
+  - type: textarea
+    id: sanitized-context
+    attributes:
+      label: "Arındırılmış bağlam / Sanitized context"
+      description: "Remove credentials, private code, and personal data. / Kimlik bilgilerini, özel kodu ve kişisel verileri çıkarın."
+  - type: input
     id: tv-error
     attributes:
       label: "TradingView hata mesajı / error message (varsa / if any)"

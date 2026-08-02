@@ -10,6 +10,8 @@ All notable public changes to Pine Script Agent Kit are recorded here.
   `structural-only` evidence.
 - Added an advisory source-link workflow for scheduled or manual official URL
   freshness checks.
+- Added a public support guide and evidence-aware issue, discussion, and pull
+  request prompts for community contributions.
 
 ## [1.0.0] — 2026-08-01
 
