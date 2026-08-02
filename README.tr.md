@@ -215,3 +215,9 @@ Kamusal görsel sistemin adı **Verified Signal**’dır. Düzenlenebilir kaynak
 Topluluk için [Uğur Pala](https://github.com/trugurpala) tarafından sürdürülür.
 
 Bu bağımsız proje TradingView ile bağlantılı değildir ve TradingView tarafından onaylanmamıştır. Pine Script ve TradingView markaları ilgili sahiplerine aittir.
+
+Kamusal görsel sistemin adı **Verified Signal**’dır. Düzenlenebilir kaynak [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), ilkeler ise [görsel felsefe belgesi](docs/design/verified-signal-philosophy.md) içindedir.
+
+Topluluk için [Uğur Pala](https://github.com/trugurpala) tarafından sürdürülür.
+
+Bu bağımsız proje TradingView ile bağlantılı değildir ve TradingView tarafından onaylanmamıştır. Pine Script ve TradingView markaları ilgili sahiplerine aittir.

@@ -209,3 +209,9 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 The current release is **v1.0.0**. See the [release record](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0) and [changelog](CHANGELOG.md). Future changes stay under `Unreleased` until they receive their own tag and GitHub Release.
 
 Code and project documentation use the [MIT License](LICENSE). Citation metadata is available in [CITATION.cff](CITATION.cff).
+
+The public visual system is **Verified Signal**. The editable source lives in [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), and its principles live in [the visual philosophy](docs/design/verified-signal-philosophy.md).
+
+Maintained by [Uğur Pala](https://github.com/trugurpala) for the community.
+
+This independent project is not affiliated with or endorsed by TradingView. Pine Script and TradingView are trademarks of their respective owners.
