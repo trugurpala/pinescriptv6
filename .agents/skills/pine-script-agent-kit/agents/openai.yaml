@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pine Script Agent Kit"
+  short_description: "Source-traceable Pine Script v6 guidance"
+  default_prompt: "Review this Pine Script v6 code with Pine Script Agent Kit. State assumptions, cite PSAK rule and source IDs, keep evidence boundaries explicit, and give a separate TradingView manual-check list."

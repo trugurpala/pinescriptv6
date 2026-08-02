@@ -41,3 +41,4 @@ _test/
 !verification/*.json
 !tests/fixtures/**/*.json
 !tests/golden/*.json
+!.agents/skills/**/*.json

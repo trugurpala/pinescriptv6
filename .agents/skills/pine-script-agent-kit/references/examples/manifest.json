@@ -1,0 +1,565 @@
+{
+  "schema_version": 1,
+  "examples": [
+    {
+      "path": "examples/indicators/01_ema_cross.pine",
+      "sha256": "666710adc94a05928c39903ae6df9f68f815af8324ca817b5d99492408b5b179",
+      "evidence": "tradingview-verified",
+      "checked_on": "2026-08-02",
+      "tradingview_record": "TV-20260802-EMA-CROSS-001",
+      "limitations": [
+        "A user-reported Pine Editor check recorded no compile errors for this exact hash; Codex could not independently observe the editor. Runtime/chart behavior, alert delivery, repaint behavior, data access, profitability, security, and live-trading suitability remain unverified."
+      ]
+    },
+    {
+      "path": "examples/indicators/02_rsi_ob_os.pine",
+      "sha256": "8d2fa3a60024d4698726dd2f60f46b3b2e40724f3298c1040a07d0792997a277",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/03_macd_histogram.pine",
+      "sha256": "b6d69d29a528334594eee612ab094b72137d5c7e4d3b45dae2df98a6d176a87e",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/04_bollinger_bands.pine",
+      "sha256": "90d34fdc263e90dba72f8e1f0a9dbe0d75f3897666aaee309dc45c3da1b74314",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/05_supertrend.pine",
+      "sha256": "6ff34e11d68fd7195886968c0425c65b0a25669accfb8d38b71c4cac497868fe",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/06_vwap_session.pine",
+      "sha256": "b877b1661fc3ff9877f47c91450057c34f918147332c8def7870dcf94f08823d",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/07_atr_levels.pine",
+      "sha256": "8a0d65c6ff336fa3e96e084c58b0d214bca9de8b6a7d9a33e95ca923f219b94c",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/08_pivot_points.pine",
+      "sha256": "565c2e83e8912d0ef6dfef0ee247470a6a33cc2b7914ba4bdd22498d1a95ee0c",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/09_volume_profile.pine",
+      "sha256": "07086b0fa5f6d40ace9262c640c102ad7927b198deb42b0266a66146bd310860",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/10_stoch_rsi.pine",
+      "sha256": "11ae5096f4c47e158ae8da7cb6582f8bb8c2fc3226b277149941e62d6c212b30",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/11_ichimoku.pine",
+      "sha256": "bd78bc3f1b2d43321e08e49191be08fc6b0a2f1a41948fc18c8853c1c22dc169",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/12_mtf_ema.pine",
+      "sha256": "5714369f310d07953d71ed64a0340f2068de303aa43a928075168b60312cf902",
+      "evidence": "structural-only",
+      "checked_on": "2026-08-02",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/13_session_highlight.pine",
+      "sha256": "dc5602ab489eb6a192df498d3bb3a73dbf4c29dba7ea6916c57649cbb833d2f4",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/14_rsi_divergence.pine",
+      "sha256": "e451d2dbc202e40f6b45e157bff151207f90281ff7d727adc42edebb50a5b7e7",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/15_ema_ribbon.pine",
+      "sha256": "c66a1e05d619c1593a4e766c5cb7dc037b6e429ea6748c9874b7a282efd16506",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/16_chandelier_exit.pine",
+      "sha256": "4023a2a6cfe4900dc1852640eaa33d7d44214445e39087a8c1c03538be1e20c3",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/17_squeeze_momentum.pine",
+      "sha256": "0f36148e5d0fd8a6c8c600316beffedc477b286662c12cb868ccd7bbfb77daa3",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/indicators/18_fakeout_filter.pine",
+      "sha256": "7bf077bd0d452166873b53368b7d3030878854caf9366ecddccada6ab9b2f43b",
+      "evidence": "structural-only",
+      "checked_on": "2026-08-02",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/01_ema_cross_strategy.pine",
+      "sha256": "f0bae35ef3783b54f494b26f0088410e416ab56e3e0a0be6a9f4666fa6bb890d",
+      "evidence": "structural-only",
+      "checked_on": "2026-08-02",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/02_rsi_mean_reversion.pine",
+      "sha256": "d234f7243cfd77567c5009eb1f8e5d6557131065c2eafc837cf2c0f8c6b80c96",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/03_supertrend_strategy.pine",
+      "sha256": "2eeee8bfa4ebcc0577d559c763d2b8943bafbdf251e8ad9c30aa91c31933f7ad",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/04_bb_breakout.pine",
+      "sha256": "c5e6affc0801d2c05931d6b7e2ce3797676d68720dce5521b5aed1be409dc269",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/05_macd_strategy.pine",
+      "sha256": "1f1588ea579f58b548acce9d1fdfcd6f2ec17b040c291cb0c974c3bacd5bd700",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/06_rsi_atr_strategy.pine",
+      "sha256": "ef02edce1bd6b3423cfd5dacf69da5bc02a53c8728a4985da07b602442a29529",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/07_mtf_trend_strategy.pine",
+      "sha256": "8de4f008eb239553b2536e870827ff2c406dae74a22097bcd6f6f919167a00c6",
+      "evidence": "structural-only",
+      "checked_on": "2026-08-02",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/08_triple_ema_strategy.pine",
+      "sha256": "2c4833f9ea17f107869c1abb34a272b32fd3f10aa936f7dcb89ad5924a5246d4",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/09_stoch_strategy.pine",
+      "sha256": "c4eac8ff4ffa74a8480a776c8961cf7ded594a9a3185ce8a1c94aafa0ca3c53a",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/10_adx_trend_strategy.pine",
+      "sha256": "95e2b67e99f8d01dd714b6075e4e9dd3414e22722ac252a81af25d10fdeba1a2",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/11_viop_session_strategy.pine",
+      "sha256": "cdf8cb5bc421ae8ff3f6625db2e4bfe9dc1208ce770de49d4515cf0f0774b005",
+      "evidence": "structural-only",
+      "checked_on": "2026-08-02",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/12_chandelier_strategy.pine",
+      "sha256": "c205b5da6dc28c648cde487853537e84a315cd99db9ee1fb8c787907779d2399",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/13_fakeout_confirmed_strategy.pine",
+      "sha256": "380c9091fcea622d7d0f7aa82f1dbb8de6f029bc9e3b15c1cbdb24e4c140a3f2",
+      "evidence": "structural-only",
+      "checked_on": "2026-08-02",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "examples/strategies/14_mtf_viop_strategy.pine",
+      "sha256": "75703038a2a13446a99bb72a9c5e5c39fe53a47c896863d37ffdd97b7df574ca",
+      "evidence": "structural-only",
+      "checked_on": "2026-08-02",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/01_es_sp500.pine",
+      "sha256": "e0f8ef0fbdb6138c086463e5bcd369919d9f3d2da299e5f17ead1db00f634866",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/02_nq_nasdaq.pine",
+      "sha256": "98d256b8105657d604ed2d8ee20b66ed54ee496961b958310c668ad7269ea069",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/03_gc_gold.pine",
+      "sha256": "35faf3b34edc3fed6eefea93cb592d7fcb69fcb7de94d43ff569ee2217cc23f8",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/04_cl_crude_oil.pine",
+      "sha256": "148eaa3cd386490e7a84838c4c82d1ce80343491a58e110addb56086eab223fc",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/05_eurusd_forex.pine",
+      "sha256": "fbee727b9ddae3ca691b648f9718e93c7f68d855ffaf54afad768e7601e5b502",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/06_gbpusd_forex.pine",
+      "sha256": "0071818eeaaeb841d60afb30c052fe9f0298ca2713db1083b6f83e0240db6100",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/07_usdjpy_forex.pine",
+      "sha256": "2a2f49db59cac619da5f4793c14b141b9407e00f54cd89ff317a23d2d271f7c2",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/08_btc_crypto.pine",
+      "sha256": "1442b8508bf27137a89d2692940509b56737ace5655cc15b0c1c780cc79c1f39",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/09_eth_crypto.pine",
+      "sha256": "212b9bfc434876482a9628c792b0e4b0fdc9b98d008e934ea6ade2a2fd00535e",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/10_dax_germany.pine",
+      "sha256": "c491576759a28672c2f3f5cea30193bfde4e5f2f2b1940e65afec00df105f030",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/11_nikkei_japan.pine",
+      "sha256": "ba7f3a6aede2515a1db18331026e652d5e6cdbd21034c04d5eba73698748072d",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/12_universal_strategy.pine",
+      "sha256": "b6a8df6395a871df7a9eb81b26a3ccbdee1dd0336d2f6eeb06cf93b59871ad3f",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/13_btc_trend_pullback.pine",
+      "sha256": "a14a6d5eac2c21ef2483f4ffdc6de876f9a36cebe13283dfc542bc52c918e4fe",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/14_eth_momentum.pine",
+      "sha256": "e18ef38544495cf0690ccd7acd3ae37b0d02d36b4a7ebf877d51242ac8d4b798",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/15_es_opening_range.pine",
+      "sha256": "f499a84c4addab4ec5e1798c6d28e0b0a1ddbb9cea3af12cac63319aa65cb10f",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/16_nq_vwap_reversion.pine",
+      "sha256": "867b4252e6f48b927756199e170a4fe88e1c44987f87407c89e8c251622aa010",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/17_gc_gold_trend.pine",
+      "sha256": "63b35b04100a940b34228d79c31b42ce64be8b4027d7817df861ae1ca0695c5e",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/18_cl_crude_momentum.pine",
+      "sha256": "897bd3a470d86e3e74d1177b668a20c0f5061a9d3b7122576c4950e890e8b2e0",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/19_eurusd_london_breakout.pine",
+      "sha256": "75b598a912cfb5ce4044d9c42e6e94ae91dde83e338efe2e1565b332e0a447d0",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/20_gbpusd_structure.pine",
+      "sha256": "1cb742cbd510d7da055a1eed4761c5c43513ab123efd31629adb69b1f7fd76a3",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/21_usdjpy_carry_trend.pine",
+      "sha256": "d7bbbd3653e4564660105602faa341e02df3b5d0d1318df251f81c33e4d67be4",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "global-markets/22_dax_gap_fade.pine",
+      "sha256": "56520e700e6a24930c4f04e478d0e4518a4ef17cfe9187a3a6d9616f31ea56a6",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "webhook-templates/02_pine_alert_conditions.pine",
+      "sha256": "4743de9bca6ef6dd9327b9dd2f6781357ef136cecd03fa3f798dc13ef9789333",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    },
+    {
+      "path": "webhook-templates/06_viop_bist30_alerts.pine",
+      "sha256": "6299d55d21def9ceddb064ee8e01db1b2dcbb90be1ded31b804a69c12feb5865",
+      "evidence": "structural-only",
+      "checked_on": "2026-07-31",
+      "tradingview_record": null,
+      "limitations": [
+        "Not compiled in TradingView during this repository audit."
+      ]
+    }
+  ]
+}

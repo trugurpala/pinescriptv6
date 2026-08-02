@@ -109,12 +109,33 @@ class DocumentationTests(unittest.TestCase):
             for label in NOT_CHECKED_LABELS:
                 self.assertIn(label, content, relative_path)
 
+    def test_readmes_explain_the_standard_codex_skill_install_path(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        installer_url = (
+            "$skill-installer https://github.com/trugurpala/pinescriptv6/"
+            "tree/main/.agents/skills/pine-script-agent-kit"
+        )
+        for content in (english, turkish):
+            self.assertIn(".agents/skills/pine-script-agent-kit/SKILL.md", content)
+            self.assertIn(installer_url, content)
+            self.assertIn("$pine-script-agent-kit", content)
+
+        self.assertIn("does not prove that a host loaded", english)
+        self.assertIn("hostun bu beceriyi yüklediğini", turkish)
+        self.assertIn("kanıtlamaz", turkish)
+
     def test_adoption_covers_supported_surfaces_and_local_evidence_boundary(self):
         path = ROOT / "ADOPTION.md"
         self.assertTrue(path.is_file(), "ADOPTION.md")
         content = path.read_text(encoding="utf-8")
         expected_paths = {
             "Portable Agent Skill": ("SKILL.md",),
+            "Codex Desktop skill": (
+                ".agents/skills/pine-script-agent-kit/SKILL.md",
+                ".agents/skills/pine-script-agent-kit/agents/openai.yaml",
+            ),
             "Codex": ("AGENTS.md",),
             "Claude Code": ("CLAUDE.md",),
             "Gemini CLI": ("GEMINI.md",),
@@ -148,7 +169,7 @@ class DocumentationTests(unittest.TestCase):
                 continue
             data_rows.append(cells)
 
-        self.assertEqual(len(data_rows), 11)
+        self.assertEqual(len(data_rows), 12)
         rows_by_surface = {row[0]: row for row in data_rows}
         self.assertEqual(set(rows_by_surface), set(expected_paths))
         for surface, paths in expected_paths.items():
@@ -172,6 +193,17 @@ class DocumentationTests(unittest.TestCase):
             "tools/psak.py",
         ):
             self.assertIn(phrase, portable_placement)
+
+        codex_skill_source, codex_skill_placement, codex_skill_verification, codex_skill_prompt = rows_by_surface["Codex Desktop skill"][1:]
+        self.assertIn(
+            "$skill-installer https://github.com/trugurpala/pinescriptv6/"
+            "tree/main/.agents/skills/pine-script-agent-kit",
+            codex_skill_placement,
+        )
+        self.assertIn("restart Codex", codex_skill_placement)
+        self.assertIn("pine-script-agent-kit", codex_skill_source)
+        self.assertIn("loaded skill", codex_skill_verification)
+        self.assertIn("Pine Script v6", codex_skill_prompt)
 
         cline_source, cline_placement, cline_verification, _ = rows_by_surface["Cline"][1:]
         self.assertIn("AGENTS.md", cline_source)
@@ -399,10 +431,8 @@ class DocumentationTests(unittest.TestCase):
 
         self.assertIn("name: pine-script-agent-kit", frontmatter)
         self.assertIn("description: Evidence-first Pine Script v6 guidance", frontmatter)
-        self.assertIn("license: MIT", frontmatter)
-        self.assertIn("metadata:", frontmatter)
-        self.assertRegex(frontmatter, r"(?m)^  maintainer: .+$")
-        self.assertRegex(frontmatter, r"(?m)^  repository: https://github.com/trugurpala/pinescriptv6$")
+        self.assertNotIn("license:", frontmatter)
+        self.assertNotIn("metadata:", frontmatter)
         self.assertNotRegex(frontmatter, r"(?m)^maintainer:")
         self.assertNotRegex(frontmatter, r"(?m)^repository:")
 

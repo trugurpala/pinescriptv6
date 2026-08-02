@@ -99,6 +99,22 @@ NOT CHECKED: Profitability
 
 Ağ kullanan tek kalite komutu `python tools/psak.py links` komutudur. Kayıtlı resmî adresleri denetler; ulaşamadığı bağlantıyı doğrulanmamış olarak bildirir.
 
+## Codex Desktop'a kurulum
+
+Pine Script rehberini projeler arasında tekrar kullanmak için paketlenmiş Codex
+becerisini kur:
+
+```text
+$skill-installer https://github.com/trugurpala/pinescriptv6/tree/main/.agents/skills/pine-script-agent-kit
+```
+
+Kurulumdan sonra Codex'te görünmüyorsa Codex'i yeniden başlat. Ardından
+`$pine-script-agent-kit` ile çağır ve [ADOPTION.md](ADOPTION.md) belgesindeki
+kısa deneme istemini kullan. Yüklenebilir giriş noktası
+`.agents/skills/pine-script-agent-kit/SKILL.md` dosyasıdır. Bir becerinin
+kurulmuş olması, hostun bu beceriyi yüklediğini veya kurallara uyduğunu
+kanıtlamaz; rehbere güvenmeden önce yüklü beceriyi doğrula.
+
 ## Bilgi nereden geliyor?
 
 Üretilen her talimat, adı belli bir kaynakla başlar. Proje; kapsamı, istisnaları ve kanıt seviyesi kaydedilmeden bir bilgiyi ajan rehberliğine dönüştürmez.
@@ -159,6 +175,7 @@ kullanmadığını sınamak için [kullanım rehberini](ADOPTION.md) izle.
 | Araç | Projedeki talimat yüzeyi |
 | --- | --- |
 | Taşınabilir ajan becerisi | [`SKILL.md`](SKILL.md) |
+| Codex Desktop becerisi | [`.agents/skills/pine-script-agent-kit/SKILL.md`](.agents/skills/pine-script-agent-kit/SKILL.md) |
 | Codex | `AGENTS.md` |
 | Claude Code | `CLAUDE.md` |
 | Gemini CLI | `GEMINI.md` |
