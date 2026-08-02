@@ -13,6 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class RepositoryTests(unittest.TestCase):
+    def test_codex_skill_bundle_json_is_not_ignored(self):
+        ignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+
+        self.assertIn("!.agents/skills/**/*.json", ignore)
+
     def test_critical_files_must_exist_and_be_nonempty(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)

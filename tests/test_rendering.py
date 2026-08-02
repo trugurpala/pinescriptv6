@@ -37,6 +37,9 @@ class RenderingTests(unittest.TestCase):
         (root / "knowledge/rules").mkdir()
         (root / "agents").mkdir()
         (root / "adapters").mkdir()
+        (root / "examples").mkdir()
+        (root / "verification").mkdir()
+        (root / "docs").mkdir()
         catalog = {
             "schema_version": 1,
             "rules": [self._rule("PSAK-Z", "official", "Later rule.")],
@@ -64,6 +67,11 @@ class RenderingTests(unittest.TestCase):
         )
         (root / "knowledge/rules/rule.md").write_text("# Rule\n", encoding="utf-8")
         (root / "agents/protocol.md").write_text("Protocol body.\n", encoding="utf-8")
+        (root / "examples/manifest.json").write_text("{}\n", encoding="utf-8")
+        (root / "verification/tradingview.json").write_text("{}\n", encoding="utf-8")
+        (root / "docs/tradingview-manual-verification.md").write_text(
+            "# Manual verification\n", encoding="utf-8"
+        )
         for name in (
             "codex.md",
             "claude.md",
@@ -91,6 +99,14 @@ class RenderingTests(unittest.TestCase):
             "compilation or runtime behavior.\n",
             encoding="utf-8",
         )
+        (root / "adapters/codex-skill.md").write_text(
+            "---\nname: pine-script-agent-kit\n---\n\n{{NOTICE}}\n",
+            encoding="utf-8",
+        )
+        (root / "adapters/codex-skill.openai.yaml").write_text(
+            "interface:\n  display_name: Pine Script Agent Kit\n",
+            encoding="utf-8",
+        )
 
     def test_rule_section_filters_unverified_and_sorts(self):
         rules = [
@@ -115,7 +131,58 @@ class RenderingTests(unittest.TestCase):
 
             self.assertEqual(first, second)
             self.assertTrue(first)
-            self.assertTrue(all(GENERATED_NOTICE in content for content in first.values()))
+            adapter_outputs = {
+                relative: content
+                for relative, content in first.items()
+                if not relative.is_relative_to(
+                    Path(".agents/skills/pine-script-agent-kit/references")
+                )
+                and relative != Path(
+                    ".agents/skills/pine-script-agent-kit/agents/openai.yaml"
+                )
+            }
+            self.assertTrue(all(GENERATED_NOTICE in content for content in adapter_outputs.values()))
+
+    def test_renderer_builds_a_self_contained_codex_skill_bundle(self):
+        root = Path(__file__).resolve().parents[1]
+        outputs = render_outputs(root)
+        bundle = Path(".agents/skills/pine-script-agent-kit")
+
+        skill = outputs[bundle / "SKILL.md"]
+        self.assertTrue(skill.startswith("---\nname: pine-script-agent-kit\n"))
+        self.assertIn("references/agents/protocol.md", skill)
+        self.assertIn("references/knowledge/catalog.json", skill)
+        self.assertIn("references/examples/manifest.json", skill)
+        self.assertIn("full PSAK checkout", skill)
+
+        metadata = outputs[bundle / "agents/openai.yaml"]
+        self.assertIn('display_name: "Pine Script Agent Kit"', metadata)
+        self.assertIn("default_prompt:", metadata)
+
+        expected_sources = (
+            "agents/protocol.md",
+            "knowledge/catalog.json",
+            "knowledge/sources.json",
+            "examples/manifest.json",
+            "verification/tradingview.json",
+            "docs/tradingview-manual-verification.md",
+        )
+        for relative in expected_sources:
+            bundled = bundle / "references" / relative
+            self.assertIn(bundled, outputs, bundled.as_posix())
+            self.assertEqual(
+                outputs[bundled],
+                (root / relative).read_text(encoding="utf-8"),
+                relative,
+            )
+
+        rule_sources = sorted((root / "knowledge/rules").glob("*.md"))
+        self.assertTrue(rule_sources)
+        for source in rule_sources:
+            relative = source.relative_to(root)
+            bundled = bundle / "references" / relative
+            self.assertIn(bundled, outputs, bundled.as_posix())
+            self.assertEqual(outputs[bundled], source.read_text(encoding="utf-8"))
 
     def test_only_path_specific_copilot_output_has_apply_to_frontmatter(self):
         with TemporaryDirectory() as directory:

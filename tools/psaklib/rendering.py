@@ -35,6 +35,16 @@ OUTPUT_PREFIXES = {
     ),
 }
 
+SKILL_BUNDLE_ROOT = Path(".agents/skills/pine-script-agent-kit")
+SKILL_BUNDLE_REFERENCE_FILES = (
+    Path("agents/protocol.md"),
+    Path("knowledge/catalog.json"),
+    Path("knowledge/sources.json"),
+    Path("examples/manifest.json"),
+    Path("verification/tradingview.json"),
+    Path("docs/tradingview-manual-verification.md"),
+)
+
 
 def render_rule_section(rules: list[dict[str, object]]) -> str:
     blocks: list[str] = []
@@ -90,6 +100,20 @@ def render_outputs(root: Path) -> dict[Path, str]:
         )
         for output_name in output_names:
             outputs[Path(output_name)] = OUTPUT_PREFIXES.get(output_name, "") + content
+    skill_template = (root / "adapters/codex-skill.md").read_text(encoding="utf-8")
+    outputs[SKILL_BUNDLE_ROOT / "SKILL.md"] = (
+        skill_template.replace("{{NOTICE}}", GENERATED_NOTICE).rstrip() + "\n"
+    )
+    outputs[SKILL_BUNDLE_ROOT / "agents/openai.yaml"] = (
+        (root / "adapters/codex-skill.openai.yaml").read_text(encoding="utf-8").rstrip()
+        + "\n"
+    )
+    for relative in (*SKILL_BUNDLE_REFERENCE_FILES, *sorted((root / "knowledge/rules").glob("*.md"))):
+        source = relative if relative.is_absolute() else root / relative
+        source_relative = source.relative_to(root)
+        outputs[SKILL_BUNDLE_ROOT / "references" / source_relative] = source.read_text(
+            encoding="utf-8"
+        )
     return dict(sorted(outputs.items(), key=lambda item: item[0].as_posix()))
 
 

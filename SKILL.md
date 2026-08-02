@@ -1,10 +1,6 @@
 ---
 name: pine-script-agent-kit
 description: Evidence-first Pine Script v6 guidance for AI coding agents.
-license: MIT
-metadata:
-  maintainer: Uğur Pala <mail@ugurpala.com>
-  repository: https://github.com/trugurpala/pinescriptv6
 ---
 
 # Pine Script Agent Kit

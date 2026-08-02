@@ -99,6 +99,20 @@ NOT CHECKED: Profitability
 
 `python tools/psak.py links` is the only network-aware quality command. It checks registered official URLs and reports a link it cannot reach as unverified.
 
+## Install in Codex Desktop
+
+For reusable Pine Script guidance across projects, install the packaged Codex skill:
+
+```text
+$skill-installer https://github.com/trugurpala/pinescriptv6/tree/main/.agents/skills/pine-script-agent-kit
+```
+
+If it does not appear in Codex after installation, restart Codex. Invoke it with
+`$pine-script-agent-kit`, then use the smoke prompt in [ADOPTION.md](ADOPTION.md).
+The installed entry point is `.agents/skills/pine-script-agent-kit/SKILL.md`.
+Installing a skill does not prove that a host loaded or obeyed it; confirm the
+loaded skill before relying on its guidance.
+
 ## Where the knowledge comes from
 
 Every generated instruction starts with a named source. A source does not become agent guidance until the project records its scope, exceptions, and evidence level.
@@ -159,6 +173,7 @@ host smoke prompt.
 | Tool | Project surface |
 | --- | --- |
 | Portable Agent Skill | [`SKILL.md`](SKILL.md) |
+| Codex Desktop skill | [`.agents/skills/pine-script-agent-kit/SKILL.md`](.agents/skills/pine-script-agent-kit/SKILL.md) |
 | Codex | `AGENTS.md` |
 | Claude Code | `CLAUDE.md` |
 | Gemini CLI | `GEMINI.md` |

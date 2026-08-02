@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "tv-alerts",
+      "title": "Pine Script alerts",
+      "url": "https://www.tradingview.com/pine-script-docs/concepts/alerts/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-08-02",
+      "applies_to": "Pine Script v6",
+      "locator": "Introduction; Script alerts; alert() function events; Order fill events; alertcondition() events; Avoiding repainting with alerts"
+    },
+    {
+      "id": "tv-arrays",
+      "title": "Pine Script arrays",
+      "url": "https://www.tradingview.com/pine-script-docs/language/arrays/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-07-31",
+      "applies_to": "Pine Script v6",
+      "locator": "Arrays"
+    },
+    {
+      "id": "tv-bar-states",
+      "title": "Pine Script bar states",
+      "url": "https://www.tradingview.com/pine-script-docs/concepts/bar-states/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-07-31",
+      "applies_to": "Pine Script v6",
+      "locator": "Bar states"
+    },
+    {
+      "id": "tv-execution-model",
+      "title": "Pine Script execution model",
+      "url": "https://www.tradingview.com/pine-script-docs/language/execution-model/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-08-02",
+      "applies_to": "Pine Script v6",
+      "locator": "Executions on historical bars; Executions on realtime bars; Rollback; Events that trigger script executions"
+    },
+    {
+      "id": "tv-inputs",
+      "title": "Pine Script inputs",
+      "url": "https://www.tradingview.com/pine-script-docs/concepts/inputs/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-07-31",
+      "applies_to": "Pine Script v6",
+      "locator": "Inputs"
+    },
+    {
+      "id": "tv-migration-v6",
+      "title": "Migration guide to Pine Script v6",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-07-31",
+      "applies_to": "Pine Script v6",
+      "locator": "To Pine Script version 6"
+    },
+    {
+      "id": "tv-other-timeframes",
+      "title": "Other timeframes and data",
+      "url": "https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-07-31",
+      "applies_to": "Pine Script v6",
+      "locator": "Other timeframes and data"
+    },
+    {
+      "id": "tv-reference-v6",
+      "title": "Pine Script v6 reference manual",
+      "url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "publisher": "TradingView",
+      "kind": "official-reference",
+      "accessed": "2026-07-31",
+      "applies_to": "Pine Script v6",
+      "locator": "Reference manual"
+    },
+    {
+      "id": "tv-release-notes",
+      "title": "Pine Script release notes",
+      "url": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "publisher": "TradingView",
+      "kind": "official-release-note",
+      "accessed": "2026-07-31",
+      "applies_to": "Pine Script v6",
+      "locator": "July 2025 through July 2026"
+    },
+    {
+      "id": "tv-repainting",
+      "title": "Pine Script repainting",
+      "url": "https://www.tradingview.com/pine-script-docs/concepts/repainting/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-08-02",
+      "applies_to": "Pine Script v6",
+      "locator": "Historical and realtime behavior; Fluid data values; request.security(); varip; Bar state built-ins; Strategies; Dataset variations"
+    },
+    {
+      "id": "tv-strategies",
+      "title": "Pine Script strategies",
+      "url": "https://www.tradingview.com/pine-script-docs/concepts/strategies/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-08-02",
+      "applies_to": "Pine Script v6",
+      "locator": "Broker emulator; Orders and trades; Altering calculation behavior; Simulating trading costs; Strategy alerts; Notes on testing strategies"
+    },
+    {
+      "id": "tv-strings",
+      "title": "Pine Script strings",
+      "url": "https://www.tradingview.com/pine-script-docs/concepts/strings/",
+      "publisher": "TradingView",
+      "kind": "official-guide",
+      "accessed": "2026-07-31",
+      "applies_to": "Pine Script v6",
+      "locator": "Strings"
+    }
+  ]
+}
