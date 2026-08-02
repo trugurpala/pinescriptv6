@@ -52,6 +52,14 @@ EXPLANATORY_ASSETS = (
     ("assets/source-provenance.png", (1280, 720)),
 )
 
+SUB_READMES = (
+    "examples/README.md",
+    "global-markets/README.md",
+    "tradingview-publish/README.md",
+    "v5-to-v6-migration/README.md",
+    "webhook-templates/README.md",
+)
+
 
 class DocumentationTests(unittest.TestCase):
     def test_readmes_share_status_commands_and_core_links(self):
@@ -215,6 +223,23 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("Do not post private code", support)
         self.assertIn("Özel kodu", support)
 
+    def test_subdirectory_readmes_are_user_facing_and_evidence_bounded(self):
+        forbidden = (
+            "copy-paste ready",
+            "errors auto-saved",
+            "Premium or higher required",
+            "ready-to-use trading systems",
+        )
+
+        for relative_path in SUB_READMES:
+            content = (ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn("structural-only", content, relative_path)
+            self.assertIn("SUPPORT.md", content, relative_path)
+            self.assertIn("tradingview-manual-verification.md", content, relative_path)
+            lowered = content.lower()
+            for claim in forbidden:
+                self.assertNotIn(claim.lower(), lowered, relative_path)
+
     def test_legacy_custom_gpt_docs_are_safe_bridges(self):
         paths = (
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_KNOWLEDGE_PACK.md",
@@ -240,6 +265,12 @@ class DocumentationTests(unittest.TestCase):
             ROOT / "README.tr.md",
             ROOT / "CONTRIBUTING.md",
             ROOT / "SECURITY.md",
+            ROOT / "SUPPORT.md",
+            ROOT / "examples/README.md",
+            ROOT / "global-markets/README.md",
+            ROOT / "tradingview-publish/README.md",
+            ROOT / "v5-to-v6-migration/README.md",
+            ROOT / "webhook-templates/README.md",
             ROOT / "docs/provenance.md",
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_KNOWLEDGE_PACK.md",
             ROOT / "docs/custom-gpt/PINE_SCRIPT_V6_HATA_HAFIZASI_GPT.md",

@@ -1,35 +1,35 @@
-# Webhook Templates — Pine Script v6
-> Maintainer: Ugur Pala · mail@ugurpala.com · github.com/trugurpala/pinescriptv6
+# Webhook templates for Pine Script v6
 
-TR: TradingView alert'lerini dış sistemlere iletmek için hazır webhook şablonları.
-EN: Ready-to-use webhook templates for forwarding TradingView alerts to external systems.
+These files show how TradingView alert messages can be shaped for an external
+receiver. They are educational templates, not a broker integration or a safe
+live-ordering system.
 
----
+## Evidence and limits
 
-## Dosyalar / Files
+The Pine files are tracked as `structural-only`. Test the exact file and payload
+in your own TradingView account and receiver before relying on it. Account
+plans, alert limits, symbols, exchange data, and webhook availability vary.
+See the [TradingView manual verification guide](../docs/tradingview-manual-verification.md)
+and the [support guide](../SUPPORT.md).
 
-| Dosya | Açıklama / Description |
-|-------|------------------------|
-| `01_alert_message_templates.md` | TradingView alert mesaj şablonları |
-| `02_pine_alert_conditions.pine` | `alertcondition()` ve `alert()` örnekleri |
-| `03_telegram_webhook.md` | Telegram bot entegrasyonu |
-| `04_discord_webhook.md` | Discord webhook entegrasyonu |
-| `05_json_payload_templates.md` | JSON payload şablonları (broker API'leri için) |
-| `06_viop_bist30_alerts.pine` | VİOP / BIST30 spesifik alert örnekleri |
+## Files
 
----
+| File | Purpose |
+| --- | --- |
+| `01_alert_message_templates.md` | Alert message patterns |
+| `02_pine_alert_conditions.pine` | `alertcondition()` and `alert()` examples |
+| `03_telegram_webhook.md` | Telegram delivery notes |
+| `04_discord_webhook.md` | Discord delivery notes |
+| `05_json_payload_templates.md` | JSON payload examples |
+| `06_viop_bist30_alerts.pine` | VIOP/BIST30 alert context |
 
-## Nasıl Çalışır / How It Works
+## Delivery path
 
-```
-TradingView Alert
-      │
-      ▼
-Webhook URL ──► Telegram Bot
-             ├─► Discord Channel
-             ├─► Custom Server (Python/Node.js)
-             └─► Broker API
+```text
+TradingView alert -> webhook endpoint -> validation -> application/logging
 ```
 
-TR: TradingView Premium veya üzeri gereklidir.
-EN: TradingView Premium or higher required for webhook alerts.
+Before any real integration, use HTTPS, authenticate requests, validate the
+symbol/side/size/timestamp/nonce, prevent replay, rate-limit, log safely, and
+provide a kill switch. Keep tokens outside Pine source and Git history. The
+templates use placeholders and do not authorize live orders.

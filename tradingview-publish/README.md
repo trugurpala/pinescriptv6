@@ -1,37 +1,35 @@
-# TradingView Publish Rehberi
-> Ugur Pala · github.com/trugurpala/pinescriptv6
+# TradingView publishing notes
 
-## Sıra / Publish Order
+This folder contains descriptions and a review order for three possible
+TradingView publications. It is a preparation aid, not proof that any script
+has been compiled, published, approved, or kept non-repainting.
+The source files remain `structural-only` until a hash-bound manual record
+exists.
 
-| # | Script | Pine Dosyası | Description Dosyası |
-|---|--------|-------------|---------------------|
-| 1 | Fakeout Filter | `examples/indicators/18_fakeout_filter.pine` | `01_fakeout_filter_description.md` |
-| 2 | VIOP Session Strategy | `examples/strategies/11_viop_session_strategy.pine` | `02_viop_session_description.md` |
-| 3 | Fakeout-Confirmed Strategy | `examples/strategies/13_fakeout_confirmed_strategy.pine` | `03_fakeout_confirmed_strategy_description.md` |
+## Publish order
 
-## Her Script İçin Adımlar / Steps for Each Script
+| # | Script | Pine file | Description |
+| --- | --- | --- | --- |
+| 1 | Fakeout Filter | `../examples/indicators/18_fakeout_filter.pine` | `01_fakeout_filter_description.md` |
+| 2 | VIOP Session Strategy | `../examples/strategies/11_viop_session_strategy.pine` | `02_viop_session_description.md` |
+| 3 | Fakeout-Confirmed Strategy | `../examples/strategies/13_fakeout_confirmed_strategy.pine` | `03_fakeout_confirmed_strategy_description.md` |
 
-1. **Pine dosyasını aç** — GitHub'dan `.pine` dosyasına tıkla, Raw görünümünü kopyala
-2. **TradingView Pine Editor'ü aç** — grafik üzerinde alt panel
-3. **Yeni script oluştur** — `New` → `Create new indicator` veya `Create new strategy`
-4. **Kodu yapıştır** — `Add to chart` ile test et, hata yoksa devam et
-5. **Publish** — `Publish script` → Title + Description kopyala → Tags ekle → `Publish`
+## Review a script before publishing
 
-## Description'a Mutlaka Eklenecekler
+1. Confirm the exact file and SHA-256 in [`../examples/manifest.json`](../examples/manifest.json).
+2. Follow the [TradingView manual verification guide](../docs/tradingview-manual-verification.md).
+3. Test the exact file in Pine Editor and on the intended chart context.
+4. Record compile errors, alert behavior, repaint observations, and strategy
+   results as separate observations.
+5. Only publish when the account, script type, description, visibility, and
+   TradingView rules are appropriate for you.
 
-Her description'ın sonunda şu satır mutlaka olmalı:
-```
-github.com/trugurpala/pinescriptv6
-```
+Do not turn a compile result into a profitability, security, or live-trading
+claim. Do not put credentials, private code, or customer data in a description.
+For contribution and reporting routes, see [`../SUPPORT.md`](../SUPPORT.md).
 
-Bu satır olmadan repo keşfedilmez.
+## Description checklist
 
-## Publish Sonrası
-
-Her publish'ten sonra X'te paylaş:
-```
-Yeni Pine Script v6 script: [BAŞLIK]
-TradingView: [URL]
-Kaynak: github.com/trugurpala/pinescriptv6
-#PineScript #PineScriptV6 #TradingView #AlgoTrading
-```
+Each description should state the Pine version, intended use, assumptions,
+known limitations, and evidence level. Keep the repository URL as attribution;
+do not imply endorsement by TradingView.
