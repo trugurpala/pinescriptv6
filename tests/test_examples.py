@@ -16,6 +16,25 @@ from tools.psaklib.examples import (
 
 VALID_PINE = '//@version=6\nindicator("Structural fixture")\nplot(close)\n'
 
+AUGUST_2_EXAMPLES = (
+    "examples/indicators/01_ema_cross.pine",
+    "examples/indicators/12_mtf_ema.pine",
+    "examples/indicators/18_fakeout_filter.pine",
+    "examples/strategies/01_ema_cross_strategy.pine",
+    "examples/strategies/07_mtf_trend_strategy.pine",
+    "examples/strategies/11_viop_session_strategy.pine",
+    "examples/strategies/13_fakeout_confirmed_strategy.pine",
+    "examples/strategies/14_mtf_viop_strategy.pine",
+)
+
+HTF_COMMENT_EXAMPLES = (
+    "examples/indicators/12_mtf_ema.pine",
+    "examples/indicators/18_fakeout_filter.pine",
+    "examples/strategies/07_mtf_trend_strategy.pine",
+    "examples/strategies/13_fakeout_confirmed_strategy.pine",
+    "examples/strategies/14_mtf_viop_strategy.pine",
+)
+
 
 class ExampleTests(unittest.TestCase):
     def test_ema_indicator_discloses_timing_and_alert_boundaries(self):
@@ -61,6 +80,43 @@ class ExampleTests(unittest.TestCase):
             self.assertEqual(entry["evidence"], "structural-only")
             self.assertIsNone(entry["tradingview_record"])
             self.assertEqual(entry["sha256"], sha256_file(Path(relative_path)))
+
+    def test_august_2_example_records_have_current_structural_evidence(self):
+        manifest = json.loads(Path("examples/manifest.json").read_text(encoding="utf-8"))
+        entries = {entry["path"]: entry for entry in manifest["examples"]}
+
+        for relative_path in AUGUST_2_EXAMPLES:
+            entry = entries[relative_path]
+            self.assertEqual(entry["checked_on"], "2026-08-02", relative_path)
+            self.assertEqual(entry["evidence"], "structural-only", relative_path)
+            self.assertIsNone(entry["tradingview_record"], relative_path)
+            self.assertEqual(entry["sha256"], sha256_file(Path(relative_path)), relative_path)
+
+    def test_strategy_alert_comments_do_not_repeat_stale_blanket_claim(self):
+        text = Path("examples/strategies/11_viop_session_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertNotIn("strategy içinde çalışmaz", text)
+        self.assertNotRegex(text, r"(?m)alertcondition\(\) (?:çalışmaz|does not)\s*$")
+        for phrase in (
+            "alertcondition() can compile in a strategy",
+            "does not create selectable strategy alertcondition events",
+            "alert() is used",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_confirmed_htf_comments_preserve_the_timeframe_boundary(self):
+        boundary = (
+            "[1] + lookahead_on is a confirmed HTF pattern only when the requested "
+            "timeframe is higher than the chart; this code does not enforce that relation."
+        )
+
+        for relative_path in HTF_COMMENT_EXAMPLES:
+            text = Path(relative_path).read_text(encoding="utf-8")
+            self.assertIn(boundary, text, relative_path)
+            self.assertNotIn("confirmed HTF request pattern", text, relative_path)
+            self.assertNotIn("confirms the HTF request", text, relative_path)
 
     def test_examples_readme_has_disclosure_checklist_and_ema_slice(self):
         text = Path("examples/README.md").read_text(encoding="utf-8")

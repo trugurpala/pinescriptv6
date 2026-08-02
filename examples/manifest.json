@@ -5,7 +5,7 @@
       "path": "examples/indicators/01_ema_cross.pine",
       "sha256": "666710adc94a05928c39903ae6df9f68f815af8324ca817b5d99492408b5b179",
       "evidence": "structural-only",
-      "checked_on": "2026-07-31",
+      "checked_on": "2026-08-02",
       "tradingview_record": null,
       "limitations": [
         "Not compiled in TradingView during this repository audit."
@@ -113,9 +113,9 @@
     },
     {
       "path": "examples/indicators/12_mtf_ema.pine",
-      "sha256": "fc15f8c0342631f5fb66f0655df95ecb1981f867aff69e6af59b3b477ded043b",
+      "sha256": "5714369f310d07953d71ed64a0340f2068de303aa43a928075168b60312cf902",
       "evidence": "structural-only",
-      "checked_on": "2026-07-31",
+      "checked_on": "2026-08-02",
       "tradingview_record": null,
       "limitations": [
         "Not compiled in TradingView during this repository audit."
@@ -173,9 +173,9 @@
     },
     {
       "path": "examples/indicators/18_fakeout_filter.pine",
-      "sha256": "9e7d188fc4ea4266b11a5ed35457462ac4bf5a39d53b81cb96599af75af28b8c",
+      "sha256": "7bf077bd0d452166873b53368b7d3030878854caf9366ecddccada6ab9b2f43b",
       "evidence": "structural-only",
-      "checked_on": "2026-07-31",
+      "checked_on": "2026-08-02",
       "tradingview_record": null,
       "limitations": [
         "Not compiled in TradingView during this repository audit."
@@ -185,7 +185,7 @@
       "path": "examples/strategies/01_ema_cross_strategy.pine",
       "sha256": "f0bae35ef3783b54f494b26f0088410e416ab56e3e0a0be6a9f4666fa6bb890d",
       "evidence": "structural-only",
-      "checked_on": "2026-07-31",
+      "checked_on": "2026-08-02",
       "tradingview_record": null,
       "limitations": [
         "Not compiled in TradingView during this repository audit."
@@ -243,9 +243,9 @@
     },
     {
       "path": "examples/strategies/07_mtf_trend_strategy.pine",
-      "sha256": "da947899a8e699ee7740cef2eeaac05056d858cd6957b926e7070b8d9d0aef6b",
+      "sha256": "8de4f008eb239553b2536e870827ff2c406dae74a22097bcd6f6f919167a00c6",
       "evidence": "structural-only",
-      "checked_on": "2026-07-31",
+      "checked_on": "2026-08-02",
       "tradingview_record": null,
       "limitations": [
         "Not compiled in TradingView during this repository audit."
@@ -283,9 +283,9 @@
     },
     {
       "path": "examples/strategies/11_viop_session_strategy.pine",
-      "sha256": "bc70d38ee50db76903082068e99cfdc18fddbc8590b1f86fb5b840f77d006180",
+      "sha256": "b2d5122bede450d3a59e053af746a78adddfcddcd9e220d20f9c682096550fe2",
       "evidence": "structural-only",
-      "checked_on": "2026-07-31",
+      "checked_on": "2026-08-02",
       "tradingview_record": null,
       "limitations": [
         "Not compiled in TradingView during this repository audit."
@@ -303,9 +303,9 @@
     },
     {
       "path": "examples/strategies/13_fakeout_confirmed_strategy.pine",
-      "sha256": "11f1797fc7e7c6eec7bfbb28b9ed3bd729224e4e9270832e962cd0a104e6ee31",
+      "sha256": "bd73295134cb21a4b09b45fd36cd7bc80ee8b5b3de13debfb502a22a44669f4c",
       "evidence": "structural-only",
-      "checked_on": "2026-07-31",
+      "checked_on": "2026-08-02",
       "tradingview_record": null,
       "limitations": [
         "Not compiled in TradingView during this repository audit."
@@ -313,9 +313,9 @@
     },
     {
       "path": "examples/strategies/14_mtf_viop_strategy.pine",
-      "sha256": "a3fe7cd0fd6ded2a5d9aed43095b281f330104da2cc6f4e22e9d2facbbd25628",
+      "sha256": "75703038a2a13446a99bb72a9c5e5c39fe53a47c896863d37ffdd97b7df574ca",
       "evidence": "structural-only",
-      "checked_on": "2026-07-31",
+      "checked_on": "2026-08-02",
       "tradingview_record": null,
       "limitations": [
         "Not compiled in TradingView during this repository audit."

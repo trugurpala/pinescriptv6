@@ -17,7 +17,7 @@
 // Önerilen TF / Recommended TF: 5M, 15M, 1H
 //
 // LESSONS_LEARNED uygulanan düzeltmeler:
-//   - alertcondition() → alert() (strategy içinde çalışmaz)
+//   - alertcondition() can compile in a strategy but does not create selectable strategy alertcondition events; alert() is used
 //   - barstate.islast label kaldırıldı → bgcolor ile seans gösterimi
 //   - calc_on_every_tick kaldırıldı (default false; backtest realism still depends on fills, data, and costs)
 
@@ -79,8 +79,8 @@ if bearCross and not longOnly
         comment_loss="SL", comment_profit="TP")
 
 // ── Alertler / Alerts ─────────────────────────────────────────────────────────
-// TR: alert() strategy içinde çalışır, alertcondition() çalışmaz
-// EN: alert() works inside strategies, alertcondition() does not
+// TR: alertcondition() stratejide derlenebilir ancak seçilebilir olay oluşturmaz; alert() kullanılır
+// EN: alertcondition() can compile in a strategy but does not create selectable strategy alertcondition events; alert() is used
 if bullCross
     alert("VİOP Long — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"),
         alert.freq_once_per_bar)

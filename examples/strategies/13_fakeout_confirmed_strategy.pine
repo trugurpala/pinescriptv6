@@ -12,7 +12,7 @@
 // ✅ calc_on_every_tick yok: bar-close calculation setting; fill, data, and cost assumptions remain.
 // ✅ barstate.isconfirmed + table → uyarısız, kapanmış barda güncellenir
 // ✅ Çok satırlı "and" yok → tek satır
-// ✅ request.security() → [1] + lookahead_on confirms the HTF request; broader repaint behavior is unverified.
+// ✅ [1] + lookahead_on is a confirmed HTF pattern only when the requested timeframe is higher than the chart; this code does not enforce that relation.
 
 strategy("Fakeout-Confirmed Strategy [trugurpala]",
     overlay            = true,
@@ -54,7 +54,7 @@ float fastEma = ta.ema(close, fastLen)
 float slowEma = ta.ema(close, slowLen)
 float atrVal  = ta.atr(atrLen)
 float volAvg  = ta.sma(volume, volLen)
-// LESSONS_LEARNED: [1] + lookahead_on is the confirmed HTF request pattern, not a whole-script verdict.
+// [1] + lookahead_on is a confirmed HTF pattern only when the requested timeframe is higher than the chart; this code does not enforce that relation.
 float htfEma  = request.security(syminfo.tickerid, htfTF, ta.ema(close, htfLen)[1], lookahead=barmerge.lookahead_on)
 
 // ── 4 Filtre ─────────────────────────────────────────────────────────────────

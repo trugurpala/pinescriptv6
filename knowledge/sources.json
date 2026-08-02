@@ -39,7 +39,7 @@
       "kind": "official-guide",
       "accessed": "2026-08-02",
       "applies_to": "Pine Script v6",
-      "locator": "Executions on historical and realtime bars; Rollback; Strategy executions"
+      "locator": "Executions on historical bars; Executions on realtime bars; Rollback; Events that trigger script executions"
     },
     {
       "id": "tv-inputs",

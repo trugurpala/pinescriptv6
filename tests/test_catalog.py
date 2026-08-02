@@ -232,6 +232,11 @@ class CatalogTests(unittest.TestCase):
             self.assertIn(source_id, sources)
             self.assertEqual(sources[source_id]["url"], url)
             self.assertEqual(sources[source_id]["kind"], "official-guide")
+        self.assertEqual(
+            sources["tv-execution-model"]["locator"],
+            "Executions on historical bars; Executions on realtime bars; Rollback; "
+            "Events that trigger script executions",
+        )
 
         rules = {
             rule["id"]: rule

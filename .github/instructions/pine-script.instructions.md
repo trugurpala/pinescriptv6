@@ -1,3 +1,6 @@
+---
+applyTo: "**/*.pine"
+---
 <!-- Generated from knowledge/catalog.json and agents/protocol.md.
      Regenerate with: python tools/psak.py render -->
 # Pine Script Agent Kit for GitHub Copilot

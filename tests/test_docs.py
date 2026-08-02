@@ -133,6 +133,10 @@ class DocumentationTests(unittest.TestCase):
             "ChatGPT Custom GPT": (
                 "generated/custom-gpt/INSTRUCTIONS.md",
                 "generated/custom-gpt/KNOWLEDGE.md",
+                "knowledge/catalog.json",
+                "knowledge/sources.json",
+                "examples/manifest.json",
+                "verification/tradingview.json",
             ),
         }
         table_lines = [line for line in content.splitlines() if line.startswith("|")]
@@ -156,10 +160,12 @@ class DocumentationTests(unittest.TestCase):
 
         portable_placement = rows_by_surface["Portable Agent Skill"][2]
         for phrase in (
-            "repository tree intact",
-            "repository root as the skill directory",
+            "complete repository tree",
+            "parent directory named `pine-script-agent-kit`",
+            "name must match the directory",
             "agents/protocol.md",
             "knowledge/catalog.json",
+            "knowledge/sources.json",
             "examples/manifest.json",
             "verification/tradingview.json",
             "tools/psak.py",
@@ -307,17 +313,44 @@ class DocumentationTests(unittest.TestCase):
             self.assertIn(badge, english)
             self.assertIn(badge, turkish)
 
-        self.assertIn("No failing automation currently requires intervention", english)
-        self.assertIn("The project is in maintenance and accepts community contributions", english)
+        self.assertNotIn("No failing automation currently requires intervention", english)
+        self.assertIn("This project is maintained and accepts community contributions", english)
         self.assertIn("What it does", english)
         self.assertIn("What it does not do", english)
         self.assertIn("Free for the community", english)
 
-        self.assertIn("Şu anda müdahale gerektiren hata veya başarısız otomasyon bulunmuyor", turkish)
-        self.assertIn("Proje bakım ve topluluk katkısı kabul etme aşamasında", turkish)
+        self.assertNotIn("Şu anda müdahale gerektiren hata veya başarısız otomasyon bulunmuyor", turkish)
+        self.assertIn("Proje bakımdadır ve topluluk katkılarını kabul eder", turkish)
         self.assertIn("Ne işe yarar?", turkish)
         self.assertIn("Ne yapmaz?", turkish)
         self.assertIn("Topluluk için ücretsiz", turkish)
+
+    def test_skill_frontmatter_and_adoption_surfaces_follow_host_contracts(self):
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        self.assertTrue(skill.startswith("---\n"))
+        frontmatter = skill.split("---", 2)[1]
+
+        self.assertIn("name: pine-script-agent-kit", frontmatter)
+        self.assertIn("description: Evidence-first Pine Script v6 guidance", frontmatter)
+        self.assertIn("license: MIT", frontmatter)
+        self.assertIn("metadata:", frontmatter)
+        self.assertRegex(frontmatter, r"(?m)^  maintainer: .+$")
+        self.assertRegex(frontmatter, r"(?m)^  repository: https://github.com/trugurpala/pinescriptv6$")
+        self.assertNotRegex(frontmatter, r"(?m)^maintainer:")
+        self.assertNotRegex(frontmatter, r"(?m)^repository:")
+
+        scoped = (ROOT / ".github/instructions/pine-script.instructions.md").read_bytes()
+        repository_wide = (ROOT / ".github/copilot-instructions.md").read_bytes()
+        self.assertTrue(scoped.startswith(b'---\napplyTo: "**/*.pine"\n---\n'))
+        self.assertFalse(repository_wide.startswith(b"---"))
+
+    def test_roadmap_uses_durable_unreleased_status(self):
+        roadmap = (ROOT / "ROADMAP.md").read_text(encoding="utf-8")
+
+        self.assertNotIn("current branch", roadmap.lower())
+        self.assertIn("Unreleased", roadmap)
+        self.assertIn("CHANGELOG.md", roadmap)
+        self.assertIn("v1.0.0", roadmap)
 
     def test_social_preview_is_approved_png_size(self):
         path = ROOT / "assets/social-preview.png"

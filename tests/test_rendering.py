@@ -106,6 +106,21 @@ class RenderingTests(unittest.TestCase):
             self.assertTrue(first)
             self.assertTrue(all(GENERATED_NOTICE in content for content in first.values()))
 
+    def test_only_path_specific_copilot_output_has_apply_to_frontmatter(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._repository(root)
+
+            outputs = render_outputs(root)
+            scoped = outputs[Path(".github/instructions/pine-script.instructions.md")]
+            repository_wide = outputs[Path(".github/copilot-instructions.md")]
+
+            frontmatter = '---\napplyTo: "**/*.pine"\n---\n'
+            self.assertTrue(scoped.startswith(frontmatter))
+            self.assertFalse(repository_wide.startswith("---"))
+            self.assertTrue(repository_wide.startswith(GENERATED_NOTICE))
+            self.assertEqual(scoped[len(frontmatter):], repository_wide)
+
     def test_check_reports_changed_generated_file(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)

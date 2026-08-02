@@ -6,10 +6,9 @@ changelog.
 
 ## Phase 1 — Reliability core
 
-The current branch adds source-bound alert, strategy execution, and repaint
-classification guidance plus public adoption and contribution documents. It
-remains unreleased until it is merged and tagged. The published release remains
-v1.0.0.
+The [`Unreleased`](CHANGELOG.md#unreleased) changelog section records source-bound
+alert, strategy execution, and repaint classification guidance plus public
+adoption and contribution documents. The published release remains v1.0.0.
 
 ## Phase 2 — Daily Pine foundations
 

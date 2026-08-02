@@ -14,7 +14,7 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf ve Zed için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı, istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
 
 > [!NOTE]
-> **Proje durumu:** Şu anda müdahale gerektiren hata veya başarısız otomasyon bulunmuyor. Proje bakım ve topluluk katkısı kabul etme aşamasında.
+> **Proje durumu:** Proje bakımdadır ve topluluk katkılarını kabul eder.
 >
 > Güncel sürüm **v1.0.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
 
