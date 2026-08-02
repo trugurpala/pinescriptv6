@@ -120,8 +120,9 @@ class DocumentationTests(unittest.TestCase):
             "Claude Code": ("CLAUDE.md",),
             "Gemini CLI": ("GEMINI.md",),
             "Cursor": (".cursor/rules/pinescriptv6.mdc", ".cursorrules"),
-            "Cline": (".clinerules",),
+            "Cline": ("AGENTS.md",),
             "Windsurf": (
+                "AGENTS.md",
                 ".windsurf/rules/pine-script-agent-kit.md",
                 ".windsurfrules",
             ),
@@ -129,7 +130,7 @@ class DocumentationTests(unittest.TestCase):
                 ".github/copilot-instructions.md",
                 ".github/instructions/pine-script.instructions.md",
             ),
-            "Zed": ("AGENTS.md", ".zed/rules"),
+            "Zed": ("AGENTS.md",),
             "ChatGPT Custom GPT": (
                 "generated/custom-gpt/INSTRUCTIONS.md",
                 "generated/custom-gpt/KNOWLEDGE.md",
@@ -171,6 +172,24 @@ class DocumentationTests(unittest.TestCase):
             "tools/psak.py",
         ):
             self.assertIn(phrase, portable_placement)
+
+        cline_source, cline_placement, cline_verification, _ = rows_by_surface["Cline"][1:]
+        self.assertIn("AGENTS.md", cline_source)
+        self.assertIn("project root", cline_placement)
+        self.assertIn("Rules panel", cline_verification)
+        self.assertIn("smoke prompt", cline_verification)
+
+        windsurf_source, windsurf_placement, _, _ = rows_by_surface["Windsurf"][1:]
+        self.assertIn("primary", windsurf_source)
+        self.assertIn("modern", windsurf_source)
+        self.assertIn("bridge", windsurf_source)
+        self.assertIn("legacy", windsurf_source)
+        self.assertIn("root", windsurf_placement)
+
+        zed_source, zed_placement, _, _ = rows_by_surface["Zed"][1:]
+        self.assertEqual(zed_source, "`AGENTS.md`")
+        self.assertIn("project root", zed_placement)
+        self.assertNotIn(".zed/rules", " | ".join(rows_by_surface["Zed"]))
         for command in REQUIRED_README_COMMANDS:
             self.assertIn(command, content)
         normalized_content = " ".join(content.split())
@@ -245,6 +264,9 @@ class DocumentationTests(unittest.TestCase):
             "TradingView",
         ):
             self.assertIn(term, strategy)
+        self.assertIn("`immediately` parameter on `strategy.close()`", strategy)
+        self.assertIn("`strategy.close_all()`", strategy)
+        self.assertNotIn("An order call's `immediately` behavior", strategy)
         for term in (
             "classification",
             "varip",
@@ -433,6 +455,14 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("## [Unreleased]", changelog)
         self.assertIn("Pine Script Agent Kit", citation)
         self.assertIn("https://github.com/trugurpala/pinescriptv6", citation)
+
+    def test_unreleased_changelog_records_host_and_session_alert_hardening(self):
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        unreleased = changelog.split("## [1.0.0]", 1)[0]
+
+        self.assertIn("Windsurf", unreleased)
+        self.assertIn("host adoption", unreleased)
+        self.assertIn("session-close alert", unreleased)
 
     def test_manual_tradingview_verification_guide_is_linked_without_overclaiming(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")

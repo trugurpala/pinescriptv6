@@ -106,6 +106,40 @@ class ExampleTests(unittest.TestCase):
         ):
             self.assertIn(phrase, text)
 
+    def test_viop_session_close_alert_discloses_detection_and_fill_boundary(self):
+        text = Path("examples/strategies/11_viop_session_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("bool sesClose = not inSession and inSession[1]", text)
+        self.assertIn(
+            'strategy.close_all(comment="Seans sonu / Session end")', text
+        )
+        for phrase in (
+            "first available out-of-session chart execution after an in-session execution",
+            "No chart execution means no close request",
+            "close_all() requests a close",
+            "normally fills later under default settings",
+            "can fire while flat",
+            "not an order-fill confirmation",
+            "close_all() called, fill unverified",
+        ):
+            self.assertIn(phrase, text)
+        for stale_claim in (
+            "All positions auto-closed at session end",
+            "pozisyonlar kapatıldı / session closed",
+        ):
+            self.assertNotIn(stale_claim, text)
+
+    def test_fakeout_strategy_uses_neutral_signal_description(self):
+        text = Path("examples/strategies/13_fakeout_confirmed_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("Signal strategy with four configurable fakeout filters.", text)
+        self.assertNotIn("High-quality signal strategy", text)
+        self.assertNotIn("yüksek kaliteli", text.lower())
+
     def test_confirmed_htf_comments_preserve_the_timeframe_boundary(self):
         boundary = (
             "[1] + lookahead_on is a confirmed HTF pattern only when the requested "

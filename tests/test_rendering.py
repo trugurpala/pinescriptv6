@@ -80,6 +80,17 @@ class RenderingTests(unittest.TestCase):
                 "{{NOTICE}}\n# Host\n\n{{PROTOCOL}}\n\n{{RULES}}\n",
                 encoding="utf-8",
             )
+        (root / "adapters/windsurf-bridge.md").write_text(
+            "---\n"
+            "trigger: always_on\n"
+            "---\n"
+            "{{NOTICE}}\n"
+            "# Windsurf bridge\n\n"
+            "Use the root `AGENTS.md` as the canonical project instructions.\n\n"
+            "Local checks remain structural-only and do not establish TradingView "
+            "compilation or runtime behavior.\n",
+            encoding="utf-8",
+        )
 
     def test_rule_section_filters_unverified_and_sorts(self):
         rules = [
@@ -120,6 +131,31 @@ class RenderingTests(unittest.TestCase):
             self.assertFalse(repository_wide.startswith("---"))
             self.assertTrue(repository_wide.startswith(GENERATED_NOTICE))
             self.assertEqual(scoped[len(frontmatter):], repository_wide)
+
+    def test_windsurf_modern_rule_is_a_short_always_on_bridge(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._repository(root)
+
+            outputs = render_outputs(root)
+            modern = outputs[Path(".windsurf/rules/pine-script-agent-kit.md")]
+            legacy = outputs[Path(".windsurfrules")]
+
+            self.assertTrue(modern.startswith("---\ntrigger: always_on\n---\n"))
+            self.assertLess(len(modern), 12_000)
+            self.assertIn("AGENTS.md", modern)
+            self.assertIn("structural-only", modern)
+            self.assertIn("TradingView compilation or runtime behavior", modern)
+            self.assertNotIn("PSAK-Z", modern)
+            self.assertFalse(legacy.startswith("---"))
+            self.assertIn("PSAK-Z", legacy)
+
+    def test_repository_windsurf_bridge_starts_at_byte_zero_and_stays_bounded(self):
+        root = Path(__file__).resolve().parents[1]
+        modern = (root / ".windsurf/rules/pine-script-agent-kit.md").read_bytes()
+
+        self.assertTrue(modern.startswith(b"---\ntrigger: always_on\n---\n"))
+        self.assertLess(len(modern.decode("utf-8")), 12_000)
 
     def test_check_reports_changed_generated_file(self):
         with TemporaryDirectory() as directory:

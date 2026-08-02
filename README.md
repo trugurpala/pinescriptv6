@@ -162,10 +162,10 @@ host smoke prompt.
 | Claude Code | `CLAUDE.md` |
 | Gemini CLI | `GEMINI.md` |
 | Cursor | `.cursor/rules/pinescriptv6.mdc` |
-| Cline | `.clinerules` |
-| Windsurf | `.windsurf/rules/pine-script-agent-kit.md` |
+| Cline | `AGENTS.md` |
+| Windsurf | `AGENTS.md` (primary) |
 | GitHub Copilot | `.github/copilot-instructions.md` and scoped instructions |
-| Zed | `AGENTS.md` and the `.zed/rules` compatibility bridge |
+| Zed | `AGENTS.md` |
 | Portable knowledge pack | `generated/custom-gpt/` |
 
 ## Quality commands

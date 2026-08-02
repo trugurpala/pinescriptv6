@@ -1,8 +1,7 @@
 ---
 trigger: always_on
 ---
-<!-- Generated from knowledge/catalog.json and agents/protocol.md.
-     Regenerate with: python tools/psak.py render -->
+{{NOTICE}}
 # Pine Script Agent Kit for Windsurf
 
 Use the repository-root [`AGENTS.md`](../../AGENTS.md) as the primary project

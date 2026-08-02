@@ -5,12 +5,12 @@
 //
 // TR: VİOP (Türkiye vadeli işlem piyasası) için seans bazlı strateji.
 //     09:30-18:15 UTC+3 seans saatleri içinde işlem yapar.
-//     Seans kapanışında tüm pozisyonlar otomatik kapatılır.
+//     Seans içi çalışmayı izleyen ilk uygun seans dışı grafik çalışmasında close_all() çağrılır; dolum ayrıca doğrulanmalıdır.
 //     ATR tabanlı SL/TP, EMA cross sinyali.
 //
 // EN: Session-based strategy for VIOP (Turkish futures market).
 //     Only trades within market hours: 09:30-18:15 UTC+3.
-//     All positions auto-closed at session end.
+//     close_all() is called on the first available out-of-session chart execution after an in-session execution; any fill needs separate verification.
 //     ATR-based SL/TP, EMA cross signal.
 //
 // Sembol / Symbol: BIST:XU030D1! veya F_XU030 (VİOP)
@@ -46,8 +46,14 @@ bool  longOnly = input.bool(false, "Sadece Long / Long Only", group="Sinyal / Si
 // EN: No signals generated outside session hours
 bool inSession = not na(time(timeframe.period, "0930-1815", "UTC+3"))
 
-// TR: Seans kapanışında tüm pozisyonları kapat
-// EN: Close all positions at session end
+// TR: sesClose, seans içi çalışmayı izleyen ilk uygun seans dışı grafik çalışmasında true olur.
+// EN: sesClose is true only on the first available out-of-session chart execution after an in-session execution.
+// TR: Grafik çalışması yoksa kapatma isteği de yoktur.
+// EN: No chart execution means no close request.
+// TR: close_all() kapatma ister; oluşturulan emir varsayılan ayarlarda normalde daha sonra dolar.
+// EN: close_all() requests a close; any created order normally fills later under default settings.
+// TR: Seans alarmı pozisyon yokken de çalışabilir ve emir dolum onayı değildir.
+// EN: The session alert can fire while flat and is not an order-fill confirmation.
 bool sesClose = not inSession and inSession[1]
 if sesClose
     strategy.close_all(comment="Seans sonu / Session end")
@@ -88,7 +94,7 @@ if bearCross
     alert("VİOP Short — " + syminfo.ticker + " @ " + str.tostring(close, "#.##"),
         alert.freq_once_per_bar)
 if sesClose
-    alert("VİOP Seans Sonu — pozisyonlar kapatıldı / session closed",
+    alert("VİOP Seans Sonu — close_all() çağrıldı, dolum doğrulanmadı / close_all() called, fill unverified",
         alert.freq_once_per_bar)
 
 // ── Görseller / Visuals ───────────────────────────────────────────────────────

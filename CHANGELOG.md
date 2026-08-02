@@ -24,6 +24,10 @@ All notable public changes to Pine Script Agent Kit are recorded here.
   safer TradingView, migration, market, and webhook workflows.
 - Hardened EMA and related example comments with timing, fill, cost, alert, and
   mechanism-specific repaint disclosures without changing Pine behavior.
+- Hardened Windsurf, Cline, and Zed host adoption around root `AGENTS.md`
+  discovery while retaining generated compatibility artifacts.
+- Corrected the VİOP session-close alert and strategy-close timing language to
+  distinguish close requests from unverified fills.
 
 ## [1.0.0] — 2026-08-01
 

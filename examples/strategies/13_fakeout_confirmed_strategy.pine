@@ -3,8 +3,8 @@
 // Author: Ugur Pala · github.com/trugurpala/pinescriptv6
 // TradingView: https://tr.tradingview.com/u/trugurpala/
 //
-// TR: Tüm 4 fakeout filtresi aktif, yüksek kaliteli sinyal stratejisi.
-// EN: High-quality signal strategy with all 4 fakeout filters active.
+// TR: Dört yapılandırılabilir fakeout filtresi kullanan sinyal stratejisi.
+// EN: Signal strategy with four configurable fakeout filters.
 // Önerilen TF: 15M, 1H, 4H
 
 // LESSONS_LEARNED kontrol listesi:

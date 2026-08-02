@@ -268,6 +268,15 @@ class CatalogTests(unittest.TestCase):
             self.assertTrue(rule["claim_value"])
             self.assertTrue((root / rule["body"]).is_file())
 
+        self.assertEqual(
+            rules["PSAK-STRATEGY-003"]["exceptions"],
+            [
+                "process_orders_on_close, the immediately parameter on strategy.close() "
+                "and strategy.close_all(), intrabar execution, post-fill execution, "
+                "historical-tick execution, and user property overrides can change timing."
+            ],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

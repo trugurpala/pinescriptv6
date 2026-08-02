@@ -22,8 +22,8 @@ sources `tv-strategies` and `tv-execution-model` in the
   account, chart type, and available data support them. It is distinct from
   realtime tick recalculation.
 - `process_orders_on_close` can make orders eligible for a closing-tick fill.
-  An order call's `immediately` behavior and user property overrides can also
-  alter timing.
+  The `immediately` parameter on `strategy.close()` and `strategy.close_all()`,
+  plus user property overrides, can also alter timing.
 
 These settings are semantic choices, not quality labels. A user can override
 script defaults in strategy properties. A plan, chart type, symbol, timeframe,

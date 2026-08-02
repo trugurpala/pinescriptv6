@@ -235,7 +235,7 @@ With default settings a strategy calculates once at bar close, and a newly creat
 **Why:** The broker emulator cannot fill a new order before the strategy has created it, so calculation and fill timestamps are distinct by default.
 
 **Exceptions:**
-- process_orders_on_close, immediately, intrabar execution, post-fill execution, historical-tick execution, and user property overrides can change timing.
+- process_orders_on_close, the immediately parameter on strategy.close() and strategy.close_all(), intrabar execution, post-fill execution, historical-tick execution, and user property overrides can change timing.
 
 **Evidence:** `official` · **Sources:** `tv-strategies`, `tv-execution-model` · **Verified:** 2026-08-02
 

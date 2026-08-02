@@ -283,7 +283,7 @@
     },
     {
       "path": "examples/strategies/11_viop_session_strategy.pine",
-      "sha256": "b2d5122bede450d3a59e053af746a78adddfcddcd9e220d20f9c682096550fe2",
+      "sha256": "39f3ab8aadb7bace2f6fae070eec3d907e1907223ff6e76139548a615f9c9585",
       "evidence": "structural-only",
       "checked_on": "2026-08-02",
       "tradingview_record": null,
@@ -303,7 +303,7 @@
     },
     {
       "path": "examples/strategies/13_fakeout_confirmed_strategy.pine",
-      "sha256": "bd73295134cb21a4b09b45fd36cd7bc80ee8b5b3de13debfb502a22a44669f4c",
+      "sha256": "380c9091fcea622d7d0f7aa82f1dbb8de6f029bc9e3b15c1cbdb24e4c140a3f2",
       "evidence": "structural-only",
       "checked_on": "2026-08-02",
       "tradingview_record": null,

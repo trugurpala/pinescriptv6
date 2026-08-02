@@ -162,10 +162,10 @@ kullanmadığını sınamak için [kullanım rehberini](ADOPTION.md) izle.
 | Claude Code | `CLAUDE.md` |
 | Gemini CLI | `GEMINI.md` |
 | Cursor | `.cursor/rules/pinescriptv6.mdc` |
-| Cline | `.clinerules` |
-| Windsurf | `.windsurf/rules/pine-script-agent-kit.md` |
+| Cline | `AGENTS.md` |
+| Windsurf | `AGENTS.md` (birincil) |
 | GitHub Copilot | `.github/copilot-instructions.md` ve kapsama özel talimatlar |
-| Zed | `AGENTS.md` ve `.zed/rules` uyumluluk köprüsü |
+| Zed | `AGENTS.md` |
 | Taşınabilir bilgi paketi | `generated/custom-gpt/` |
 
 ## Kalite komutları

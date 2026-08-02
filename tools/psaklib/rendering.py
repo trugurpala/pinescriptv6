@@ -14,10 +14,10 @@ TEMPLATE_OUTPUTS = {
     "adapters/gemini.md": ("GEMINI.md",),
     "adapters/cursor.mdc": (".cursor/rules/pinescriptv6.mdc", ".cursorrules"),
     "adapters/cline.md": (".clinerules",),
-    "adapters/windsurf.md": (
+    "adapters/windsurf-bridge.md": (
         ".windsurf/rules/pine-script-agent-kit.md",
-        ".windsurfrules",
     ),
+    "adapters/windsurf.md": (".windsurfrules",),
     "adapters/copilot.md": (
         ".github/copilot-instructions.md",
         ".github/instructions/pine-script.instructions.md",

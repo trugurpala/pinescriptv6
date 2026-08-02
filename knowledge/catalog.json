@@ -269,7 +269,7 @@
       "claim": "With default settings a strategy calculates once at bar close, and a newly created order is first eligible to fill on the next available tick, commonly the following bar's open.",
       "rationale": "The broker emulator cannot fill a new order before the strategy has created it, so calculation and fill timestamps are distinct by default.",
       "scope": "Default Pine v6 strategy calculation and broker-emulator fill timing.",
-      "exceptions": ["process_orders_on_close, immediately, intrabar execution, post-fill execution, historical-tick execution, and user property overrides can change timing."],
+      "exceptions": ["process_orders_on_close, the immediately parameter on strategy.close() and strategy.close_all(), intrabar execution, post-fill execution, historical-tick execution, and user property overrides can change timing."],
       "sources": ["tv-strategies", "tv-execution-model"],
       "evidence": "official",
       "verified_on": "2026-08-02",
