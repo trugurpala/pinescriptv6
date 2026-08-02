@@ -55,6 +55,7 @@ EXPLANATORY_ASSETS = (
 SUB_READMES = (
     "examples/README.md",
     "global-markets/README.md",
+    "global-markets/STRATEGIES_README.md",
     "tradingview-publish/README.md",
     "v5-to-v6-migration/README.md",
     "webhook-templates/README.md",
