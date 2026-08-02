@@ -44,7 +44,6 @@ REQUIRED_README_BADGES = (
     "actions/workflows/quality.yml/badge.svg",
     "img.shields.io/github/v/release/trugurpala/pinescriptv6",
     "License-MIT",
-    "Divan%20ile-%C3%BCretildi",
 )
 
 EXPLANATORY_ASSETS = (
@@ -96,6 +95,13 @@ class DocumentationTests(unittest.TestCase):
     def test_readmes_use_the_maintenance_first_public_format(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
         turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        self.assertNotIn("Built with Divan", english)
+        self.assertNotIn("Divan ile üretildi", turkish)
+        self.assertNotIn("Divan%20ile-%C3%BCretildi", english + turkish)
+        self.assertNotIn("[!IMPORTANT]", turkish)
+        self.assertIn("> **Önemli sınır**", turkish)
+        self.assertNotIn("Ã", turkish)
 
         for badge in REQUIRED_README_BADGES:
             self.assertIn(badge, english)

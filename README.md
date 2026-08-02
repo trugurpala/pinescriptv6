@@ -9,7 +9,6 @@ Help AI coding tools give Pine Script v6 answers they can trace to named sources
 [![quality](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Built with Divan](https://img.shields.io/badge/Divan%20ile-%C3%BCretildi-087F8C)](https://github.com/trugurpala/divan)
 
 Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, and Zed the same evidence-aware Pine v6 guidance. It keeps the source, the rule, its exceptions, and its verification state connected.
 
