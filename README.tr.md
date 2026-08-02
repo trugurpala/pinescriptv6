@@ -4,12 +4,11 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 
 [English](README.md)
 
-![Yapay zekâ kodlama araçları için kaynağı izlenebilir Pine Script bilgi yolu](assets/social-preview.png)
+![Yapay zekâ kodlama araçları için kaynağı izlenebilir Pine Script bilgi yolu](assets/social-preview.tr.png)
 
 [![kalite](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Divan ile üretildi](https://img.shields.io/badge/Divan%20ile-%C3%BCretildi-087F8C)](https://github.com/trugurpala/divan)
 
 Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
 Windsurf, Zed ve Devin için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı,
@@ -20,7 +19,7 @@ istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
 >
 > Güncel sürüm **v1.0.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
 
-> [!IMPORTANT]
+> **Önemli sınır**
 > Bu paket bir yapay zekâ yanıtını iyileştirebilir. TradingView derleyicisinin veya grafik testinin yerini alamaz. Depo kontrolü, Pine kodunun derlendiğini, hiç yeniden çizim yapmadığını, güvenli ya da kârlı olduğunu kanıtlamaz.
 
 [Başlangıç](#pine-görevinle-başla) · [Nasıl çalışır?](#bir-yapay-zekâ-ajanı-bu-paketi-nasıl-kullanır) · [Kaynaklar](#bilgi-nereden-geliyor) · [Doğrulama](#kanıt-seviyeleri-ne-anlama-geliyor) · [Topluluk](#topluluk-için-ücretsiz) · [Katkı](#projeye-katkı)
@@ -222,10 +221,6 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 Güncel sürüm **v1.0.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
 
 Kod ve proje belgeleri [MIT Lisansı](LICENSE) ile yayımlanır. Atıf bilgileri [CITATION.cff](CITATION.cff) içindedir.
-
-## Divan ile üretildi
-
-[Divan](https://github.com/trugurpala/divan), bu projenin araştırma, planlama, uygulama, denetim ve yayın hazırlığına yardım etti. Açık kaynaklıdır ve projenin çalışma bağımlılığı değildir.
 
 Kamusal görsel sistemin adı **Verified Signal**’dır. Düzenlenebilir kaynak [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), ilkeler ise [görsel felsefe belgesi](docs/design/verified-signal-philosophy.md) içindedir.
 

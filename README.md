@@ -9,7 +9,6 @@ Help AI coding tools give Pine Script v6 answers they can trace to named sources
 [![quality](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Built with Divan](https://img.shields.io/badge/Divan%20ile-%C3%BCretildi-087F8C)](https://github.com/trugurpala/divan)
 
 Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
 Windsurf, Zed, and Devin the same evidence-aware Pine v6 guidance. It keeps the
@@ -222,10 +221,6 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 The current release is **v1.0.0**. See the [release record](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0) and [changelog](CHANGELOG.md). Future changes stay under `Unreleased` until they receive their own tag and GitHub Release.
 
 Code and project documentation use the [MIT License](LICENSE). Citation metadata is available in [CITATION.cff](CITATION.cff).
-
-## Built with Divan
-
-[Divan](https://github.com/trugurpala/divan) helped research, plan, implement, inspect, and prepare this project. It is open source and is not a runtime dependency.
 
 The public visual system is **Verified Signal**. The editable source lives in [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), and its principles live in [the visual philosophy](docs/design/verified-signal-philosophy.md).
 

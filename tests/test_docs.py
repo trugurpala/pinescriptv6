@@ -68,7 +68,6 @@ REQUIRED_README_BADGES = (
     "actions/workflows/quality.yml/badge.svg",
     "img.shields.io/github/v/release/trugurpala/pinescriptv6",
     "License-MIT",
-    "Divan%20ile-%C3%BCretildi",
 )
 
 EXPLANATORY_ASSETS = (
@@ -427,6 +426,24 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("Pine Script Agent Kit", source)
         self.assertIn("VERIFIED KNOWLEDGE", source)
         self.assertNotIn("LESSONS_LEARNED", source)
+
+    def test_readme_language_and_attribution_surfaces_are_consistent(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        self.assertIn("assets/social-preview.png", english)
+        self.assertIn("assets/social-preview.tr.png", turkish)
+        self.assertIn("> **Önemli sınır**", turkish)
+        self.assertNotIn("[!IMPORTANT]", turkish)
+        self.assertNotIn("Built with Divan", english)
+        self.assertNotIn("Divan ile üretildi", turkish)
+
+        path = ROOT / "assets/social-preview.tr.png"
+        data = path.read_bytes()
+        self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
+        self.assertEqual(data[12:16], b"IHDR")
+        width, height = struct.unpack(">II", data[16:24])
+        self.assertEqual((width, height), (1280, 640))
 
     def test_readmes_guide_people_before_exposing_repository_internals(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
