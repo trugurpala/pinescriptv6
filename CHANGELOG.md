@@ -4,25 +4,24 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 
 ## [Unreleased]
 
-- Recorded a hash-bound, user-reported Pine Editor check for
+## [1.1.0] — 2026-08-02
+
+### Added
+
+- Source-bound reliability rules for alerts, strategy recalculation and
+  execution timing, backtesting assumptions, and repaint classification.
+- Public alert, strategy execution, repainting, backtesting, adoption,
+  coverage, roadmap, support, and rule-contribution guides.
+- A hash-bound, user-reported Pine Editor check for
   `examples/indicators/01_ema_cross.pine`; runtime, repaint, alert delivery,
   data access, profitability, security, and live-trading remain unverified.
-- Added source-bound reliability rules for alerts, strategy recalculation and
-  execution timing, backtesting assumptions, and repaint classification.
+- A rule contribution template and linked contribution paths for source,
+  rule, correction, example, verification, adapter, claim, and security reviews.
+
+### Changed
+
 - Made the offline CLI boundary explicit with six `NOT CHECKED` results after a
   successful `check` run.
-- Added public alert, strategy execution, repainting, backtesting, adoption,
-  coverage, and roadmap guides.
-- Added a rule contribution template and linked contribution paths for source,
-  rule, correction, example, verification, adapter, claim, and security reviews.
-- Hardened catalog rule body validation so rule explanation paths must stay
-  inside the repository.
-- Added TradingView manual verification guidance for promoting examples beyond
-  `structural-only` evidence.
-- Added an advisory source-link workflow for scheduled or manual official URL
-  freshness checks.
-- Added a public support guide and evidence-aware issue, discussion, and pull
-  request prompts for community contributions.
 - Reworked subdirectory guides with clear entry points, evidence limits, and
   safer TradingView, migration, market, and webhook workflows.
 - Hardened EMA and related example comments with timing, fill, cost, alert, and
@@ -31,6 +30,15 @@ All notable public changes to Pine Script Agent Kit are recorded here.
   surfaces and first-match precedence while retaining generated artifacts.
 - Corrected VİOP entry signals and session-close alert wording to distinguish
   the entry window, possible out-of-session exits and fills, and close requests.
+
+### Security and maintenance
+
+- Hardened catalog rule body validation so rule explanation paths must stay
+  inside the repository.
+- Added an advisory source-link workflow for scheduled or manual official URL
+  freshness checks.
+- Pinned GitHub Actions to immutable commit SHAs and added monthly Dependabot
+  maintenance for GitHub Actions updates.
 
 ## [1.0.0] — 2026-08-01
 
@@ -53,5 +61,6 @@ Repository checks establish structure and consistency. They do not establish
 TradingView compilation, runtime behavior, profitability, non-repainting
 behavior, data entitlement, or live-trading suitability.
 
-[Unreleased]: https://github.com/trugurpala/pinescriptv6/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/trugurpala/pinescriptv6/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/trugurpala/pinescriptv6/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0

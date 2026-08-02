@@ -29,7 +29,7 @@ General correctness questions that do not expose sensitive details may use
 ## Supported versions
 
 Security fixes target the current default branch and the latest published release
-when the issue applies there. The current release is `v1.0.0`.
+when the issue applies there. The current release is `v1.1.0`.
 
 ## Webhook and secret guidance
 

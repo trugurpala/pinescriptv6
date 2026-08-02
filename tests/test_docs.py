@@ -10,7 +10,7 @@ REQUIRED_README_COMMANDS = (
     "python tools/psak.py render --check",
     "python tools/psak.py check",
 )
-REQUIRED_STATUS_PHRASES = ("v1.0.0",)
+REQUIRED_STATUS_PHRASES = ("v1.1.0",)
 FORBIDDEN_CLAIMS = (
     "all examples are tested in tradingview",
     "production-ready",
@@ -338,8 +338,8 @@ class DocumentationTests(unittest.TestCase):
         )
         self.assertIn("README.tr.md", english)
         self.assertIn("README.md", turkish)
-        self.assertIn("The current release is **v1.0.0**", english)
-        self.assertIn("Güncel sürüm **v1.0.0**", turkish)
+        self.assertIn("The current release is **v1.1.0**", english)
+        self.assertIn("Güncel sürüm **v1.1.0**", turkish)
 
     def test_readmes_label_the_displayed_output_as_the_final_check_ending(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -417,7 +417,7 @@ class DocumentationTests(unittest.TestCase):
         self.assertNotIn("current branch", roadmap.lower())
         self.assertIn("Unreleased", roadmap)
         self.assertIn("CHANGELOG.md", roadmap)
-        self.assertIn("v1.0.0", roadmap)
+        self.assertIn("v1.1.0", roadmap)
 
     def test_social_preview_is_approved_png_size(self):
         path = ROOT / "assets/social-preview.png"
@@ -516,18 +516,21 @@ class DocumentationTests(unittest.TestCase):
 
         self.assertNotIn("## [2.0.0]", changelog)
         self.assertIn("## [Unreleased]", changelog)
+        self.assertIn("## [1.1.0] — 2026-08-02", changelog)
         self.assertIn("Pine Script Agent Kit", citation)
+        self.assertIn("version: 1.1.0", citation)
+        self.assertIn("date-released: 2026-08-02", citation)
         self.assertIn("https://github.com/trugurpala/pinescriptv6", citation)
 
-    def test_unreleased_changelog_records_host_and_session_alert_hardening(self):
+    def test_v110_changelog_records_host_and_session_alert_hardening(self):
         changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-        unreleased = changelog.split("## [1.0.0]", 1)[0]
+        v110 = changelog.split("## [1.1.0]", 1)[1].split("## [1.0.0]", 1)[0]
 
-        self.assertIn("Windsurf", unreleased)
-        self.assertIn("host adoption", unreleased)
-        self.assertIn("session-close alert", unreleased)
-        self.assertIn("first-match precedence", unreleased)
-        self.assertIn("entry signals", unreleased)
+        self.assertIn("Windsurf", v110)
+        self.assertIn("host adoption", v110)
+        self.assertIn("session-close alert", v110)
+        self.assertIn("first-match precedence", v110)
+        self.assertIn("entry signals", v110)
 
     def test_manual_tradingview_verification_guide_is_linked_without_overclaiming(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")

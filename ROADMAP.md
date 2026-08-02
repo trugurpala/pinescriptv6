@@ -6,9 +6,9 @@ changelog.
 
 ## Phase 1 — Reliability core
 
-The [`Unreleased`](CHANGELOG.md#unreleased) changelog section records source-bound
-alert, strategy execution, and repaint classification guidance plus public
-adoption and contribution documents. The published release remains v1.0.0.
+The published release is v1.1.0. Future work begins in the
+[`Unreleased`](CHANGELOG.md#unreleased) changelog section after it has the
+evidence required for publication.
 
 ## Phase 2 — Daily Pine foundations
 

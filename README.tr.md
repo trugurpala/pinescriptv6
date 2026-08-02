@@ -17,7 +17,7 @@ istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
 > [!NOTE]
 > **Proje durumu:** Proje bakımdadır ve topluluk katkılarını kabul eder.
 >
-> Güncel sürüm **v1.0.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
+> Güncel sürüm **v1.1.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
 
 > **Önemli sınır**
 > Bu paket bir yapay zekâ yanıtını iyileştirebilir. TradingView derleyicisinin veya grafik testinin yerini alamaz. Depo kontrolü, Pine kodunun derlendiğini, hiç yeniden çizim yapmadığını, güvenli ya da kârlı olduğunu kanıtlamaz.
@@ -218,7 +218,7 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 
 ## Sürüm, lisans ve atıf
 
-Güncel sürüm **v1.0.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
+Güncel sürüm **v1.1.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.1.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
 
 Kod ve proje belgeleri [MIT Lisansı](LICENSE) ile yayımlanır. Atıf bilgileri [CITATION.cff](CITATION.cff) içindedir.
 
