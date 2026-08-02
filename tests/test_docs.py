@@ -61,6 +61,12 @@ SUB_READMES = (
     "webhook-templates/README.md",
 )
 
+PUBLISH_DESCRIPTIONS = (
+    "tradingview-publish/01_fakeout_filter_description.md",
+    "tradingview-publish/02_viop_session_description.md",
+    "tradingview-publish/03_fakeout_confirmed_strategy_description.md",
+)
+
 
 class DocumentationTests(unittest.TestCase):
     def test_readmes_share_status_commands_and_core_links(self):
@@ -240,6 +246,14 @@ class DocumentationTests(unittest.TestCase):
             lowered = content.lower()
             for claim in forbidden:
                 self.assertNotIn(claim.lower(), lowered, relative_path)
+
+    def test_publish_descriptions_keep_publication_and_signal_claims_bounded(self):
+        for relative_path in PUBLISH_DESCRIPTIONS:
+            content = (ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn("structural-only", content, relative_path)
+            self.assertIn("Evidence boundary", content, relative_path)
+            self.assertNotIn("PUBLISHED", content, relative_path)
+            self.assertNotIn("gerçekçi backtest", content.lower(), relative_path)
 
     def test_legacy_custom_gpt_docs_are_safe_bridges(self):
         paths = (
