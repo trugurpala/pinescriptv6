@@ -22,6 +22,8 @@ All notable public changes to Pine Script Agent Kit are recorded here.
   request prompts for community contributions.
 - Reworked subdirectory guides with clear entry points, evidence limits, and
   safer TradingView, migration, market, and webhook workflows.
+- Hardened EMA and related example comments with timing, fill, cost, alert, and
+  mechanism-specific repaint disclosures without changing Pine behavior.
 
 ## [1.0.0] — 2026-08-01
 

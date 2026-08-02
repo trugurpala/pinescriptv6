@@ -19,7 +19,7 @@
 // LESSONS_LEARNED uygulanan düzeltmeler:
 //   - alertcondition() → alert() (strategy içinde çalışmaz)
 //   - barstate.islast label kaldırıldı → bgcolor ile seans gösterimi
-//   - calc_on_every_tick kaldırıldı (default false — backtest güvenilir)
+//   - calc_on_every_tick kaldırıldı (default false; backtest realism still depends on fills, data, and costs)
 
 strategy("VİOP Session Strategy [trugurpala]",
     overlay              = true,

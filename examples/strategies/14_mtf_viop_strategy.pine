@@ -54,7 +54,7 @@ float  noiseMult = input.float(0.3,  "Noise (ATR×)", step=0.05, group="Filtrele
 bool   useSession = input.bool(true, "VİOP Seans Filtresi (09:30-18:15)", group="Seans / Session")
 
 // ── TREND TF — request.security ile üst TF verileri ─────────────────────────
-// LESSONS_LEARNED: [1] + lookahead_on → repainting yok
+// LESSONS_LEARNED: [1] + lookahead_on confirms the HTF request; broader repaint behavior is unverified.
 [tfFastEma, tfSlowEma, tfStUp, tfStDir] = request.security(
     syminfo.tickerid, trendTF,
     [ta.ema(close, trendFast)[1],

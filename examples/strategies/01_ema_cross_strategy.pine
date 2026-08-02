@@ -1,6 +1,13 @@
 //@version=6
 // EMA Cross Strategy — ATR SL/TP — github.com/trugurpala/pinescriptv6
 // Author: Ugur Pala · mail@ugurpala.com
+// Evidence: structural-only; no TradingView compile/chart record exists.
+// Uses chart-timeframe values and default strategy recalculation/order-processing settings.
+// With default semantics, signals are calculated at bar close; new orders are normally first eligible on the next tick.
+// TradingView must verify actual chart behavior.
+// Commission is a fixed 0.1% example assumption; slippage is not configured.
+// Stops/targets use the signal bar's close and ATR, not from a confirmed actual fill price.
+// No alert workflow is configured in this example.
 strategy("EMA Cross Strategy [trugurpala]",
     overlay=true, initial_capital=10000,
     default_qty_type=strategy.percent_of_equity, default_qty_value=10,

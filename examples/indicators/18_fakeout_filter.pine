@@ -43,7 +43,7 @@ float slowEma = ta.ema(close, slowLen)
 float atrVal  = ta.atr(atrLen)
 float volAvg  = ta.sma(volume, volLen)
 
-// HTF trend — repainting yok / no repainting
+// HTF trend uses a confirmed HTF request pattern; broader repaint behavior remains unverified.
 float htfEma  = request.security(syminfo.tickerid, htfTF,
     ta.ema(close, htfLen)[1], lookahead=barmerge.lookahead_on)
 

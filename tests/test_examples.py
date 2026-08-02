@@ -1,6 +1,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import json
+import re
 import subprocess
 import sys
 import unittest
@@ -17,6 +18,83 @@ VALID_PINE = '//@version=6\nindicator("Structural fixture")\nplot(close)\n'
 
 
 class ExampleTests(unittest.TestCase):
+    def test_ema_indicator_discloses_timing_and_alert_boundaries(self):
+        text = Path("examples/indicators/01_ema_cross.pine").read_text(encoding="utf-8")
+
+        for concept in (
+            "Evidence: structural-only; no TradingView compile/chart record exists.",
+            "chart-timeframe values only; no request.*() call",
+            "bullCross/bearCross use developing chart-timeframe values on an open realtime bar",
+            "condition and marker can change before close",
+            "alertcondition() exposes UI-selectable conditions",
+            "frequency is selected in TradingView Create Alert",
+            "bar-close delivery addresses timing only, not a blanket repaint verdict",
+        ):
+            self.assertIn(concept, text)
+
+    def test_ema_strategy_discloses_timing_fill_and_cost_boundaries(self):
+        text = Path("examples/strategies/01_ema_cross_strategy.pine").read_text(
+            encoding="utf-8"
+        )
+
+        for concept in (
+            "Evidence: structural-only; no TradingView compile/chart record exists.",
+            "chart-timeframe values and default strategy recalculation/order-processing settings",
+            "signals are calculated at bar close",
+            "new orders are normally first eligible on the next tick",
+            "TradingView must verify actual chart behavior",
+            "fixed 0.1% example assumption; slippage is not configured",
+            "signal bar's close and ATR, not from a confirmed actual fill price",
+            "No alert workflow is configured in this example",
+        ):
+            self.assertIn(concept, text)
+
+    def test_ema_manifest_entries_keep_structural_hash_bound_evidence(self):
+        manifest = json.loads(Path("examples/manifest.json").read_text(encoding="utf-8"))
+        entries = {entry["path"]: entry for entry in manifest["examples"]}
+
+        for relative_path in (
+            "examples/indicators/01_ema_cross.pine",
+            "examples/strategies/01_ema_cross_strategy.pine",
+        ):
+            entry = entries[relative_path]
+            self.assertEqual(entry["evidence"], "structural-only")
+            self.assertIsNone(entry["tradingview_record"])
+            self.assertEqual(entry["sha256"], sha256_file(Path(relative_path)))
+
+    def test_examples_readme_has_disclosure_checklist_and_ema_slice(self):
+        text = Path("examples/README.md").read_text(encoding="utf-8")
+
+        for item in (
+            "Evidence status",
+            "Signal timing",
+            "Requested timeframes and confirmation",
+            "Strategy calculation settings",
+            "Order fill timing",
+            "Commission and slippage",
+            "Stop/target anchor",
+            "Alert setup",
+            "indicators/01_ema_cross.pine",
+            "strategies/01_ema_cross_strategy.pine",
+            "first hardened slice",
+        ):
+            self.assertIn(item, text)
+
+    def test_tracked_pine_comments_avoid_blanket_repaint_and_backtest_phrases(self):
+        blanket = re.compile(
+            r"no repainting|repainting yok|backtest g(?:ü|Ã¼)venilir", re.IGNORECASE
+        )
+
+        offenders = []
+        for path in discover_pine_files(Path(".")):
+            for line_number, line in enumerate(
+                path.read_text(encoding="utf-8").splitlines(), start=1
+            ):
+                if blanket.search(line):
+                    offenders.append(f"{path.as_posix()}:{line_number}: {line.strip()}")
+
+        self.assertEqual(offenders, [])
+
     def test_pine_hash_is_stable_across_line_endings(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)
