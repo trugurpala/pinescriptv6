@@ -1,4 +1,16 @@
 {
   "schema_version": 1,
-  "records": []
+  "records": [
+    {
+      "id": "TV-20260802-EMA-CROSS-001",
+      "path": "examples/indicators/01_ema_cross.pine",
+      "sha256": "666710adc94a05928c39903ae6df9f68f815af8324ca817b5d99492408b5b179",
+      "pine_version": "6",
+      "tested_on": "2026-08-02",
+      "result": "pass",
+      "environment": "TradingView Pine Editor on a 15-minute chart; manual user report",
+      "reviewer": "repository maintainer (user-reported manual check)",
+      "notes": "The user reported no Pine Editor errors after testing the exact hash-bound file. Codex could not independently observe the editor. This record covers only that reported Pine Editor check; it does not verify chart behavior, alert delivery, repaint behavior, data access, profitability, security, or live-trading suitability."
+    }
+  ]
 }

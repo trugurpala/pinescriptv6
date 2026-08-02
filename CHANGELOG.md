@@ -4,6 +4,9 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 
 ## [Unreleased]
 
+- Recorded a hash-bound, user-reported Pine Editor check for
+  `examples/indicators/01_ema_cross.pine`; runtime, repaint, alert delivery,
+  data access, profitability, security, and live-trading remain unverified.
 - Added source-bound reliability rules for alerts, strategy recalculation and
   execution timing, backtesting assumptions, and repaint classification.
 - Made the offline CLI boundary explicit with six `NOT CHECKED` results after a

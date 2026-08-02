@@ -145,9 +145,9 @@ Official starting points:
 
 ## Examples and verification
 
-The repository tracks 56 Pine v6 files. `examples/manifest.json` records them as `structural-only`: each file exists, is non-empty, has a SHA-256 entry, and declares `//@version=6` on its first line.
+The repository tracks 56 Pine v6 files. `examples/manifest.json` records 55 as `structural-only` and one as `tradingview-verified` for a dated, hash-bound Pine Editor check. Every file exists, is non-empty, has a SHA-256 entry, and declares `//@version=6` on its first line.
 
-That status does not establish compilation, runtime behavior, profitability, non-repainting behavior, data access, or live-trading suitability. Check `examples/manifest.json` and any matching `verification/tradingview.json` record before making a stronger claim.
+The manual record establishes only its stated Pine Editor check for the exact file hash and recorded environment. Neither status establishes runtime behavior, profitability, non-repainting behavior, data access, security, alert delivery, or live-trading suitability. Check `examples/manifest.json` and any matching `verification/tradingview.json` record before making a stronger claim.
 
 To promote an example beyond `structural-only`, follow [TradingView manual verification](docs/tradingview-manual-verification.md).
 

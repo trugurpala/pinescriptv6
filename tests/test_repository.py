@@ -2,6 +2,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from urllib.error import URLError
 import json
+import re
 import unittest
 
 from tools.psaklib.links import check_source_links, validate_source_url
@@ -72,6 +73,30 @@ class RepositoryTests(unittest.TestCase):
         self.assertNotIn("python -m unittest discover -s tests -v", workflow)
         self.assertNotIn("python tools/psak.py check", workflow)
         self.assertNotIn("python tools/psak.py links", quality)
+
+    def test_action_references_are_sha_pinned_and_dependabot_tracks_them(self):
+        workflow_paths = (
+            ".github/workflows/quality.yml",
+            ".github/workflows/source-links.yml",
+            "docs/ci-workflow.yml",
+        )
+
+        for relative_path in workflow_paths:
+            workflow = (ROOT / relative_path).read_text(encoding="utf-8")
+            references = re.findall(r"^\s*-?\s*uses:\s+([^\s@]+)@([^\s#]+)", workflow, re.MULTILINE)
+
+            self.assertTrue(references, relative_path)
+            for action, revision in references:
+                self.assertRegex(
+                    revision,
+                    r"^[0-9a-f]{40}$",
+                    f"{relative_path} must pin {action} to an immutable commit SHA",
+                )
+
+        dependabot = (ROOT / ".github/dependabot.yml").read_text(encoding="utf-8")
+        self.assertIn('package-ecosystem: "github-actions"', dependabot)
+        self.assertIn('directory: "/"', dependabot)
+        self.assertIn('interval: "monthly"', dependabot)
 
     def test_pull_request_template_keeps_tradingview_evidence_hash_bound(self):
         template = (ROOT / ".github/pull_request_template.md").read_text(encoding="utf-8")
