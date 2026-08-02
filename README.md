@@ -210,10 +210,6 @@ The current release is **v1.0.0**. See the [release record](https://github.com/t
 
 Code and project documentation use the [MIT License](LICENSE). Citation metadata is available in [CITATION.cff](CITATION.cff).
 
-## Built with Divan
-
-[Divan](https://github.com/trugurpala/divan) helped research, plan, implement, inspect, and prepare this project. It is open source and is not a runtime dependency.
-
 The public visual system is **Verified Signal**. The editable source lives in [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), and its principles live in [the visual philosophy](docs/design/verified-signal-philosophy.md).
 
 Maintained by [Uğur Pala](https://github.com/trugurpala) for the community.
