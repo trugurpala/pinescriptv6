@@ -18,7 +18,7 @@ Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Winds
 >
 > Güncel sürüm **v1.0.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
 
-> [!IMPORTANT]
+> **Ã–nemli sÄ±nÄ±r**
 > Bu paket bir yapay zekâ yanıtını iyileştirebilir. TradingView derleyicisinin veya grafik testinin yerini alamaz. Depo kontrolü, Pine kodunun derlendiğini, hiç yeniden çizim yapmadığını, güvenli ya da kârlı olduğunu kanıtlamaz.
 
 [Başlangıç](#pine-görevinle-başla) · [Nasıl çalışır?](#bir-yapay-zekâ-ajanı-bu-paketi-nasıl-kullanır) · [Kaynaklar](#bilgi-nereden-geliyor) · [Doğrulama](#kanıt-seviyeleri-ne-anlama-geliyor) · [Topluluk](#topluluk-için-ücretsiz) · [Katkı](#projeye-katkı)
@@ -210,9 +210,11 @@ Güncel sürüm **v1.0.0**’dır. [Sürüm kaydını](https://github.com/trugur
 
 Kod ve proje belgeleri [MIT Lisansı](LICENSE) ile yayımlanır. Atıf bilgileri [CITATION.cff](CITATION.cff) içindedir.
 
-## Divan ile üretildi
+Kamusal görsel sistemin adı **Verified Signal**’dır. Düzenlenebilir kaynak [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), ilkeler ise [görsel felsefe belgesi](docs/design/verified-signal-philosophy.md) içindedir.
 
-[Divan](https://github.com/trugurpala/divan), bu projenin araştırma, planlama, uygulama, denetim ve yayın hazırlığına yardım etti. Açık kaynaklıdır ve projenin çalışma bağımlılığı değildir.
+Topluluk için [Uğur Pala](https://github.com/trugurpala) tarafından sürdürülür.
+
+Bu bağımsız proje TradingView ile bağlantılı değildir ve TradingView tarafından onaylanmamıştır. Pine Script ve TradingView markaları ilgili sahiplerine aittir.
 
 Kamusal görsel sistemin adı **Verified Signal**’dır. Düzenlenebilir kaynak [Figma](https://www.figma.com/design/o0rNk4Cur1kh9JGyQymxoE), ilkeler ise [görsel felsefe belgesi](docs/design/verified-signal-philosophy.md) içindedir.
 
