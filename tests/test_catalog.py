@@ -215,6 +215,54 @@ class CatalogTests(unittest.TestCase):
             self.assertIn("invalid-rule-field", {issue.code for issue in rule_issues})
             self.assertIn("invalid-rule-list", {issue.code for issue in rule_issues})
 
+    def test_reliability_sources_and_rules_are_registered(self):
+        root = Path(__file__).resolve().parents[1]
+        sources = {
+            source["id"]: source
+            for source in json.loads(
+                (root / "knowledge/sources.json").read_text(encoding="utf-8")
+            )["sources"]
+        }
+        expected_source_urls = {
+            "tv-alerts": "https://www.tradingview.com/pine-script-docs/concepts/alerts/",
+            "tv-repainting": "https://www.tradingview.com/pine-script-docs/concepts/repainting/",
+            "tv-execution-model": "https://www.tradingview.com/pine-script-docs/language/execution-model/",
+        }
+        for source_id, url in expected_source_urls.items():
+            self.assertIn(source_id, sources)
+            self.assertEqual(sources[source_id]["url"], url)
+            self.assertEqual(sources[source_id]["kind"], "official-guide")
+
+        rules = {
+            rule["id"]: rule
+            for rule in json.loads(
+                (root / "knowledge/catalog.json").read_text(encoding="utf-8")
+            )["rules"]
+        }
+        expected_rule_sources = {
+            "PSAK-ALERT-001": ["tv-alerts"],
+            "PSAK-ALERT-002": ["tv-alerts", "tv-execution-model"],
+            "PSAK-ALERT-003": ["tv-alerts"],
+            "PSAK-ALERT-004": ["tv-alerts"],
+            "PSAK-ALERT-005": ["tv-alerts", "tv-repainting"],
+            "PSAK-STRATEGY-003": ["tv-strategies", "tv-execution-model"],
+            "PSAK-STRATEGY-004": ["tv-strategies"],
+            "PSAK-STRATEGY-005": ["tv-strategies"],
+            "PSAK-REPAINT-001": ["tv-repainting", "tv-execution-model"],
+            "PSAK-REPAINT-002": ["tv-repainting", "tv-bar-states"],
+        }
+        for rule_id, source_ids in expected_rule_sources.items():
+            self.assertIn(rule_id, rules)
+            rule = rules[rule_id]
+            self.assertEqual(rule["status"], "active")
+            self.assertEqual(rule["evidence"], "official")
+            self.assertTrue(rule["scope"])
+            self.assertTrue(rule["exceptions"])
+            self.assertEqual(rule["sources"], source_ids)
+            self.assertTrue(rule["conflict_key"])
+            self.assertTrue(rule["claim_value"])
+            self.assertTrue((root / rule["body"]).is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
