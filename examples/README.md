@@ -6,10 +6,12 @@ manual TradingView experiment.
 
 ## Evidence and limits
 
-Every example is tracked in [`manifest.json`](manifest.json) as
-`structural-only`. That means the repository confirms the file, its SHA-256,
-and its v6 header. It does not prove compilation, runtime behavior,
-non-repainting behavior, profitability, or live-trading suitability.
+Every example is tracked in [`manifest.json`](manifest.json). Most entries are
+`structural-only`; one entry has a dated, hash-bound `tradingview-verified`
+Pine Editor record. The repository confirms each file, its SHA-256, and its v6
+header. A manual record establishes only its stated check for the exact hash
+and environment. It does not prove runtime behavior, non-repainting behavior,
+profitability, security, alert delivery, or live-trading suitability.
 
 Before making a stronger claim, follow the [TradingView manual verification guide](../docs/tradingview-manual-verification.md). Never paste credentials or private code into an issue or pull request; see the [support guide](../SUPPORT.md).
 

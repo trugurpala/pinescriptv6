@@ -145,9 +145,9 @@ Başlıca resmî kaynaklar:
 
 ## Örnekler ve doğrulama
 
-Depo, Git tarafından izlenen 56 Pine v6 dosyası içerir. `examples/manifest.json` bu dosyaları `structural-only` olarak kaydeder: her dosya vardır, boş değildir, SHA-256 envanterinde yer alır ve ilk satırında `//@version=6` bulunur.
+Depo, Git tarafından izlenen 56 Pine v6 dosyası içerir. `examples/manifest.json` dosyaların 55'ini `structural-only`, birini ise tarihli ve dosya özetine bağlı Pine Editor kontrolü için `tradingview-verified` olarak kaydeder. Her dosya vardır, boş değildir, SHA-256 envanterinde yer alır ve ilk satırında `//@version=6` bulunur.
 
-Bu kayıt; derlemeyi, çalışma davranışını, kârlılığı, yeniden çizim yapmamayı, veri erişimini veya canlı işlem uygunluğunu kanıtlamaz. Daha güçlü bir cümle kurmadan önce `examples/manifest.json` ile varsa eşleşen `verification/tradingview.json` kaydını denetle.
+Elle kayıt, yalnızca belirtilen tam dosya özeti ve ortam için yazılan Pine Editor kontrolünü gösterir. Hiçbir durum; çalışma davranışını, kârlılığı, yeniden çizim yapmamayı, veri erişimini, güvenliği, uyarı teslimini veya canlı işlem uygunluğunu kanıtlamaz. Daha güçlü bir cümle kurmadan önce `examples/manifest.json` ile varsa eşleşen `verification/tradingview.json` kaydını denetle.
 
 Bir örneği `structural-only` durumunun ötesine taşımak için [TradingView elle doğrulama rehberini](docs/tradingview-manual-verification.md) izle.
 

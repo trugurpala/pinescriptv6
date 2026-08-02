@@ -4,11 +4,11 @@
     {
       "path": "examples/indicators/01_ema_cross.pine",
       "sha256": "666710adc94a05928c39903ae6df9f68f815af8324ca817b5d99492408b5b179",
-      "evidence": "structural-only",
+      "evidence": "tradingview-verified",
       "checked_on": "2026-08-02",
-      "tradingview_record": null,
+      "tradingview_record": "TV-20260802-EMA-CROSS-001",
       "limitations": [
-        "Not compiled in TradingView during this repository audit."
+        "A user-reported Pine Editor check recorded no compile errors for this exact hash; Codex could not independently observe the editor. Runtime/chart behavior, alert delivery, repaint behavior, data access, profitability, security, and live-trading suitability remain unverified."
       ]
     },
     {

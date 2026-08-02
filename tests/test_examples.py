@@ -68,18 +68,34 @@ class ExampleTests(unittest.TestCase):
         ):
             self.assertIn(concept, text)
 
-    def test_ema_manifest_entries_keep_structural_hash_bound_evidence(self):
+    def test_ema_indicator_has_a_hash_bound_manual_pine_editor_record(self):
+        manifest = json.loads(Path("examples/manifest.json").read_text(encoding="utf-8"))
+        records = json.loads(Path("verification/tradingview.json").read_text(encoding="utf-8"))
+        entries = {entry["path"]: entry for entry in manifest["examples"]}
+        records_by_id = {record["id"]: record for record in records["records"]}
+
+        entry = entries["examples/indicators/01_ema_cross.pine"]
+        record = records_by_id["TV-20260802-EMA-CROSS-001"]
+
+        self.assertEqual(entry["evidence"], "tradingview-verified")
+        self.assertEqual(entry["tradingview_record"], record["id"])
+        self.assertEqual(entry["sha256"], sha256_file(Path(entry["path"])))
+        self.assertEqual(record["path"], entry["path"])
+        self.assertEqual(record["sha256"], entry["sha256"])
+        self.assertEqual(record["pine_version"], "6")
+        self.assertEqual(record["tested_on"], "2026-08-02")
+        self.assertEqual(record["result"], "pass")
+        self.assertIn("user-reported", record["reviewer"])
+        self.assertIn("could not independently observe", record["notes"])
+
+    def test_ema_strategy_keeps_structural_hash_bound_evidence(self):
         manifest = json.loads(Path("examples/manifest.json").read_text(encoding="utf-8"))
         entries = {entry["path"]: entry for entry in manifest["examples"]}
 
-        for relative_path in (
-            "examples/indicators/01_ema_cross.pine",
-            "examples/strategies/01_ema_cross_strategy.pine",
-        ):
-            entry = entries[relative_path]
-            self.assertEqual(entry["evidence"], "structural-only")
-            self.assertIsNone(entry["tradingview_record"])
-            self.assertEqual(entry["sha256"], sha256_file(Path(relative_path)))
+        entry = entries["examples/strategies/01_ema_cross_strategy.pine"]
+        self.assertEqual(entry["evidence"], "structural-only")
+        self.assertIsNone(entry["tradingview_record"])
+        self.assertEqual(entry["sha256"], sha256_file(Path(entry["path"])))
 
     def test_august_2_example_records_have_current_structural_evidence(self):
         manifest = json.loads(Path("examples/manifest.json").read_text(encoding="utf-8"))
@@ -88,8 +104,16 @@ class ExampleTests(unittest.TestCase):
         for relative_path in AUGUST_2_EXAMPLES:
             entry = entries[relative_path]
             self.assertEqual(entry["checked_on"], "2026-08-02", relative_path)
-            self.assertEqual(entry["evidence"], "structural-only", relative_path)
-            self.assertIsNone(entry["tradingview_record"], relative_path)
+            if relative_path == "examples/indicators/01_ema_cross.pine":
+                self.assertEqual(entry["evidence"], "tradingview-verified", relative_path)
+                self.assertEqual(
+                    entry["tradingview_record"],
+                    "TV-20260802-EMA-CROSS-001",
+                    relative_path,
+                )
+            else:
+                self.assertEqual(entry["evidence"], "structural-only", relative_path)
+                self.assertIsNone(entry["tradingview_record"], relative_path)
             self.assertEqual(entry["sha256"], sha256_file(Path(relative_path)), relative_path)
 
     def test_strategy_alert_comments_do_not_repeat_stale_blanket_claim(self):
