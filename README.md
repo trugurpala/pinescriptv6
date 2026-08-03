@@ -9,6 +9,7 @@ Help AI coding tools give Pine Script v6 answers they can trace to named sources
 [![quality](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Developed with Divan](https://img.shields.io/badge/Developed%20with-Divan-5B3DF5)](https://github.com/trugurpala/divan)
 
 Works with Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, Zed,
 and Devin.
@@ -43,7 +44,7 @@ guidance came from or pretending that a local check is a TradingView result.
 > [!NOTE]
 > **Project status:** This project is maintained and accepts community contributions.
 >
-> The current release is **v1.1.0**. It is the clean public starting point for future changes.
+> The current release is **v1.2.0**. It packages the Codex skill, clearer community paths, and public project governance.
 
 > [!IMPORTANT]
 > This kit can improve an AI answer, but it cannot replace the TradingView compiler or a chart test. A repository check never becomes a claim that Pine code compiles, never repaints, is secure, or is profitable.
@@ -267,7 +268,7 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 
 ## Releases, license, and citation
 
-The current release is **v1.1.0**. See the [release record](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.1.0) and [changelog](CHANGELOG.md). Future changes stay under `Unreleased` until they receive their own tag and GitHub Release.
+The current release is **v1.2.0**. See the [release record](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.2.0) and [changelog](CHANGELOG.md). Future changes stay under `Unreleased` until they receive their own tag and GitHub Release.
 
 Code and project documentation use the [MIT License](LICENSE). Citation metadata is available in [CITATION.cff](CITATION.cff).
 

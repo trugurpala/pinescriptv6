@@ -4,6 +4,8 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-08-03
+
 ### Added
 
 - Public governance and CODEOWNERS policies covering decision-making,
@@ -21,6 +23,11 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 - Reworked the English and Turkish README openings around the concrete user
   flow, shipped artifacts, and the boundary between AI assistance, local checks,
   and TradingView verification.
+- Replaced legacy issue and pull-request templates with clearer bilingual forms,
+  private security routing, and reproducible Pine context.
+- Added a linked **Developed with Divan** badge while keeping Divan's role clear:
+  it provided planning, persistent context, and verifiable delivery infrastructure
+  without becoming a contributor requirement or governance authority.
 
 ## [1.1.0] — 2026-08-02
 
@@ -79,6 +86,7 @@ Repository checks establish structure and consistency. They do not establish
 TradingView compilation, runtime behavior, profitability, non-repainting
 behavior, data entitlement, or live-trading suitability.
 
-[Unreleased]: https://github.com/trugurpala/pinescriptv6/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/trugurpala/pinescriptv6/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/trugurpala/pinescriptv6/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/trugurpala/pinescriptv6/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/trugurpala/pinescriptv6/releases/tag/v1.0.0

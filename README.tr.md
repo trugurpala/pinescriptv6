@@ -9,6 +9,7 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 [![kalite](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Divan ile geliştirildi](https://img.shields.io/badge/Developed%20with-Divan-5B3DF5)](https://github.com/trugurpala/divan)
 
 Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, Zed ve Devin ile
 çalışır.
@@ -44,7 +45,7 @@ kontrolü TradingView sonucu gibi sunmamak istiyorsan bu paket işine yarar.
 > [!NOTE]
 > **Proje durumu:** Proje bakımdadır ve topluluk katkılarını kabul eder.
 >
-> Güncel sürüm **v1.1.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
+> Güncel sürüm **v1.2.0**’dır. Codex becerisini, daha açık topluluk yollarını ve kamusal proje yönetişimini paketler.
 
 > **Önemli sınır**
 > Bu paket bir yapay zekâ yanıtını iyileştirebilir. TradingView derleyicisinin veya grafik testinin yerini alamaz. Depo kontrolü, Pine kodunun derlendiğini, hiç yeniden çizim yapmadığını, güvenli ya da kârlı olduğunu kanıtlamaz.
@@ -270,7 +271,7 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 
 ## Sürüm, lisans ve atıf
 
-Güncel sürüm **v1.1.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.1.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
+Güncel sürüm **v1.2.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.2.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
 
 Kod ve proje belgeleri [MIT Lisansı](LICENSE) ile yayımlanır. Atıf bilgileri [CITATION.cff](CITATION.cff) içindedir.
 
