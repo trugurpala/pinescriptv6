@@ -94,6 +94,28 @@ PUBLISH_DESCRIPTIONS = (
 
 
 class DocumentationTests(unittest.TestCase):
+    def test_readmes_explain_the_product_flow_in_plain_language(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        for phrase in (
+            "## In plain language",
+            "Your Pine task and chart context",
+            "AI code or review + source IDs + remaining manual checks",
+            "56 tracked Pine v6 examples",
+            "It is useful when",
+        ):
+            self.assertIn(phrase, english)
+
+        for phrase in (
+            "## En sade anlatımıyla",
+            "Pine görevin ve grafik bağlamın",
+            "AI kodu veya incelemesi + kaynak kimlikleri + kalan elle kontroller",
+            "56 Pine v6 örneği",
+            "bu paket işine yarar",
+        ):
+            self.assertIn(phrase, turkish)
+
     def test_governance_defines_authority_evidence_and_succession(self):
         governance = (ROOT / "GOVERNANCE.md").read_text(encoding="utf-8")
 

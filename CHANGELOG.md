@@ -16,6 +16,12 @@ All notable public changes to Pine Script Agent Kit are recorded here.
   with an explicit reminder that installation alone does not prove host loading
   or compliance.
 
+### Changed
+
+- Reworked the English and Turkish README openings around the concrete user
+  flow, shipped artifacts, and the boundary between AI assistance, local checks,
+  and TradingView verification.
+
 ## [1.1.0] — 2026-08-02
 
 ### Added

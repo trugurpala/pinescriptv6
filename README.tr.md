@@ -10,9 +10,36 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
-Windsurf, Zed ve Devin için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı,
-istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
+Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, Zed ve Devin ile
+çalışır.
+
+## En sade anlatımıyla
+
+İhtiyacın olan Pine göstergesini, stratejiyi, v6 taşımasını, hatayı veya kod
+incelemesini anlatırsın. Bu paket, desteklenen yapay zekâ aracına kaynak bağlantılı
+Pine v6 kurallarını, istisnalarını ve dürüst doğrulama sınırlarını verir. Araç da
+hangi bilgiye dayandığını ve TradingView'de neyin hâlâ denenmesi gerektiğini
+açıklayan kod veya inceleme üretebilir.
+
+```text
+Pine görevin ve grafik bağlamın
+        ↓
+Resmî kaynaklar + kapsamı belirli kurallar + kayıtlı kanıt
+        ↓
+AI kodu veya incelemesi + kaynak kimlikleri + kalan elle kontroller
+```
+
+Depo şunları sunar:
+
+- kurulabilir Codex becerisi ve taşınabilir ajan talimatları;
+- Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, Zed ve Devin için
+  üretilmiş adaptörler;
+- doğrulama durumu dosya özetine bağlı 56 Pine v6 örneği;
+- katalog bütünlüğünü, örnek envanterini ve üretilmiş dosya farklarını denetleyen
+  Python standart kütüphane kontrolleri.
+
+Pine kodunda yapay zekâ desteği isterken bilginin kaynağını gizlememek ve yerel
+kontrolü TradingView sonucu gibi sunmamak istiyorsan bu paket işine yarar.
 
 > [!NOTE]
 > **Proje durumu:** Proje bakımdadır ve topluluk katkılarını kabul eder.

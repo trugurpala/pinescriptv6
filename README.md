@@ -10,9 +10,35 @@ Help AI coding tools give Pine Script v6 answers they can trace to named sources
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
-Windsurf, Zed, and Devin the same evidence-aware Pine v6 guidance. It keeps the
-source, the rule, its exceptions, and its verification state connected.
+Works with Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, Zed,
+and Devin.
+
+## In plain language
+
+You describe the Pine indicator, strategy, migration, error, or review you need.
+This kit gives a supported AI coding tool source-linked Pine v6 rules, their
+exceptions, and honest verification limits. The tool can then return code or a
+review that explains what it relied on and what still needs a TradingView check.
+
+```text
+Your Pine task and chart context
+        ↓
+Official sources + scoped rules + recorded evidence
+        ↓
+AI code or review + source IDs + remaining manual checks
+```
+
+The repository provides:
+
+- an installable Codex skill and portable agent instructions;
+- generated adapters for Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
+  Windsurf, Zed, and Devin;
+- 56 tracked Pine v6 examples with hash-bound evidence status;
+- standard-library Python checks for catalog integrity, example inventory, and
+  generated-file drift.
+
+It is useful when you want AI assistance with Pine code without hiding where the
+guidance came from or pretending that a local check is a TradingView result.
 
 > [!NOTE]
 > **Project status:** This project is maintained and accepts community contributions.
