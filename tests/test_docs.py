@@ -255,7 +255,7 @@ class DocumentationTests(unittest.TestCase):
         self.assertTrue(path.is_file(), template_path)
         template = path.read_text(encoding="utf-8")
         contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
-        pull_request = (ROOT / ".github/pull_request_template.md").read_text(encoding="utf-8")
+        pull_request = (ROOT / ".github/PULL_REQUEST_TEMPLATE.md").read_text(encoding="utf-8")
         fields = (
             "Rule ID",
             "Claim",

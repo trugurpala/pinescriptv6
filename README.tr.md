@@ -22,7 +22,7 @@ istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
 > **Önemli sınır**
 > Bu paket bir yapay zekâ yanıtını iyileştirebilir. TradingView derleyicisinin veya grafik testinin yerini alamaz. Depo kontrolü, Pine kodunun derlendiğini, hiç yeniden çizim yapmadığını, güvenli ya da kârlı olduğunu kanıtlamaz.
 
-[Başlangıç](#pine-görevinle-başla) · [Nasıl çalışır?](#bir-yapay-zekâ-ajanı-bu-paketi-nasıl-kullanır) · [Kaynaklar](#bilgi-nereden-geliyor) · [Doğrulama](#kanıt-seviyeleri-ne-anlama-geliyor) · [Topluluk](#topluluk-için-ücretsiz) · [Katkı](#projeye-katkı)
+[Başlangıç](#pine-görevinle-başla) · [Nasıl çalışır?](#bir-yapay-zekâ-ajanı-bu-paketi-nasıl-kullanır) · [Kaynaklar](#bilgi-nereden-geliyor) · [Doğrulama](#kanıt-seviyeleri-ne-anlama-geliyor) · [Divan](#divan-ile-geliştirildi) · [Topluluk](#topluluk-için-ücretsiz) · [Katkı](#projeye-katkı)
 
 ## Pine görevinle başla
 
@@ -206,6 +206,14 @@ Danışma amaçlı `source-links` workflow'u elle veya haftalık zamanlamayla re
 Alarm gizli anahtarını, borsa kimlik bilgilerini, özel Pine kodunu, müşteri verisini veya kişisel bilgiyi örneklere, issue kayıtlarına ya da pull request’lere koyma. Alarm örnekleri yer tutucu kullanır. Canlı kullanım ayrıca kimlik doğrulama, veri doğrulama, tekrar gönderim koruması, hız sınırı ve işlem riski denetimi ister.
 
 Hassas sorunları [SECURITY.md](SECURITY.md) üzerinden özel olarak bildir.
+
+## Divan ile geliştirildi
+
+Bu proje [Divan](https://github.com/trugurpala/divan) ile planlanıp teslim
+edilmiştir. Divan; Codex ve Claude Code gibi kodlama hostlarına plan, kalıcı
+bağlam ve doğrulanabilir teslim katmanı ekler. Bir yapay zekâ modeli veya ayrı
+bir bulut hizmeti değildir. Pine Script Agent Kit'i kurmak, kullanmak,
+doğrulamak ya da projeye katkı vermek için Divan kullanmanız gerekmez.
 
 ## Topluluk için ücretsiz
 

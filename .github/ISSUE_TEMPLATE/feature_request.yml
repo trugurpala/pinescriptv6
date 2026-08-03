@@ -1,12 +1,21 @@
-name: "✨ Öneri / Feature Request"
-description: "Yeni örnek veya iyileştirme / New example or improvement"
+name: "✨ Öneri / Feature request"
+description: "Kaynaklı bir kural, örnek veya kullanıcı deneyimi iyileştirmesi önerin / Suggest a sourced rule, example, or user-experience improvement"
 title: "[FEATURE] "
-labels: ["enhancement"]
+labels:
+  - enhancement
 body:
+  - type: textarea
+    id: need
+    attributes:
+      label: "İhtiyaç / Need"
+      description: "Önce çözülmesini istediğiniz kullanıcı veya katkı sorununun ne olduğunu anlatın. / Describe the user or contributor problem first."
+    validations:
+      required: true
   - type: textarea
     id: suggestion
     attributes:
       label: "Önerin / Your suggestion"
+      description: "Beklenen davranışı ve kapsam sınırlarını açıklayın. / Explain the desired behavior and scope boundaries."
     validations:
       required: true
   - type: dropdown
@@ -16,7 +25,7 @@ body:
       options:
         - "Yeni indikatör / New indicator"
         - "Yeni strateji / New strategy"
-        - "Yeni global market"
+        - "Yeni global market / New global market"
         - "VIOP/BIST30"
         - "LESSONS_LEARNED"
         - "AI editor config"
@@ -25,3 +34,21 @@ body:
         - "Other"
     validations:
       required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: "Kaynak veya kanıt / Source or evidence"
+      description: "Pine davranışıyla ilgiliyse resmî TradingView adresini veya önerilen doğrulama yolunu ekleyin. / For Pine behavior, include an official TradingView URL or a proposed verification path."
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatifler / Alternatives"
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "Göndermeden önce / Before submitting"
+      options:
+        - label: "Benzer issue ve discussion kayıtlarını aradım. / I searched similar issues and discussions."
+          required: true
+        - label: "Kâr, güvenlik veya yeniden çizmeme konusunda kanıtsız bir iddia eklemedim. / I did not add an unsupported profitability, security, or non-repainting claim."
+          required: true

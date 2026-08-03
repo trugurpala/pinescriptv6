@@ -22,7 +22,7 @@ source, the rule, its exceptions, and its verification state connected.
 > [!IMPORTANT]
 > This kit can improve an AI answer, but it cannot replace the TradingView compiler or a chart test. A repository check never becomes a claim that Pine code compiles, never repaints, is secure, or is profitable.
 
-[Start](#start-with-your-pine-task) · [How it works](#how-an-ai-agent-uses-this-kit) · [Sources](#where-the-knowledge-comes-from) · [Verification](#what-the-evidence-levels-mean) · [Community](#free-for-the-community) · [Contribute](#contributing)
+[Start](#start-with-your-pine-task) · [How it works](#how-an-ai-agent-uses-this-kit) · [Sources](#where-the-knowledge-comes-from) · [Verification](#what-the-evidence-levels-mean) · [Divan](#developed-with-divan) · [Community](#free-for-the-community) · [Contribute](#contributing)
 
 ## Start with your Pine task
 
@@ -204,6 +204,14 @@ The advisory `source-links` workflow can be run manually or on its weekly schedu
 Do not place webhook secrets, exchange credentials, private Pine code, customer data, or personal information in examples, issues, or pull requests. Webhook examples use placeholders. Live use still needs authentication, payload validation, replay protection, rate limits, and trading-risk controls.
 
 Report sensitive issues privately through [SECURITY.md](SECURITY.md).
+
+## Developed with Divan
+
+This project was planned and delivered with
+[Divan](https://github.com/trugurpala/divan). Divan adds planning, persistent
+context, and verifiable delivery to coding hosts such as Codex and Claude Code.
+It is not an AI model and it is not a separate cloud service. You do not need
+Divan to install, use, validate, or contribute to Pine Script Agent Kit.
 
 ## Free for the community
 
