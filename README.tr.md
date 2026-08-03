@@ -9,15 +9,43 @@ Yapay zekâ kodlama araçlarının Pine Script v6 yanıtlarını adı belli kayn
 [![kalite](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Divan ile geliştirildi](https://img.shields.io/badge/Developed%20with-Divan-5B3DF5)](https://github.com/trugurpala/divan)
 
-Pine Script Agent Kit; Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
-Windsurf, Zed ve Devin için aynı Pine v6 rehberliğini üretir. Kaynağı, kuralı,
-istisnaları ve doğrulama durumunu birbirinden koparmadan saklar.
+Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, Zed ve Devin ile
+çalışır.
+
+## En sade anlatımıyla
+
+İhtiyacın olan Pine göstergesini, stratejiyi, v6 taşımasını, hatayı veya kod
+incelemesini anlatırsın. Bu paket, desteklenen yapay zekâ aracına kaynak bağlantılı
+Pine v6 kurallarını, istisnalarını ve dürüst doğrulama sınırlarını verir. Araç da
+hangi bilgiye dayandığını ve TradingView'de neyin hâlâ denenmesi gerektiğini
+açıklayan kod veya inceleme üretebilir.
+
+```text
+Pine görevin ve grafik bağlamın
+        ↓
+Resmî kaynaklar + kapsamı belirli kurallar + kayıtlı kanıt
+        ↓
+AI kodu veya incelemesi + kaynak kimlikleri + kalan elle kontroller
+```
+
+Depo şunları sunar:
+
+- kurulabilir Codex becerisi ve taşınabilir ajan talimatları;
+- Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, Zed ve Devin için
+  üretilmiş adaptörler;
+- doğrulama durumu dosya özetine bağlı 56 Pine v6 örneği;
+- katalog bütünlüğünü, örnek envanterini ve üretilmiş dosya farklarını denetleyen
+  Python standart kütüphane kontrolleri.
+
+Pine kodunda yapay zekâ desteği isterken bilginin kaynağını gizlememek ve yerel
+kontrolü TradingView sonucu gibi sunmamak istiyorsan bu paket işine yarar.
 
 > [!NOTE]
 > **Proje durumu:** Proje bakımdadır ve topluluk katkılarını kabul eder.
 >
-> Güncel sürüm **v1.1.0**’dır. Bundan sonraki değişiklikler bu temiz kamusal başlangıç üzerine kaydedilir.
+> Güncel sürüm **v1.2.0**’dır. Codex becerisini, daha açık topluluk yollarını ve kamusal proje yönetişimini paketler.
 
 > **Önemli sınır**
 > Bu paket bir yapay zekâ yanıtını iyileştirebilir. TradingView derleyicisinin veya grafik testinin yerini alamaz. Depo kontrolü, Pine kodunun derlendiğini, hiç yeniden çizim yapmadığını, güvenli ya da kârlı olduğunu kanıtlamaz.
@@ -225,7 +253,7 @@ Soru ve öneriler için [GitHub Discussions](https://github.com/trugurpala/pines
 
 ## Projeye katkı
 
-Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğrulama tarihi, testler ve güncel üretilmiş dosyalar içermelidir. [CONTRIBUTING.md](CONTRIBUTING.md) ile başla ve [Davranış Kuralları](CODE_OF_CONDUCT.md) belgesine uy.
+Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğrulama tarihi, testler ve güncel üretilmiş dosyalar içermelidir. [CONTRIBUTING.md](CONTRIBUTING.md) ile başla, [Davranış Kuralları](CODE_OF_CONDUCT.md) belgesine uy ve kararlarla bakım sorumlulukları için [yönetişim belgesine](GOVERNANCE.md) bak.
 
 ## Proje belgeleri
 
@@ -237,13 +265,13 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 - [Kamusal yazım ilkeleri](docs/writing-style.md)
 - [Pine v6 sürüm kapsamı](knowledge/releases/2025-2026.md)
 - [Taşınabilir ajan becerisi](SKILL.md)
-- [Katkı rehberi](CONTRIBUTING.md), [güvenlik politikası](SECURITY.md) ve [Davranış Kuralları](CODE_OF_CONDUCT.md)
+- [Katkı rehberi](CONTRIBUTING.md), [yönetişim](GOVERNANCE.md), [güvenlik politikası](SECURITY.md) ve [Davranış Kuralları](CODE_OF_CONDUCT.md)
 - [Destek rehberi](SUPPORT.md)
 - [Değişiklik geçmişi](CHANGELOG.md) ve [atıf bilgileri](CITATION.cff)
 
 ## Sürüm, lisans ve atıf
 
-Güncel sürüm **v1.1.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.1.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
+Güncel sürüm **v1.2.0**’dır. [Sürüm kaydını](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.2.0) ve [değişiklik günlüğünü](CHANGELOG.md) inceleyebilirsin. Sonraki çalışmalar, kendi etiketi ve GitHub Release kaydı oluşana kadar `Unreleased` altında kalır.
 
 Kod ve proje belgeleri [MIT Lisansı](LICENSE) ile yayımlanır. Atıf bilgileri [CITATION.cff](CITATION.cff) içindedir.
 

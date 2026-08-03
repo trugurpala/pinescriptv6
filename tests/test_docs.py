@@ -10,7 +10,7 @@ REQUIRED_README_COMMANDS = (
     "python tools/psak.py render --check",
     "python tools/psak.py check",
 )
-REQUIRED_STATUS_PHRASES = ("v1.1.0",)
+REQUIRED_STATUS_PHRASES = ("v1.2.0",)
 FORBIDDEN_CLAIMS = (
     "all examples are tested in tradingview",
     "production-ready",
@@ -21,6 +21,7 @@ REQUIRED_LINKS = (
     "SECURITY.md",
     "CONTRIBUTING.md",
     "CODE_OF_CONDUCT.md",
+    "GOVERNANCE.md",
     "CHANGELOG.md",
     "SKILL.md",
     "docs/provenance.md",
@@ -37,6 +38,7 @@ RELIABILITY_DOCS = (
 NEW_PUBLIC_DOCS = (
     "ADOPTION.md",
     "COVERAGE.md",
+    "GOVERNANCE.md",
     "ROADMAP.md",
     "docs/rule-contribution-template.md",
     *RELIABILITY_DOCS,
@@ -68,6 +70,7 @@ REQUIRED_README_BADGES = (
     "actions/workflows/quality.yml/badge.svg",
     "img.shields.io/github/v/release/trugurpala/pinescriptv6",
     "License-MIT",
+    "Developed%20with-Divan",
 )
 
 EXPLANATORY_ASSETS = (
@@ -92,6 +95,41 @@ PUBLISH_DESCRIPTIONS = (
 
 
 class DocumentationTests(unittest.TestCase):
+    def test_readmes_explain_the_product_flow_in_plain_language(self):
+        english = (ROOT / "README.md").read_text(encoding="utf-8")
+        turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
+
+        for phrase in (
+            "## In plain language",
+            "Your Pine task and chart context",
+            "AI code or review + source IDs + remaining manual checks",
+            "56 tracked Pine v6 examples",
+            "It is useful when",
+        ):
+            self.assertIn(phrase, english)
+
+        for phrase in (
+            "## En sade anlatımıyla",
+            "Pine görevin ve grafik bağlamın",
+            "AI kodu veya incelemesi + kaynak kimlikleri + kalan elle kontroller",
+            "56 Pine v6 örneği",
+            "bu paket işine yarar",
+        ):
+            self.assertIn(phrase, turkish)
+
+    def test_governance_defines_authority_evidence_and_succession(self):
+        governance = (ROOT / "GOVERNANCE.md").read_text(encoding="utf-8")
+
+        for phrase in (
+            "The current maintainer is",
+            "final merge and release authority",
+            "Maintainer succession",
+            "local, TradingView-tested, published, and live states",
+            "Divan does not make governance decisions",
+            "SECURITY.md",
+        ):
+            self.assertIn(phrase, governance)
+
     def test_public_reliability_guides_exist_and_readmes_link_them(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
         turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
@@ -370,8 +408,8 @@ class DocumentationTests(unittest.TestCase):
         )
         self.assertIn("README.tr.md", english)
         self.assertIn("README.md", turkish)
-        self.assertIn("The current release is **v1.1.0**", english)
-        self.assertIn("Güncel sürüm **v1.1.0**", turkish)
+        self.assertIn("The current release is **v1.2.0**", english)
+        self.assertIn("Güncel sürüm **v1.2.0**", turkish)
 
     def test_readmes_label_the_displayed_output_as_the_final_check_ending(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -447,7 +485,7 @@ class DocumentationTests(unittest.TestCase):
         self.assertNotIn("current branch", roadmap.lower())
         self.assertIn("Unreleased", roadmap)
         self.assertIn("CHANGELOG.md", roadmap)
-        self.assertIn("v1.1.0", roadmap)
+        self.assertIn("v1.2.0", roadmap)
 
     def test_social_preview_is_approved_png_size(self):
         path = ROOT / "assets/social-preview.png"
@@ -546,11 +584,25 @@ class DocumentationTests(unittest.TestCase):
 
         self.assertNotIn("## [2.0.0]", changelog)
         self.assertIn("## [Unreleased]", changelog)
+        self.assertIn("## [1.2.0] — 2026-08-03", changelog)
         self.assertIn("## [1.1.0] — 2026-08-02", changelog)
         self.assertIn("Pine Script Agent Kit", citation)
-        self.assertIn("version: 1.1.0", citation)
-        self.assertIn("date-released: 2026-08-02", citation)
+        self.assertIn("version: 1.2.0", citation)
+        self.assertIn("date-released: 2026-08-03", citation)
         self.assertIn("https://github.com/trugurpala/pinescriptv6", citation)
+
+    def test_v120_changelog_records_distribution_governance_and_divan(self):
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        v120 = changelog.split("## [1.2.0]", 1)[1].split("## [1.1.0]", 1)[0]
+
+        for phrase in (
+            "Codex skill bundle",
+            "Public governance",
+            "English and Turkish README",
+            "Developed with Divan",
+            "private security routing",
+        ):
+            self.assertIn(phrase, v120)
 
     def test_v110_changelog_records_host_and_session_alert_hardening(self):
         changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")

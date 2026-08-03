@@ -4,8 +4,8 @@ message: >-
   If you use this source-traceable Pine Script v6 knowledge and agent kit,
   please cite it using this metadata.
 type: software
-version: 1.1.0
-date-released: 2026-08-02
+version: 1.2.0
+date-released: 2026-08-03
 authors:
   - family-names: Pala
     given-names: Uğur

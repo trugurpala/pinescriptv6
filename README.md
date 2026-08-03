@@ -9,15 +9,42 @@ Help AI coding tools give Pine Script v6 answers they can trace to named sources
 [![quality](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml/badge.svg)](https://github.com/trugurpala/pinescriptv6/actions/workflows/quality.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/trugurpala/pinescriptv6)](https://github.com/trugurpala/pinescriptv6/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Developed with Divan](https://img.shields.io/badge/Developed%20with-Divan-5B3DF5)](https://github.com/trugurpala/divan)
 
-Pine Script Agent Kit gives Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
-Windsurf, Zed, and Devin the same evidence-aware Pine v6 guidance. It keeps the
-source, the rule, its exceptions, and its verification state connected.
+Works with Codex, Claude Code, Cursor, Copilot, Gemini, Cline, Windsurf, Zed,
+and Devin.
+
+## In plain language
+
+You describe the Pine indicator, strategy, migration, error, or review you need.
+This kit gives a supported AI coding tool source-linked Pine v6 rules, their
+exceptions, and honest verification limits. The tool can then return code or a
+review that explains what it relied on and what still needs a TradingView check.
+
+```text
+Your Pine task and chart context
+        ↓
+Official sources + scoped rules + recorded evidence
+        ↓
+AI code or review + source IDs + remaining manual checks
+```
+
+The repository provides:
+
+- an installable Codex skill and portable agent instructions;
+- generated adapters for Codex, Claude Code, Cursor, Copilot, Gemini, Cline,
+  Windsurf, Zed, and Devin;
+- 56 tracked Pine v6 examples with hash-bound evidence status;
+- standard-library Python checks for catalog integrity, example inventory, and
+  generated-file drift.
+
+It is useful when you want AI assistance with Pine code without hiding where the
+guidance came from or pretending that a local check is a TradingView result.
 
 > [!NOTE]
 > **Project status:** This project is maintained and accepts community contributions.
 >
-> The current release is **v1.1.0**. It is the clean public starting point for future changes.
+> The current release is **v1.2.0**. It packages the Codex skill, clearer community paths, and public project governance.
 
 > [!IMPORTANT]
 > This kit can improve an AI answer, but it cannot replace the TradingView compiler or a chart test. A repository check never becomes a claim that Pine code compiles, never repaints, is secure, or is profitable.
@@ -223,7 +250,7 @@ Use [GitHub Discussions](https://github.com/trugurpala/pinescriptv6/discussions)
 
 ## Contributing
 
-A knowledge contribution needs a source ID, a scoped claim, an evidence level, a verification date, tests, and current generated outputs. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+A knowledge contribution needs a source ID, a scoped claim, an evidence level, a verification date, tests, and current generated outputs. Start with [CONTRIBUTING.md](CONTRIBUTING.md), follow the [Code of Conduct](CODE_OF_CONDUCT.md), and see [Governance](GOVERNANCE.md) for decision and maintainer responsibilities.
 
 ## Project documentation
 
@@ -235,13 +262,13 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 - [Public writing principles](docs/writing-style.md)
 - [Pine v6 release coverage](knowledge/releases/2025-2026.md)
 - [Portable Agent Skill](SKILL.md)
-- [Contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), and [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Contribution guide](CONTRIBUTING.md), [governance](GOVERNANCE.md), [security policy](SECURITY.md), and [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Support guide](SUPPORT.md)
 - [Change history](CHANGELOG.md) and [citation metadata](CITATION.cff)
 
 ## Releases, license, and citation
 
-The current release is **v1.1.0**. See the [release record](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.1.0) and [changelog](CHANGELOG.md). Future changes stay under `Unreleased` until they receive their own tag and GitHub Release.
+The current release is **v1.2.0**. See the [release record](https://github.com/trugurpala/pinescriptv6/releases/tag/v1.2.0) and [changelog](CHANGELOG.md). Future changes stay under `Unreleased` until they receive their own tag and GitHub Release.
 
 Code and project documentation use the [MIT License](LICENSE). Citation metadata is available in [CITATION.cff](CITATION.cff).
 

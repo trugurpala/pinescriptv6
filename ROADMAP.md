@@ -6,7 +6,7 @@ changelog.
 
 ## Phase 1 — Reliability core
 
-The published release is v1.1.0. Future work begins in the
+The published release is v1.2.0. Future work begins in the
 [`Unreleased`](CHANGELOG.md#unreleased) changelog section after it has the
 evidence required for publication.
 
