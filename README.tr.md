@@ -225,7 +225,7 @@ Soru ve öneriler için [GitHub Discussions](https://github.com/trugurpala/pines
 
 ## Projeye katkı
 
-Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğrulama tarihi, testler ve güncel üretilmiş dosyalar içermelidir. [CONTRIBUTING.md](CONTRIBUTING.md) ile başla ve [Davranış Kuralları](CODE_OF_CONDUCT.md) belgesine uy.
+Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğrulama tarihi, testler ve güncel üretilmiş dosyalar içermelidir. [CONTRIBUTING.md](CONTRIBUTING.md) ile başla, [Davranış Kuralları](CODE_OF_CONDUCT.md) belgesine uy ve kararlarla bakım sorumlulukları için [yönetişim belgesine](GOVERNANCE.md) bak.
 
 ## Proje belgeleri
 
@@ -237,7 +237,7 @@ Bilgi katkısı; kaynak kimliği, kapsamı belirli iddia, kanıt seviyesi, doğr
 - [Kamusal yazım ilkeleri](docs/writing-style.md)
 - [Pine v6 sürüm kapsamı](knowledge/releases/2025-2026.md)
 - [Taşınabilir ajan becerisi](SKILL.md)
-- [Katkı rehberi](CONTRIBUTING.md), [güvenlik politikası](SECURITY.md) ve [Davranış Kuralları](CODE_OF_CONDUCT.md)
+- [Katkı rehberi](CONTRIBUTING.md), [yönetişim](GOVERNANCE.md), [güvenlik politikası](SECURITY.md) ve [Davranış Kuralları](CODE_OF_CONDUCT.md)
 - [Destek rehberi](SUPPORT.md)
 - [Değişiklik geçmişi](CHANGELOG.md) ve [atıf bilgileri](CITATION.cff)
 

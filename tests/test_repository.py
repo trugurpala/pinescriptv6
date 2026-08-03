@@ -13,6 +13,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class RepositoryTests(unittest.TestCase):
+    def test_codeowners_assigns_default_and_policy_review(self):
+        codeowners = (ROOT / ".github/CODEOWNERS").read_text(encoding="utf-8")
+
+        self.assertIn("* @trugurpala", codeowners)
+        for path in (
+            "/.github/**",
+            "/CODE_OF_CONDUCT.md",
+            "/GOVERNANCE.md",
+            "/SECURITY.md",
+        ):
+            self.assertIn(f"{path} @trugurpala", codeowners)
+
     def test_codex_skill_bundle_json_is_not_ignored(self):
         ignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
 

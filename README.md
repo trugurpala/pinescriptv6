@@ -223,7 +223,7 @@ Use [GitHub Discussions](https://github.com/trugurpala/pinescriptv6/discussions)
 
 ## Contributing
 
-A knowledge contribution needs a source ID, a scoped claim, an evidence level, a verification date, tests, and current generated outputs. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+A knowledge contribution needs a source ID, a scoped claim, an evidence level, a verification date, tests, and current generated outputs. Start with [CONTRIBUTING.md](CONTRIBUTING.md), follow the [Code of Conduct](CODE_OF_CONDUCT.md), and see [Governance](GOVERNANCE.md) for decision and maintainer responsibilities.
 
 ## Project documentation
 
@@ -235,7 +235,7 @@ A knowledge contribution needs a source ID, a scoped claim, an evidence level, a
 - [Public writing principles](docs/writing-style.md)
 - [Pine v6 release coverage](knowledge/releases/2025-2026.md)
 - [Portable Agent Skill](SKILL.md)
-- [Contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), and [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Contribution guide](CONTRIBUTING.md), [governance](GOVERNANCE.md), [security policy](SECURITY.md), and [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Support guide](SUPPORT.md)
 - [Change history](CHANGELOG.md) and [citation metadata](CITATION.cff)
 

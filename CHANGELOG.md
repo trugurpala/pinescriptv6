@@ -6,6 +6,8 @@ All notable public changes to Pine Script Agent Kit are recorded here.
 
 ### Added
 
+- Public governance and CODEOWNERS policies covering decision-making,
+  maintainer responsibility, review ownership, releases, and succession.
 - A standard, self-contained Codex skill bundle under
   `.agents/skills/pine-script-agent-kit/`, generated from the canonical Pine
   protocol, source catalog, rule explanations, example evidence, and manual

@@ -1,2 +1,8 @@
-# Default owner for repository changes.
+# Default review ownership for all repository changes.
 * @trugurpala
+
+# Keep community policy and automation changes under explicit maintainer review.
+/.github/** @trugurpala
+/CODE_OF_CONDUCT.md @trugurpala
+/GOVERNANCE.md @trugurpala
+/SECURITY.md @trugurpala

@@ -9,6 +9,9 @@ context, and verifiable delivery to coding hosts such as Codex and Claude Code.
 Divan is not an AI model or a separate cloud service, and contributors do not
 need it for local work.
 
+The project's decision process, maintainer responsibilities, release authority,
+and succession path are documented in [GOVERNANCE.md](GOVERNANCE.md).
+
 ## Before opening a change
 
 1. Read `agents/protocol.md` and `docs/provenance.md`.

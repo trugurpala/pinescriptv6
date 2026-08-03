@@ -21,6 +21,7 @@ REQUIRED_LINKS = (
     "SECURITY.md",
     "CONTRIBUTING.md",
     "CODE_OF_CONDUCT.md",
+    "GOVERNANCE.md",
     "CHANGELOG.md",
     "SKILL.md",
     "docs/provenance.md",
@@ -37,6 +38,7 @@ RELIABILITY_DOCS = (
 NEW_PUBLIC_DOCS = (
     "ADOPTION.md",
     "COVERAGE.md",
+    "GOVERNANCE.md",
     "ROADMAP.md",
     "docs/rule-contribution-template.md",
     *RELIABILITY_DOCS,
@@ -92,6 +94,19 @@ PUBLISH_DESCRIPTIONS = (
 
 
 class DocumentationTests(unittest.TestCase):
+    def test_governance_defines_authority_evidence_and_succession(self):
+        governance = (ROOT / "GOVERNANCE.md").read_text(encoding="utf-8")
+
+        for phrase in (
+            "The current maintainer is",
+            "final merge and release authority",
+            "Maintainer succession",
+            "local, TradingView-tested, published, and live states",
+            "Divan does not make governance decisions",
+            "SECURITY.md",
+        ):
+            self.assertIn(phrase, governance)
+
     def test_public_reliability_guides_exist_and_readmes_link_them(self):
         english = (ROOT / "README.md").read_text(encoding="utf-8")
         turkish = (ROOT / "README.tr.md").read_text(encoding="utf-8")
