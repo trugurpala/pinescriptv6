@@ -3,6 +3,9 @@ contact_links:
   - name: 💬 Discussions — Soru / Fikir / Paylaşım
     url: https://github.com/trugurpala/pinescriptv6/discussions
     about: TR - Soru, fikir veya Pine Script v6 hakkında tartışmalar için. / EN - For questions, ideas, or Pine Script v6 discussions.
+  - name: 🔒 Özel güvenlik bildirimi / Private security report
+    url: https://github.com/trugurpala/pinescriptv6/security/advisories/new
+    about: TR - Güvenlik açığını herkese açık issue yerine özel bildirin. / EN - Report vulnerabilities privately instead of opening a public issue.
   - name: 🐦 X/Twitter @trugurpala
     url: https://x.com/trugurpala
     about: Hızlı sorular / Quick questions

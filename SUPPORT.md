@@ -19,7 +19,8 @@ Paste sanitized compiler messages instead of account-specific screenshots.
 ## Security and privacy
 
 Do not post private code, credentials, tokens, or personal data in public.
-Report sensitive problems through [SECURITY.md](SECURITY.md).
+Report sensitive problems through the private GitHub Security Advisory route in
+[SECURITY.md](SECURITY.md).
 
 ## TradingView evidence
 

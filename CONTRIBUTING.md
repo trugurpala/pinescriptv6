@@ -3,6 +3,12 @@
 Pine Script Agent Kit is free, open, community-built work. Contributions are
 welcome when their confidence matches their evidence.
 
+The project was planned and delivered with
+[Divan](https://github.com/trugurpala/divan), which adds planning, persistent
+context, and verifiable delivery to coding hosts such as Codex and Claude Code.
+Divan is not an AI model or a separate cloud service, and contributors do not
+need it for local work.
+
 ## Before opening a change
 
 1. Read `agents/protocol.md` and `docs/provenance.md`.

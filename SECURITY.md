@@ -18,10 +18,14 @@ production-safe trading behavior.
 
 ## Private reporting
 
-Do not open a public issue for a sensitive vulnerability or exposed secret.
-Email **mail@ugurpala.com** with the affected path, impact, reproduction steps,
-and a safe contact method. Remove real credentials and personal data from the
-report where possible.
+Do not open a public issue, discussion, or pull request for a sensitive
+vulnerability or exposed secret. Create a draft through the repository's
+[private GitHub Security Advisory form](https://github.com/trugurpala/pinescriptv6/security/advisories/new).
+
+Include the affected path, impact, safe reproduction steps, and a contact
+method. Remove real credentials, private Pine code, customer data, and personal
+information from the report wherever possible. The maintainer will confirm the
+scope and coordinate disclosure through the private advisory.
 
 General correctness questions that do not expose sensitive details may use
 [GitHub Discussions](https://github.com/trugurpala/pinescriptv6/discussions).

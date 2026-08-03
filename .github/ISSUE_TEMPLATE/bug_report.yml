@@ -1,19 +1,42 @@
-name: "🐛 Bug Report"
-description: "Hatalı kod veya yanlış bilgi / Broken code or wrong info"
+name: "🐛 Hata bildirimi / Bug report"
+description: "Tekrarlanabilir depo, belge veya kural sorununu bildirin / Report a reproducible repository, documentation, or rule problem"
 title: "[BUG] "
-labels: ["bug"]
-assignees: ["trugurpala"]
+labels:
+  - bug
 body:
+  - type: markdown
+    attributes:
+      value: |
+        TR: Güvenlik açığı, özel Pine kodu veya kimlik bilgisi paylaşmayın; SECURITY.md içindeki özel bildirim yolunu kullanın.
+        EN: Do not submit a vulnerability, private Pine code, or credentials here; use the private route in SECURITY.md.
   - type: textarea
     id: description
     attributes:
       label: "Ne yanlış? / What's wrong?"
+      description: "Gözlediğiniz sonucu ve hangi PSAK kuralı, örneği veya komutuyla ilgili olduğunu açıklayın. / Describe the observed result and the related PSAK rule, example, or command."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Yeniden üretme / Reproduction"
+      placeholder: |
+        1. Run ...
+        2. Open ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Beklenen sonuç / Expected result"
     validations:
       required: true
   - type: textarea
     id: code
     attributes:
-      label: "Kod / Code"
+      label: "En küçük arındırılmış Pine örneği / Minimal sanitized Pine example"
+      description: "Gerçek sırları, özel kodu ve kişisel veriyi çıkarın. / Remove real secrets, private code, and personal data."
       render: pine
   - type: input
     id: timeframe
@@ -33,4 +56,14 @@ body:
   - type: input
     id: tv-error
     attributes:
-      label: "TradingView hata mesajı / error message (varsa / if any)"
+      label: "TradingView hata mesajı / Error message (varsa / if any)"
+      description: "Hesap veya müşteri bilgisi içermeyen tam metni yazın. / Paste sanitized text without account or customer data."
+  - type: checkboxes
+    id: evidence
+    attributes:
+      label: "Kanıt sınırı / Evidence boundary"
+      options:
+        - label: "Yerel kontrolleri TradingView derlemesi veya grafik testi olarak sunmuyorum. / I am not presenting local checks as a TradingView compile or chart test."
+          required: true
+        - label: "Benzer açık issue kayıtlarını aradım. / I searched existing open issues."
+          required: true
