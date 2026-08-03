@@ -104,7 +104,7 @@ class RepositoryTests(unittest.TestCase):
         self.assertIn('interval: "monthly"', dependabot)
 
     def test_pull_request_template_keeps_tradingview_evidence_hash_bound(self):
-        template = (ROOT / ".github/pull_request_template.md").read_text(encoding="utf-8")
+        template = (ROOT / ".github/PULL_REQUEST_TEMPLATE.md").read_text(encoding="utf-8")
 
         self.assertNotIn("TradingView'da test edildi / Tested in TradingView", template)
         self.assertIn("structural-only", template)
